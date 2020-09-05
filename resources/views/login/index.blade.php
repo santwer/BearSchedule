@@ -10,7 +10,8 @@
 </head>
 
 <body>
-<section class="hero" id="header">
+<section class="hero mainBgColor" id="header">
+    <div class="heading-bar"></div>
     <div class="hero-body">
         <div class="container">
             <h1 class="title">
@@ -26,13 +27,13 @@
 <section class="hero" id="content">
     <div class="correct-hero">
         <div class="columns">
-            <div class="is-380">
+            <div class="is-280">
                 <b-menu-list label="Menu">
                     <b-menu-item icon="information-outline" label="Info"></b-menu-item>
                 </b-menu-list>
             </div>
-            <div class="column" style="background: lavender;">
-                <students-timeline></students-timeline>
+            <div class="column timelineContent">
+                <students-timeline ></students-timeline>
             </div>
         </div>
     </div>

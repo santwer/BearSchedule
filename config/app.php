@@ -175,6 +175,11 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * Own Application Providers
+         */
+        \App\Providers\TimelineServiceProvider::class,
+
     ],
 
     /*

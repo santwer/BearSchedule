@@ -97,6 +97,17 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var vue2vis__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue2vis */ "./node_modules/vue2vis/dist/vue2vis.umd.js");
 /* harmony import */ var vue2vis__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(vue2vis__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _TimelineItemModel__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TimelineItemModel */ "./resources/js/components/TimelineItemModel.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -107,31 +118,222 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "StudentsTimeline",
   components: {
+    TimelineItemModel: _TimelineItemModel__WEBPACK_IMPORTED_MODULE_1__["default"],
     Timeline: vue2vis__WEBPACK_IMPORTED_MODULE_0__["Timeline"],
     DataSet: vue2vis__WEBPACK_IMPORTED_MODULE_0__["DataSet"]
   },
   data: function data() {
     return {
-      groups: [{
-        id: 0,
-        content: 'Group 1'
-      }],
-      items: [{
-        id: 0,
-        group: 0,
-        start: new Date(),
-        end: '2020-12-01',
-        style: 'background: blue; color: #fff;',
-        className: 'olalla',
-        content: 'Item 1'
-      }],
+      dummeLoop: false,
+      groups: [],
+      items: [],
       options: {
         editable: true
+      },
+      currentItem: null
+    };
+  },
+  methods: {
+    getData: function getData() {
+      var that = this;
+      $.get('/ajax/timeline/getdata', function (data) {
+        if (typeof data.groups !== "undefined") {
+          that.groups = data.groups;
+        }
+
+        if (typeof data.items !== "undefined") {
+          that.items = data.items;
+        }
+
+        if (typeof data.options !== "undefined") {
+          that.options = data.options;
+        }
+
+        that.dummeLoop = true;
+        console.log(that.dummeLoop);
+      }, 'json');
+    },
+    dpClick: function dpClick() {
+      if (this.currentItem !== null) {
+        this.itemDpClick(this.currentItem);
+      } else {
+        console.log('dp');
+      }
+    },
+    itemDpClick: function itemDpClick(itemId) {
+      console.log('dp on ' + itemId);
+      var item = this.findObjectInArrayByProperty(this.items, 'id', itemId);
+      this.$refs.itemmodel.openModelItem(item);
+    },
+    itemOver: function itemOver(e) {
+      this.currentItem = null;
+
+      if (typeof e.item !== "undefined") {
+        this.currentItem = e.item;
+      }
+    },
+    itemOut: function itemOut(e) {
+      this.currentItem = null;
+    },
+    findObjectInArrayByProperty: function findObjectInArrayByProperty(array, propertyName, propertyValue) {
+      return array.find(function (o) {
+        return o[propertyName] === propertyValue;
+      });
+    }
+  },
+  mounted: function mounted() {
+    this.getData();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TimelineItemModel.vue?vue&type=script&lang=js&":
+/*!****************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TimelineItemModel.vue?vue&type=script&lang=js& ***!
+  \****************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _TimelineItemModelForm__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TimelineItemModelForm */ "./resources/js/components/TimelineItemModelForm.vue");
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "TimelineItemModel",
+  components: {
+    TimelineItemModelForm: _TimelineItemModelForm__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  data: function data() {
+    return {
+      setItem: {}
+    };
+  },
+  methods: {
+    openModalNew: function openModalNew() {
+      this.setItem = {};
+      this.openModal();
+    },
+    openModelItem: function openModelItem(item) {
+      this.setItem = item;
+      this.openModal();
+    },
+    openModal: function openModal() {
+      var that = this;
+      this.$buefy.modal.open({
+        parent: this,
+        component: _TimelineItemModelForm__WEBPACK_IMPORTED_MODULE_0__["default"],
+        props: {
+          setItem: that.setItem
+        },
+        distroyOnHide: false,
+        hasModalCard: true,
+        trapFocus: true
+      });
+    }
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TimelineItemModelForm.vue?vue&type=script&lang=js&":
+/*!********************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TimelineItemModelForm.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "TimelineItemModelForm",
+  props: ['setItem'],
+  data: function data() {
+    return {
+      item: {
+        title: '',
+        content: '',
+        start: null,
+        end: null,
+        group: ''
       }
     };
+  },
+  mounted: function mounted() {
+    this.item = this.setItem;
+
+    if (typeof this.setItem !== "undefined") {
+      this.item.start = this.setItem.start === '' ? '' : new Date(Date.parse(this.setItem.start));
+    } else {
+      this.item.start = null;
+    }
+
+    if (typeof this.setItem !== "undefined") {
+      this.item.end = this.setItem.end === '' ? '' : new Date(Date.parse(this.setItem.end));
+    } else {
+      this.item.end = null;
+    }
   }
 });
 
@@ -26913,16 +27115,221 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
+  return _c("div", [
+    _vm.dummeLoop
+      ? _c(
+          "div",
+          [
+            _c(
+              "div",
+              { staticClass: "buttons" },
+              [
+                _c("timeline-item-model", { ref: "itemmodel" }),
+                _vm._v(" "),
+                _c(
+                  "b-button",
+                  { attrs: { size: "is-small", "icon-left": "plus-thick" } },
+                  [_vm._v("Add Group")]
+                )
+              ],
+              1
+            ),
+            _vm._v(" "),
+            _c("timeline", {
+              ref: "timeline",
+              attrs: {
+                items: _vm.items,
+                groups: _vm.groups,
+                options: _vm.options
+              },
+              on: {
+                "double-click": _vm.dpClick,
+                itemover: _vm.itemOver,
+                itemout: _vm.itemOut
+              }
+            })
+          ],
+          1
+        )
+      : _vm._e()
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TimelineItemModel.vue?vue&type=template&id=3f8a833a&scoped=true&":
+/*!********************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TimelineItemModel.vue?vue&type=template&id=3f8a833a&scoped=true& ***!
+  \********************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
   return _c(
-    "div",
+    "section",
     [
-      _c("timeline", {
-        ref: "timeline",
-        attrs: { items: _vm.items, groups: _vm.groups, options: _vm.options }
-      })
+      _c(
+        "b-button",
+        {
+          attrs: { size: "is-small", "icon-left": "plus-thick" },
+          on: { click: _vm.openModalNew }
+        },
+        [_vm._v("Add Item")]
+      )
     ],
     1
   )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TimelineItemModelForm.vue?vue&type=template&id=2c085dc4&scoped=true&":
+/*!************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TimelineItemModelForm.vue?vue&type=template&id=2c085dc4&scoped=true& ***!
+  \************************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("form", { attrs: { action: "" } }, [
+    _c("div", { staticClass: "modal-card", staticStyle: { width: "400px" } }, [
+      _c("header", { staticClass: "modal-card-head" }, [
+        _c("p", { staticClass: "modal-card-title" }, [_vm._v("Item")]),
+        _vm._v(" "),
+        _c("button", {
+          staticClass: "delete",
+          attrs: { type: "button" },
+          on: {
+            click: function($event) {
+              return _vm.$emit("close")
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _c(
+        "section",
+        { staticClass: "modal-card-body" },
+        [
+          _c(
+            "b-field",
+            { attrs: { label: "Title" } },
+            [
+              _c("b-input", {
+                attrs: {
+                  type: "text",
+                  value: _vm.item.title,
+                  placeholder: "Title",
+                  required: ""
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-field",
+            { attrs: { label: "Content" } },
+            [
+              _c("b-input", {
+                attrs: {
+                  type: "text",
+                  value: _vm.item.content,
+                  placeholder: "Title"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-field",
+            { attrs: { label: "Start" } },
+            [
+              _c("b-datepicker", {
+                attrs: {
+                  placeholder: "Click to select...",
+                  icon: "calendar-today",
+                  "trap-focus": ""
+                },
+                model: {
+                  value: _vm.item.start,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "start", $$v)
+                  },
+                  expression: "item.start"
+                }
+              })
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c(
+            "b-field",
+            { attrs: { label: "End" } },
+            [
+              _c("b-datepicker", {
+                attrs: {
+                  placeholder: "Click to select...",
+                  icon: "calendar-today",
+                  "trap-focus": ""
+                },
+                model: {
+                  value: _vm.item.end,
+                  callback: function($$v) {
+                    _vm.$set(_vm.item, "end", $$v)
+                  },
+                  expression: "item.end"
+                }
+              })
+            ],
+            1
+          )
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c("footer", { staticClass: "modal-card-foot" }, [
+        _c(
+          "button",
+          {
+            staticClass: "button",
+            attrs: { type: "button" },
+            on: {
+              click: function($event) {
+                return _vm.$emit("close")
+              }
+            }
+          },
+          [_vm._v("Close")]
+        ),
+        _vm._v(" "),
+        _c("button", { staticClass: "button is-primary" }, [_vm._v("Save")])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -102061,6 +102468,144 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentsTimeline_vue_vue_type_template_id_5268d3e4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_StudentsTimeline_vue_vue_type_template_id_5268d3e4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/TimelineItemModel.vue":
+/*!*******************************************************!*\
+  !*** ./resources/js/components/TimelineItemModel.vue ***!
+  \*******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _TimelineItemModel_vue_vue_type_template_id_3f8a833a_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TimelineItemModel.vue?vue&type=template&id=3f8a833a&scoped=true& */ "./resources/js/components/TimelineItemModel.vue?vue&type=template&id=3f8a833a&scoped=true&");
+/* harmony import */ var _TimelineItemModel_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TimelineItemModel.vue?vue&type=script&lang=js& */ "./resources/js/components/TimelineItemModel.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _TimelineItemModel_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _TimelineItemModel_vue_vue_type_template_id_3f8a833a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _TimelineItemModel_vue_vue_type_template_id_3f8a833a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "3f8a833a",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/TimelineItemModel.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/TimelineItemModel.vue?vue&type=script&lang=js&":
+/*!********************************************************************************!*\
+  !*** ./resources/js/components/TimelineItemModel.vue?vue&type=script&lang=js& ***!
+  \********************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TimelineItemModel_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./TimelineItemModel.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TimelineItemModel.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TimelineItemModel_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/TimelineItemModel.vue?vue&type=template&id=3f8a833a&scoped=true&":
+/*!**************************************************************************************************!*\
+  !*** ./resources/js/components/TimelineItemModel.vue?vue&type=template&id=3f8a833a&scoped=true& ***!
+  \**************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TimelineItemModel_vue_vue_type_template_id_3f8a833a_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./TimelineItemModel.vue?vue&type=template&id=3f8a833a&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TimelineItemModel.vue?vue&type=template&id=3f8a833a&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TimelineItemModel_vue_vue_type_template_id_3f8a833a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TimelineItemModel_vue_vue_type_template_id_3f8a833a_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/TimelineItemModelForm.vue":
+/*!***********************************************************!*\
+  !*** ./resources/js/components/TimelineItemModelForm.vue ***!
+  \***********************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _TimelineItemModelForm_vue_vue_type_template_id_2c085dc4_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./TimelineItemModelForm.vue?vue&type=template&id=2c085dc4&scoped=true& */ "./resources/js/components/TimelineItemModelForm.vue?vue&type=template&id=2c085dc4&scoped=true&");
+/* harmony import */ var _TimelineItemModelForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./TimelineItemModelForm.vue?vue&type=script&lang=js& */ "./resources/js/components/TimelineItemModelForm.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _TimelineItemModelForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _TimelineItemModelForm_vue_vue_type_template_id_2c085dc4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _TimelineItemModelForm_vue_vue_type_template_id_2c085dc4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "2c085dc4",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/TimelineItemModelForm.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/TimelineItemModelForm.vue?vue&type=script&lang=js&":
+/*!************************************************************************************!*\
+  !*** ./resources/js/components/TimelineItemModelForm.vue?vue&type=script&lang=js& ***!
+  \************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TimelineItemModelForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./TimelineItemModelForm.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TimelineItemModelForm.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_TimelineItemModelForm_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/TimelineItemModelForm.vue?vue&type=template&id=2c085dc4&scoped=true&":
+/*!******************************************************************************************************!*\
+  !*** ./resources/js/components/TimelineItemModelForm.vue?vue&type=template&id=2c085dc4&scoped=true& ***!
+  \******************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TimelineItemModelForm_vue_vue_type_template_id_2c085dc4_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./TimelineItemModelForm.vue?vue&type=template&id=2c085dc4&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/TimelineItemModelForm.vue?vue&type=template&id=2c085dc4&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TimelineItemModelForm_vue_vue_type_template_id_2c085dc4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TimelineItemModelForm_vue_vue_type_template_id_2c085dc4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

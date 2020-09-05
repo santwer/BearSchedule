@@ -1,0 +1,47 @@
+<template>
+    <section>
+        <b-button size="is-small" icon-left="plus-thick" @click="openModalNew">Add Item</b-button>
+    </section>
+</template>
+
+<script>
+    import TimelineItemModelForm from "./TimelineItemModelForm";
+    export default {
+        name: "TimelineItemModel",
+        components: {
+            TimelineItemModelForm,
+        },
+        data() {
+            return {
+                setItem: {}
+            }
+        },
+        methods: {
+            openModalNew: function() {
+                this.setItem = {};
+                this.openModal();
+            },
+            openModelItem: function(item) {
+                this.setItem = item;
+                this.openModal();
+            },
+            openModal: function () {
+                var that = this;
+                this.$buefy.modal.open({
+                    parent: this,
+                    component: TimelineItemModelForm,
+                    props: {
+                        setItem: that.setItem
+                    },
+                    distroyOnHide: false,
+                    hasModalCard: true,
+                    trapFocus: true
+                })
+            }
+        }
+    }
+</script>
+
+<style scoped>
+
+</style>
