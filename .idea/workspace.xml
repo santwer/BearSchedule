@@ -2,35 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fd988c90-4956-4afa-a2e2-e5af26b31482" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/Http/Controllers/Project/ProjectController.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Models/Project.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/Providers/AjaxResponseServiceProvider.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/View/Components/MainMenu.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_09_10_184117_create_table_projects.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_09_10_184428_create_table_project_user.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_09_10_184900_add_column_project_id_to_items.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/database/migrations/2020_09_10_184954_add_column_project_id_to_groups.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/components/TimelineGroupModel.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/components/TimelineGroupModelForm.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/components/main-menu.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/layouts/main.blade.php" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/views/login/project.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/HomeController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/Timeline/TimelineAjaxController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/Timeline/TimelineAjaxController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Timeline/Group.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Timeline/Group.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/Timeline/Item.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/Timeline/Item.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Models/User.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Models/User.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/config/app.php" beforeDir="false" afterPath="$PROJECT_DIR$/config/app.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/app.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/StudentsTimeline.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/StudentsTimeline.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/TimelineItemModel.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/TimelineItemModel.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/js/components/TimelineItemModelForm.vue" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/components/TimelineItemModelForm.vue" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/less/backend.less" beforeDir="false" afterPath="$PROJECT_DIR$/resources/less/backend.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/login/index.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/login/index.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -243,12 +215,24 @@
       <workItem from="1599332897921" duration="829000" />
       <workItem from="1599373418363" duration="5215000" />
       <workItem from="1599584668973" duration="1861000" />
-      <workItem from="1599758777374" duration="11063000" />
+      <workItem from="1599758777374" duration="12662000" />
     </task>
+    <task id="LOCAL-00001" summary="adding main features">
+      <created>1599772521275</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1599772521275</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="adding main features" />
+    <option name="LAST_COMMIT_MESSAGE" value="adding main features" />
   </component>
   <component name="WindowStateProjectService">
     <state x="552" y="181" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1599373505849">
@@ -259,10 +243,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="690" y="277" key="#com.jetbrains.php.actions.copyPaste.importReferences.PhpImportReferencesDialog/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599375298185" />
-    <state x="590" y="118" key="CommitChangelistDialog2" timestamp="1599299628069">
+    <state x="590" y="118" key="CommitChangelistDialog2" timestamp="1599772520345">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="590" y="118" key="CommitChangelistDialog2/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599299628069" />
+    <state x="590" y="118" key="CommitChangelistDialog2/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599772520345" />
     <state x="878" y="281" key="FileChooserDialogImpl" timestamp="1599285255106">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
@@ -287,10 +271,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="794" y="451" key="NewPhpFileDialog/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599768779408" />
-    <state x="552" y="255" key="Vcs.Push.Dialog.v2" timestamp="1599299630973">
+    <state x="552" y="255" key="Vcs.Push.Dialog.v2" timestamp="1599772523861">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="552" y="255" key="Vcs.Push.Dialog.v2/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599299630973" />
+    <state x="552" y="255" key="Vcs.Push.Dialog.v2/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599772523861" />
     <state x="-1408" y="0" width="1424" height="1028" key="dock-window-1" timestamp="1599758810996">
       <screen x="-1920" y="0" width="1920" height="1040" />
     </state>
@@ -299,9 +283,9 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="295" y="81" width="957" height="683" key="find.popup/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599763214497" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1599769048538">
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1599774201757">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599769048538" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/-1920.0.1920.1040/0.0.1920.1040@0.0.1920.1040" timestamp="1599774201757" />
   </component>
 </project>
