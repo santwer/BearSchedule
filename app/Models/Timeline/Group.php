@@ -14,7 +14,7 @@ class Group extends Model
     protected $fillable = [
         'title', 'content', 'className', 'style', 'subgroupStack',
         'subgroupVisibility', 'visible', 'treeLevel', 'nestedGroups',
-        'showNested'
+        'showNested', 'project_id'
     ];
 
     public function items() {

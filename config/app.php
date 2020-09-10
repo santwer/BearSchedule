@@ -179,6 +179,7 @@ return [
          * Own Application Providers
          */
         \App\Providers\TimelineServiceProvider::class,
+        \App\Providers\AjaxResponseServiceProvider::class,
 
     ],
 

@@ -1,16 +1,16 @@
 <template>
     <section>
-        <b-button size="is-small" icon-left="plus-thick" @click="openModalNew">Add Item</b-button>
+        <b-button size="is-small" icon-left="plus-thick" @click="openModalNew">Add Group</b-button>
     </section>
 </template>
 
 <script>
-    import TimelineItemModelForm from "./TimelineItemModelForm";
+    import TimelineGroupModelForm from "./TimelineGroupModelForm";
     export default {
-        name: "TimelineItemModel",
+        name: "TimelineGroupModel",
         props: ['project'],
         components: {
-            TimelineItemModelForm,
+            TimelineGroupModelForm,
         },
         data() {
             return {
@@ -20,8 +20,6 @@
         methods: {
             openModalNew: function() {
                 this.setItem = {
-                    start: new Date(),
-                    end: new Date(),
                     title: null,
                     content: '',
                     group: null,
@@ -38,7 +36,7 @@
                 var that = this;
                 this.$buefy.modal.open({
                     parent: this,
-                    component: TimelineItemModelForm,
+                    component: TimelineGroupModelForm,
                     props: {
                         setItem: that.setItem
                     },

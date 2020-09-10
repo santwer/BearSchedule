@@ -2,7 +2,7 @@
     <form action="">
         <div class="modal-card" style="width: 400px;">
             <header class="modal-card-head">
-                <p class="modal-card-title">Item</p>
+                <p class="modal-card-title">Group</p>
                 <button
                     type="button"
                     class="delete"
@@ -34,22 +34,6 @@
                         </option>
                     </b-select>
                 </b-field>
-                <b-field label="Start">
-                    <b-datepicker
-                        placeholder="Click to select..."
-                        v-model="item.start"
-                        icon="calendar-today"
-                        trap-focus>
-                    </b-datepicker>
-                </b-field>
-                <b-field label="End">
-                    <b-datepicker
-                        placeholder="Click to select..."
-                        v-model="item.end"
-                        icon="calendar-today"
-                        trap-focus>
-                    </b-datepicker>
-                </b-field>
             </section>
             <footer class="modal-card-foot">
                 <button class="button" type="button" @click="$emit('close')">Close</button>
@@ -63,7 +47,7 @@
 
 <script>
     export default {
-        name: "TimelineItemModelForm",
+        name: "TimelineGroupModelForm",
         props: ['setItem'],
         data() {
             return {
@@ -98,21 +82,19 @@
                 var that = this;
                 $.ajax({
                     method: "PUT",
-                    url: "/ajax/timeline/item",
+                    url: "/ajax/timeline/group",
                     data: that.item,
                     dataType: 'json'
                 }).done(function (data) {
                     var msg = `Saved successfully`;
                     that.$buefy.toast.open(msg);
-                    that.backup.start = that.item.start;
-                    that.backup.end = that.item.end;
                     that.backup.content = that.item.content;
                     that.backup.title = that.item.title;
                     that.backup.group = that.item.group;
                     that.$emit('close');
                     if (typeof that.item.id === "undefined" || that.item.id === null) {
                         that.backup.id = data.data.id;
-                        that.$parent.$parent.$parent.newItemInTimeLine(that.backup);
+                        that.$parent.$parent.$parent.newGroupInTimeLine(that.backup);
                     }
                 }).fail(function (data) {
                     var msg = (typeof data.responseJSON.message !== "undefined") ? data.responseJSON.message : `Save didn't work. Come back later.`;
@@ -128,13 +110,13 @@
                 var that = this;
                 $.ajax({
                     method: "DELETE",
-                    url: "/ajax/timeline/item",
+                    url: "/ajax/timeline/group",
                     data: that.item,
                     dataType: 'json'
                 }).done(function (data) {
                     var msg = `Delete successfully`;
                     that.$buefy.toast.open(msg);
-                    that.$parent.$parent.$parent.deleteItemInTimeLine(that.backup.id);
+                    that.$parent.$parent.$parent.deleteGroupInTimeLine(that.backup.id);
                     that.$emit('close');
                 }).fail(function (data) {
                     var msg = (typeof data.responseJSON.message !== "undefined") ? data.responseJSON.message : `Delete didn't work. Come back later.`;
@@ -148,16 +130,7 @@
         },
         mounted() {
             this.backup = this.setItem;
-            if (typeof this.setItem !== "undefined") {
-                this.backup.start = this.setItem.start === '' ? '' : new Date(Date.parse(this.setItem.start));
-            } else {
-                this.backup.start = null;
-            }
-            if (typeof this.setItem !== "undefined") {
-                this.backup.end = this.setItem.end === '' ? '' : new Date(Date.parse(this.setItem.end));
-            } else {
-                this.backup.end = null;
-            }
+            console.log('grp', this.setItem);
             this.item = Object.assign({}, this.backup);
             this.csrf = $('meta[name=csrf-token]').attr('content');
             $.ajaxSetup({
@@ -167,7 +140,6 @@
             });
 
             this.groups = this.$parent.$parent.$parent.groups;
-            console.log(this.groups )
         }
     }
 </script>

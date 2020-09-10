@@ -13,6 +13,6 @@ const Content = new Vue({
         DataSet
     },
     data: {
-
+        showMenu: true
     },
 });
