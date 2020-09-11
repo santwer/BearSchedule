@@ -19,11 +19,11 @@ class CreateGroupsTable extends Migration
             $table->string('content');
             $table->string('className')->nullable();
             $table->string('style')->nullable();
-            $table->json('subgroupStack')->nullable();
-            $table->json('subgroupVisibility')->nullable();
+            $table->longText('subgroupStack')->nullable();
+            $table->longText('subgroupVisibility')->nullable();
             $table->boolean('visible');
             $table->smallInteger('treeLevel')->nullable();
-            $table->json('nestedGroups')->nullable();
+            $table->longText('nestedGroups')->nullable();
             $table->boolean('showNested')->nullable();
             $table->timestamps();
         });
