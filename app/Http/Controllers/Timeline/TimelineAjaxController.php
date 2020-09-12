@@ -109,6 +109,9 @@ class TimelineAjaxController extends Controller
         if (!$request->has('title') || empty($request->get('title'))) {
             return response()->ajax(null, 'Title not set.', 400);
         }
+        if (!$request->has('group') || empty($request->get('group'))) {
+            return response()->ajax(null, 'Group not set.', 400);
+        }
         if (!$request->has('start')
             || empty($request->get('start'))
             || $request->get('start') === 'Invalid Date'

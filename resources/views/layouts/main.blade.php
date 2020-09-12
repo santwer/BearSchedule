@@ -15,6 +15,7 @@
     <div class="heading-bar">{{__('Welcome')}} {{ Auth::user()->name }}</div>
     <div class="hero-body">
         <div class="container">
+            <img src="{{ asset('images/logo64.png') }}" class="bear-logo">
             <h1 class="title">
                 {{ env('APP_NAME', 'Projects') }}
             </h1>
