@@ -40,7 +40,7 @@
     @show
     <div class="correct-hero">
         <div class="columns">
-            <x-main-menu></x-main-menu>
+            <x-main-menu projectid="{{isset($project) ? $project : 0 }}"></x-main-menu>
 
             <div class="column timelineContent">
                 <div class="show-menu-btn">

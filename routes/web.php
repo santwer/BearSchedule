@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Timeline\TimelineAjaxController;
 use \App\Http\Controllers\Project\ProjectController;
+use \App\Http\Controllers\AutoComplete\AutoCompleteController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -19,7 +20,9 @@ use \App\Http\Controllers\Project\ProjectController;
 Route::middleware(['auth'])->group(function () {
     Route::get('/', 'HomeController@index')
         ->name('home');
+    Route::get('project/create', [ProjectController::class, 'create']);
     Route::get('project/{project}', [ProjectController::class, 'index']);
+    Route::post('project/{project}', [ProjectController::class, 'update'])->name('project.update');
 
     Route::group(['prefix' => 'ajax/'], function () {
         Route::group(['prefix' => 'timeline/'], function () {
@@ -29,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
             Route::put('group', [TimelineAjaxController::class, 'setGroup']);
             Route::delete('group', [TimelineAjaxController::class, 'destroyGroup']);
         });
+        Route::get('autocomplete/{controller}', [AutoCompleteController::class, 'index']);
     });
 });
 

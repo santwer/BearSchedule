@@ -6,15 +6,31 @@
                 <timeline-group-model ref="groupmodel" :project="project"></timeline-group-model>
 
 
-                <b-dropdown aria-role="list" v-model="selectedOption">
-                    <button class="button is-primary" slot="trigger" slot-scope="{ activeMenu }">
-                        <span>Timeline mode</span>
+                    <b-dropdown aria-role="list" v-model="selectedOption" class="is-float-right">
+                    <button class="button is-small  is-float-right" slot="trigger" slot-scope="{ activeMenu }">
+                        <span>Display</span>
                         <b-icon :icon="activeMenu ? 'menu-up' : 'menu-down'"></b-icon>
                     </button>
 
                     <b-dropdown-item aria-role="listitem" value="default">Default</b-dropdown-item>
-                    <b-dropdown-item aria-role="listitem" value="week">in Weeks</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="weekday">weekday</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="week">week</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="day">day</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="month">month</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="year">year</b-dropdown-item>
                 </b-dropdown>
+
+                <b-dropdown aria-role="list" v-model="selectedZoom">
+                    <button class="button is-small is-float-right" slot="trigger" slot-scope="{ activeZoom }">
+                        <span>Zoom</span>
+                        <b-icon :icon="activeZoom ? 'menu-up' : 'menu-down'"></b-icon>
+                    </button>
+                    <b-dropdown-item aria-role="listitem" value="day">day</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="week">week</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="month">month</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="year">year</b-dropdown-item>
+                </b-dropdown>
+
             </div>
 
             <b-message title="No Items" v-if="MsgIsActive" aria-close-label="Close message">
@@ -25,6 +41,7 @@
                       @double-click="dpClick"
                       @itemover="itemOver"
                       @itemout="itemOut"
+                      @rangechanged="rangeChange"
                       :items="items"
                       :groups="groups"
                       :options="options"></timeline>
@@ -56,7 +73,9 @@
                     editable: false,
                 },
                 activeMenu: false,
+                activeZoom: false,
                 selectedOption: null,
+                selectedZoom: null,
 
                 currentItem: null,
             }
@@ -138,24 +157,80 @@
             },
             findObjectInArrayByProperty: function(array, propertyName, propertyValue) {
                 return array.find((o) => { return o[propertyName] === propertyValue });
+            },
+            getCurrentWeek: function (curr) {
+               let week = [];
+
+                for (let i = 1; i <= 7; i++) {
+                    let first = curr.getDate() - curr.getDay() + i;
+                    if(i === 1 || i === 7) {
+                        let day = new Date(curr.setDate(first)).toISOString().slice(0, 10);
+                        week.push(day);
+                    }
+                }
+                return week;
+            },
+            /**
+             * @param curr Date
+             */
+            getCurrentMonth: function (curr) {
+               var month = curr.getMonth();
+               var year = curr.getFullYear();
+               var firstday = new Date(year, month, 1);
+               var lastday = new Date(year, month + 1, 0);
+               return [firstday, lastday];
+            },
+            getCurrentYear: function (curr) {
+                var year = curr.getFullYear();
+                var firstday = new Date(year, 0, 1);
+                var lastday = new Date(year + 1, 12, 0);
+                return [firstday, lastday];
+            },
+             getCurrentDay: function (curr) {
+                var year = curr.getFullYear();
+                var month = curr.getMonth();
+                var day = curr.getDate();
+                var firstday = new Date(year, month, day,0,0);
+                var lastday = new Date(year, month, day,23,59);
+                return [firstday, lastday];
+            },
+            rangeChange: function () {
+                this.selectedZoom = null;
             }
         },
         watch: {
             selectedOption: function (value, n) {
-                if (value === 'week') {
+                if (value !== 'default') {
                     this.options.timeAxis = {
-                        scale: 'week',
+                        scale: value,
                         step: 1
-                    };
-                    this.options.format = {
-                        minorLabels: {week: 'w'}
-                    };
+                    }
                 } else {
                     this.options.timeAxis = {
-                    };
-                    this.format.timeAxis = {
+                        step: 1
                     };
                 }
+                this.$refs.timeline.setOptions(this.options);
+            },
+            selectedZoom: function (value, n) {
+                const today = new Date();
+                var dates = [];
+                switch (value) {
+                    case 'week':
+                        dates = this.getCurrentWeek(today);
+                        break;
+                    case 'month':
+                        dates = this.getCurrentMonth(today);
+                        break;
+                    case 'year':
+                        dates = this.getCurrentYear(today);
+                        break;
+                    case 'day':
+                        dates = this.getCurrentDay(today);
+                        break;
+                }
+                if(typeof dates[1] !== "undefined")
+                    this.$refs.timeline.setWindow(dates[0], dates[1]);
             }
         },
         mounted() {
@@ -165,5 +240,7 @@
 </script>
 
 <style scoped>
-
+.is-float-right {
+    margin-left: auto;
+}
 </style>

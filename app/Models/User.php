@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -39,5 +40,10 @@ class User extends Authenticatable
 
     public function projects() {
         return $this->belongsToMany(Project::class, 'project_user')->withPivot(['role']);
+    }
+
+    public static function ajaxSearch(string $q):Collection
+    {
+        return self::where('email', 'like', $q)->selectRaw("id, name, email, CONCAT(name, ' (', email, ')') as value")->get();
     }
 }

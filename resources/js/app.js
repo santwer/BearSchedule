@@ -5,14 +5,17 @@ window.Buefy = require('buefy');
 //vue2vis.Timeline
 
 import StudentsTimeline from "./components/StudentsTimeline";
+import ProjectUsers from "./components/ProjectUsers";
 import { DataSet, Timeline } from 'vue2vis';
 const Content = new Vue({
     el: '#content',
     components: {
         StudentsTimeline,
-        DataSet
+        DataSet,
+        ProjectUsers
     },
     data: {
+        activeTabProject: 'timeline',
         showMenu: true,
         groupsColumns: [
             {
@@ -63,4 +66,10 @@ const Content = new Vue({
             },
         ]
     },
+    mounted() {
+        if(typeof this.$refs.projecttab !== "undefined") {
+            var setTab = $(this.$refs.projecttab.$el).data('tab');
+            this.activeTabProject = setTab;
+        }
+    }
 });
