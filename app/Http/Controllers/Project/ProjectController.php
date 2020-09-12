@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Project;
 use App\Helper\ModelInfo;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\ProjectOption;
 use App\Models\Timeline\Group;
 use App\Models\Timeline\Item;
 use App\Models\User;
@@ -65,6 +66,9 @@ class ProjectController extends Controller
         if($request->has('users')) {
             $this->setUsers($request->get('users'), $project);
         }
+        if($request->has('option')) {
+            $this->setOptions($request->get('option'), $settings->id);
+        }
 
         return $this->index($request, $project);
     }
@@ -78,6 +82,20 @@ class ProjectController extends Controller
             $basename .= ' ' .($projects->count() + 1);
         }
         return $basename;
+    }
+
+    private function setOptions(array $options, int $projectId)
+    {
+        foreach($options as $option => $value) {
+            $entry = ProjectOption::firstOrCreate([ 'project_id' => $projectId, 'option' => $option]);
+            $entry->value = $value;
+            if($value === null || $value === "null") {
+                $entry->delete();
+            } else {
+                $entry->save();
+            }
+        }
+
     }
 
     private function setUsers($users, int $projectId)

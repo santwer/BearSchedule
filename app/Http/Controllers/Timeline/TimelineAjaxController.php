@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers\Timeline;
 
+use App\Helper\Handlebars;
 use App\Http\Controllers\Controller;
+use App\Models\Project;
+use App\Models\ProjectOption;
 use App\Models\Timeline\Group;
 use App\Models\Timeline\Item;
 use App\Models\Timeline\ItemLink;
@@ -44,11 +47,8 @@ class TimelineAjaxController extends Controller
             return response()->ajax(null, 'Id not set', 400);
         }
         $project_id = $request->get('project');
+        $options = $this->getOptions($project_id);
 
-        $options = [
-            'editable' => false,
-            'minHeight' => '550px',
-        ];
 
         return response()->timeline([
             'groups' => $this->getGroups($project_id),
@@ -57,10 +57,30 @@ class TimelineAjaxController extends Controller
         ], 200);
     }
 
+    private function getOptions(int $project_id):array
+    {
+        $timelineSettings = ['template'];
+        $projectOptions = ProjectOption::where('project_id', $project_id)->whereIn('option', $timelineSettings)->get();
+        $options = [
+            'editable' => false,
+            'minHeight' => '550px',
+        ];
+        foreach($projectOptions as $option) {
+            if($option->option === 'template') {
+                if(($value = Handlebars::get($option->value)) !== null) {
+                    $options[$option->option] = $value;
+                }
+                break;
+            }
+            $options[$option->option] = $option->value;
+        }
+
+        return $options;
+    }
+
     private function getItems(int $projectId)
     {
         $items = Item::where('project_id', $projectId)->with('links')->get();
-
         return $items;
     }
 

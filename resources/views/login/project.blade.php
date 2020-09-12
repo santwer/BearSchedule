@@ -1,7 +1,6 @@
 @extends('layouts.main')
 
 @section('content')
-
     <b-tabs position="is-right" class="block" v-model="activeTabProject"
             data-tab="{{ isset($activeTab) ? $activeTab : 'timeline' }}" ref="projecttab">
         <b-tab-item label="Timeline" value="timeline">
@@ -27,6 +26,16 @@
                         <b-field label="Project Name">
                             <b-input name="name"
                                      value="{{ old('name', $settings->name) }}" {{ $role !== 'ADMIN' ? 'disabled' : '' }}></b-input>
+                        </b-field>
+                        <b-field
+                            label="Item">
+                            <b-select placeholder="Select Itemtype" name="option[template]"
+                                      value="{{ old('option.template', ($settings->option('template', 'value') === null ? 'null' : $settings->option('template', 'value'))) }}"
+                                      {{ $role !== 'ADMIN' ? 'disabled' : '' }}
+                            expanded>
+                                <option value="null">Default</option>
+                                <option value="timeline.item.default">with Subtitle</option>
+                            </b-select>
                         </b-field>
 
                     </div>

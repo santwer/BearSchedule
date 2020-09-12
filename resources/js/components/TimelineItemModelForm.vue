@@ -18,6 +18,13 @@
                                 placeholder="Title">
                             </b-input>
                         </b-field>
+                        <b-field label="Subtitle">
+                            <b-input
+                                type="text"
+                                v-model="item.subtitle"
+                                placeholder="Subtitle">
+                            </b-input>
+                        </b-field>
 
                         <b-field label="Content">
                             <b-input maxlength="200" type="textarea" v-model="item.description"></b-input>
@@ -105,6 +112,7 @@
                     start: null,
                     end: null,
                     group: null,
+                    subtitle: null,
                     links: []
                 },
                 backup: {},
@@ -151,6 +159,7 @@
                     that.backup.group = that.item.group;
                     that.backup.type = that.item.type;
                     that.backup.links = that.item.links;
+                    that.backup.subtitle = that.item.subtitle;
                     that.$emit('close');
                     if (typeof that.item.id === "undefined" || that.item.id === null) {
                         that.backup.id = data.data.id;

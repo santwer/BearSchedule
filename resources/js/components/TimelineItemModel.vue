@@ -24,6 +24,7 @@
                     end: new Date(),
                     title: null,
                     content: '',
+                    subtitle: '',
                     group: null,
                     project_id: this.project,
                     links: []

@@ -53,6 +53,7 @@
     import {DataSet, Timeline} from 'vue2vis';
     import TimelineItemModel from "./TimelineItemModel";
     import TimelineGroupModel from "./TimelineGroupModel";
+    const Handlebars = require("handlebars");
 
     export default {
         name: "StudentsTimeline",
@@ -97,6 +98,9 @@
                         that.items = data.items;
                     }
                     if (typeof data.options !== "undefined") {
+                        if(typeof data.options.template !== "undefined") {
+                            data.options.template = Handlebars.compile(data.options.template);
+                        }
                         that.options = data.options;
                     }
                     that.dummeLoop = true;
