@@ -10,7 +10,6 @@ class Handlebars
     {
         $filepath = str_replace ('.', '/', $handlebar).'.hbs';
         $path = resource_path('handlebars/'.$filepath);
-        dd($path, file_exists($path));
         if(file_exists($path)) {
             return file_get_contents($path);
         }
