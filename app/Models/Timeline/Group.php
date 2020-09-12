@@ -22,6 +22,6 @@ class Group extends Model
     }
 
     public function nestedGroups() {
-        return $this->hasMany(Group::class, 'id', 'parent');
+        return $this->hasMany(Group::class, 'parent', 'id');
     }
 }
