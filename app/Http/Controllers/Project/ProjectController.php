@@ -25,12 +25,13 @@ class ProjectController extends Controller
         if($settings === null) {
             return view('login.noproject', $this->viewVariables);
         }
+        $pageTitle = $settings->name;
 
         $groups = Group::where('project_id', $project)->get();
         $items = Item::where('project_id', $project)->get();
         $role = $this->getRoleInProject($project);
 
-        $this->viewVariables = array_merge(compact('project', 'items', 'groups', 'settings', 'role'), $this->viewVariables) ;
+        $this->viewVariables = array_merge(compact('project', 'items', 'groups', 'settings', 'role', 'pageTitle'), $this->viewVariables) ;
 
 
         return view('login.project', $this->viewVariables);
