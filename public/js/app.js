@@ -117,6 +117,22 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -134,14 +150,20 @@ __webpack_require__.r(__webpack_exports__);
       dummeLoop: false,
       groups: [],
       items: [],
+      MsgIsActive: false,
       options: {
         editable: false
       },
+      activeMenu: false,
+      selectedOption: null,
       currentItem: null
     };
   },
   methods: {
     getData: function getData() {
+      var loadingComponent = this.$buefy.loading.open({
+        container: this.$el
+      });
       var that = this;
       $.get('/ajax/timeline/getdata', {
         project: this.project
@@ -159,15 +181,20 @@ __webpack_require__.r(__webpack_exports__);
         }
 
         that.dummeLoop = true;
+        that.MsgIsActive = that.items.length === 0;
+        console.log(that.items, that.items.length === 0, that.MsgIsActive);
+        setTimeout(function () {
+          return loadingComponent.close();
+        }, 1000);
       }, 'json');
     },
     dpClick: function dpClick(e) {
       if (this.currentItem !== null) {
         this.itemDpClick(this.currentItem);
-      }
-
-      if (e.group !== null && e.item === null && e.x < 0) {
+      } else if (e.group !== null && e.item === null && e.x < 0) {
         this.groupDpClick(e.group);
+      } else if (e.group !== null && e.what === 'background' && typeof e.target !== "undefined") {
+        console.log('dp bg', e);
       } else {
         console.log('dp', e);
       }
@@ -175,6 +202,10 @@ __webpack_require__.r(__webpack_exports__);
     itemDpClick: function itemDpClick(itemId) {
       var item = this.findObjectInArrayByProperty(this.items, 'id', itemId);
       this.$refs.itemmodel.openModelItem(item);
+
+      if (this.MsgIsActive) {
+        this.getData();
+      }
     },
     groupDpClick: function groupDpClick(groupId) {
       var item = this.findObjectInArrayByProperty(this.groups, 'id', groupId);
@@ -216,6 +247,24 @@ __webpack_require__.r(__webpack_exports__);
       return array.find(function (o) {
         return o[propertyName] === propertyValue;
       });
+    }
+  },
+  watch: {
+    selectedOption: function selectedOption(value, n) {
+      if (value === 'week') {
+        this.options.timeAxis = {
+          scale: 'week',
+          step: 1
+        };
+        this.options.format = {
+          minorLabels: {
+            week: 'w'
+          }
+        };
+      } else {
+        this.options.timeAxis = {};
+        this.format.timeAxis = {};
+      }
     }
   },
   mounted: function mounted() {
@@ -404,23 +453,28 @@ __webpack_require__.r(__webpack_exports__);
     },
     deleteEntry: function deleteEntry() {
       var that = this;
-      $.ajax({
-        method: "DELETE",
-        url: "/ajax/timeline/group",
-        data: that.item,
-        dataType: 'json'
-      }).done(function (data) {
-        var msg = "Delete successfully";
-        that.$buefy.toast.open(msg);
-        that.$parent.$parent.$parent.deleteGroupInTimeLine(that.backup.id);
-        that.$emit('close');
-      }).fail(function (data) {
-        var msg = typeof data.responseJSON.message !== "undefined" ? data.responseJSON.message : "Delete didn't work. Come back later.";
-        that.$buefy.toast.open({
-          duration: 5000,
-          message: msg,
-          type: 'is-danger'
-        });
+      this.$buefy.dialog.confirm({
+        message: 'You want to Delete this Group?',
+        onConfirm: function onConfirm() {
+          $.ajax({
+            method: "DELETE",
+            url: "/ajax/timeline/group",
+            data: that.item,
+            dataType: 'json'
+          }).done(function (data) {
+            var msg = "Delete successfully";
+            that.$buefy.toast.open(msg);
+            that.$parent.$parent.$parent.deleteGroupInTimeLine(that.backup.id);
+            that.$emit('close');
+          }).fail(function (data) {
+            var msg = typeof data.responseJSON.message !== "undefined" ? data.responseJSON.message : "Delete didn't work. Come back later.";
+            that.$buefy.toast.open({
+              duration: 5000,
+              message: msg,
+              type: 'is-danger'
+            });
+          });
+        }
       });
     }
   },
@@ -476,7 +530,8 @@ __webpack_require__.r(__webpack_exports__);
         title: null,
         content: '',
         group: null,
-        project_id: this.project
+        project_id: this.project,
+        links: []
       };
       this.$emit('addItem', this.setItem);
       this.openModal();
@@ -507,6 +562,272 @@ __webpack_require__.r(__webpack_exports__);
 /*!********************************************************************************************************************************************************************************!*\
   !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/TimelineItemModelForm.vue?vue&type=script&lang=js& ***!
   \********************************************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _tools_LinkButton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./tools/LinkButton */ "./resources/js/components/tools/LinkButton.vue");
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  name: "TimelineItemModelForm",
+  components: {
+    LinkButton: _tools_LinkButton__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
+  props: ['setItem'],
+  data: function data() {
+    return {
+      item: {
+        id: null,
+        title: '',
+        content: '',
+        start: null,
+        end: null,
+        group: null,
+        links: []
+      },
+      backup: {},
+      csrf: null,
+      groups: [],
+      types: [{
+        id: 'box',
+        text: 'default'
+      }, {
+        id: 'point',
+        text: 'point'
+      }, {
+        id: 'range',
+        text: 'range'
+      }, {
+        id: 'background',
+        text: 'background'
+      }]
+    };
+  },
+  methods: {
+    saveForm: function saveForm() {
+      this.saveAction();
+    },
+    saveAction: function saveAction() {
+      if (this.csrf === null) {
+        console.error('CSRF Meta not set. Update not possible');
+        this.$buefy.toast.open({
+          duration: 5000,
+          message: "Save didn't work. Come back later.",
+          type: 'is-danger'
+        });
+        this.$emit('close');
+      }
+
+      var that = this;
+      console.log(that.item);
+      $.ajax({
+        method: "PUT",
+        url: "/ajax/timeline/item",
+        data: that.item,
+        dataType: 'json'
+      }).done(function (data) {
+        var msg = "Saved successfully";
+        that.$buefy.toast.open(msg);
+        that.backup.start = that.item.start;
+        that.backup.end = that.item.end;
+        that.backup.content = that.item.content;
+        that.backup.title = that.item.title;
+        that.backup.description = that.item.description;
+        that.backup.group = that.item.group;
+        that.backup.type = that.item.type;
+        that.backup.links = that.item.links;
+        that.$emit('close');
+
+        if (typeof that.item.id === "undefined" || that.item.id === null) {
+          that.backup.id = data.data.id;
+          that.$parent.$parent.$parent.newItemInTimeLine(that.backup);
+        }
+
+        that.backup.links = data.data.links;
+      }).fail(function (data) {
+        var msg = typeof data.responseJSON.message !== "undefined" ? data.responseJSON.message : "Save didn't work. Come back later.";
+        that.$buefy.toast.open({
+          duration: 5000,
+          message: msg,
+          type: 'is-danger'
+        });
+      });
+    },
+    deleteEntry: function deleteEntry() {
+      var that = this;
+      this.$buefy.dialog.confirm({
+        message: 'You want to Delete this Item?',
+        onConfirm: function onConfirm() {
+          $.ajax({
+            method: "DELETE",
+            url: "/ajax/timeline/item",
+            data: that.item,
+            dataType: 'json'
+          }).done(function (data) {
+            var msg = "Delete successfully";
+            that.$buefy.toast.open(msg);
+            that.$parent.$parent.$parent.deleteItemInTimeLine(that.backup.id);
+            that.$emit('close');
+          }).fail(function (data) {
+            var msg = typeof data.responseJSON.message !== "undefined" ? data.responseJSON.message : "Delete didn't work. Come back later.";
+            that.$buefy.toast.open({
+              duration: 5000,
+              message: msg,
+              type: 'is-danger'
+            });
+          });
+        }
+      });
+    },
+    addLink: function addLink() {
+      console.log(this.item.links);
+
+      if (typeof this.item.links === "undefined") {
+        this.item.links = [];
+      }
+
+      this.item.links.push({
+        href: '',
+        title: ''
+      });
+      console.log(this.item.links);
+    }
+  },
+  mounted: function mounted() {
+    this.backup = this.setItem;
+
+    if (typeof this.setItem !== "undefined") {
+      this.backup.start = this.setItem.start === '' ? '' : new Date(Date.parse(this.setItem.start));
+    } else {
+      this.backup.start = null;
+    }
+
+    if (typeof this.setItem !== "undefined") {
+      this.backup.end = this.setItem.end === '' ? '' : new Date(Date.parse(this.setItem.end));
+    } else {
+      this.backup.end = null;
+    }
+
+    this.item = Object.assign({}, this.backup);
+
+    if (typeof this.item.type === "undefined") {
+      this.item.type = 'box';
+    } else if (this.item.type === null || this.item.type === '') {
+      this.item.type = 'box';
+    }
+
+    if (typeof this.item.links === "undefined") {
+      this.item.links = [];
+    }
+
+    this.csrf = $('meta[name=csrf-token]').attr('content');
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': this.csrf
+      }
+    });
+    this.groups = this.$parent.$parent.$parent.groups;
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/tools/LinkButton.vue?vue&type=script&lang=js&":
+/*!***************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/tools/LinkButton.vue?vue&type=script&lang=js& ***!
+  \***************************************************************************************************************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -548,141 +869,35 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
-  name: "TimelineItemModelForm",
-  props: ['setItem'],
+  name: "LinkButton",
+  props: ['editmode', 'item'],
   data: function data() {
     return {
-      item: {
-        id: null,
-        title: '',
-        content: '',
-        start: null,
-        end: null,
-        group: null
-      },
-      backup: {},
-      csrf: null,
-      groups: []
+      inEdit: false,
+      isDeleted: false
     };
   },
   methods: {
-    saveForm: function saveForm() {
-      this.saveAction();
-    },
-    saveAction: function saveAction() {
-      if (this.csrf === null) {
-        console.error('CSRF Meta not set. Update not possible');
-        this.$buefy.toast.open({
-          duration: 5000,
-          message: "Save didn't work. Come back later.",
-          type: 'is-danger'
-        });
-        this.$emit('close');
+    mainClick: function mainClick() {
+      if (this.editmode) {
+        this.inEdit = !this.inEdit;
+        return;
       }
-
-      var that = this;
-      $.ajax({
-        method: "PUT",
-        url: "/ajax/timeline/item",
-        data: that.item,
-        dataType: 'json'
-      }).done(function (data) {
-        var msg = "Saved successfully";
-        that.$buefy.toast.open(msg);
-        that.backup.start = that.item.start;
-        that.backup.end = that.item.end;
-        that.backup.content = that.item.content;
-        that.backup.title = that.item.title;
-        that.backup.group = that.item.group;
-        that.$emit('close');
-
-        if (typeof that.item.id === "undefined" || that.item.id === null) {
-          that.backup.id = data.data.id;
-          that.$parent.$parent.$parent.newItemInTimeLine(that.backup);
-        }
-      }).fail(function (data) {
-        var msg = typeof data.responseJSON.message !== "undefined" ? data.responseJSON.message : "Save didn't work. Come back later.";
-        that.$buefy.toast.open({
-          duration: 5000,
-          message: msg,
-          type: 'is-danger'
-        });
-      });
     },
-    deleteEntry: function deleteEntry() {
-      var that = this;
-      $.ajax({
-        method: "DELETE",
-        url: "/ajax/timeline/item",
-        data: that.item,
-        dataType: 'json'
-      }).done(function (data) {
-        var msg = "Delete successfully";
-        that.$buefy.toast.open(msg);
-        that.$parent.$parent.$parent.deleteItemInTimeLine(that.backup.id);
-        that.$emit('close');
-      }).fail(function (data) {
-        var msg = typeof data.responseJSON.message !== "undefined" ? data.responseJSON.message : "Delete didn't work. Come back later.";
-        that.$buefy.toast.open({
-          duration: 5000,
-          message: msg,
-          type: 'is-danger'
-        });
-      });
+    goToUrl: function goToUrl() {
+      window.open(this.item.href);
+    },
+    deleteItem: function deleteItem() {
+      this.item.title = "";
+      this.item.href = "";
+      this.isDeleted = true;
     }
   },
   mounted: function mounted() {
-    this.backup = this.setItem;
-
-    if (typeof this.setItem !== "undefined") {
-      this.backup.start = this.setItem.start === '' ? '' : new Date(Date.parse(this.setItem.start));
-    } else {
-      this.backup.start = null;
+    if (this.item.title === "" && this.item.href === "") {
+      this.inEdit = true;
     }
-
-    if (typeof this.setItem !== "undefined") {
-      this.backup.end = this.setItem.end === '' ? '' : new Date(Date.parse(this.setItem.end));
-    } else {
-      this.backup.end = null;
-    }
-
-    this.item = Object.assign({}, this.backup);
-    this.csrf = $('meta[name=csrf-token]').attr('content');
-    $.ajaxSetup({
-      headers: {
-        'X-CSRF-TOKEN': this.csrf
-      }
-    });
-    this.groups = this.$parent.$parent.$parent.groups;
-    console.log(this.groups);
   }
 });
 
@@ -16135,6 +16350,25 @@ exports.push([module.i, "\n.delButton[data-v-2c085dc4] {\n    display: block;\n 
 
 /***/ }),
 
+/***/ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/tools/LinkButton.vue?vue&type=style&index=0&id=65f12aeb&scoped=true&lang=css&":
+/*!**********************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/tools/LinkButton.vue?vue&type=style&index=0&id=65f12aeb&scoped=true&lang=css& ***!
+  \**********************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "\nsection[data-v-65f12aeb] {\n    width: 100%\n}\n.editer[data-v-65f12aeb] {\n    border: 1px solid #efefef;\n    padding: 5px 0 3px 0;\n}\n.is-50[data-v-65f12aeb] {\n    width: 50px;\n    padding-top: 10px;\n}\n", ""]);
+
+// exports
+
+
+/***/ }),
+
 /***/ "./node_modules/css-loader/lib/css-base.js":
 /*!*************************************************!*\
   !*** ./node_modules/css-loader/lib/css-base.js ***!
@@ -27559,6 +27793,36 @@ if(false) {}
 
 /***/ }),
 
+/***/ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/tools/LinkButton.vue?vue&type=style&index=0&id=65f12aeb&scoped=true&lang=css&":
+/*!**************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/style-loader!./node_modules/css-loader??ref--6-1!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src??ref--6-2!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/tools/LinkButton.vue?vue&type=style&index=0&id=65f12aeb&scoped=true&lang=css& ***!
+  \**************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./LinkButton.vue?vue&type=style&index=0&id=65f12aeb&scoped=true&lang=css& */ "./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/tools/LinkButton.vue?vue&type=style&index=0&id=65f12aeb&scoped=true&lang=css&");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
 /***/ "./node_modules/style-loader/lib/addStyles.js":
 /*!****************************************************!*\
   !*** ./node_modules/style-loader/lib/addStyles.js ***!
@@ -28162,6 +28426,7 @@ var render = function() {
     _vm.dummeLoop
       ? _c(
           "div",
+          { ref: "fullline", attrs: { id: "currentContentTime" } },
           [
             _c(
               "div",
@@ -28175,24 +28440,99 @@ var render = function() {
                 _c("timeline-group-model", {
                   ref: "groupmodel",
                   attrs: { project: _vm.project }
-                })
+                }),
+                _vm._v(" "),
+                _c(
+                  "b-dropdown",
+                  {
+                    attrs: { "aria-role": "list" },
+                    scopedSlots: _vm._u(
+                      [
+                        {
+                          key: "trigger",
+                          fn: function(ref) {
+                            var activeMenu = ref.activeMenu
+                            return _c(
+                              "button",
+                              { staticClass: "button is-primary" },
+                              [
+                                _c("span", [_vm._v("Timeline mode")]),
+                                _vm._v(" "),
+                                _c("b-icon", {
+                                  attrs: {
+                                    icon: activeMenu ? "menu-up" : "menu-down"
+                                  }
+                                })
+                              ],
+                              1
+                            )
+                          }
+                        }
+                      ],
+                      null,
+                      false,
+                      3461492377
+                    ),
+                    model: {
+                      value: _vm.selectedOption,
+                      callback: function($$v) {
+                        _vm.selectedOption = $$v
+                      },
+                      expression: "selectedOption"
+                    }
+                  },
+                  [
+                    _vm._v(" "),
+                    _c(
+                      "b-dropdown-item",
+                      { attrs: { "aria-role": "listitem", value: "default" } },
+                      [_vm._v("Default")]
+                    ),
+                    _vm._v(" "),
+                    _c(
+                      "b-dropdown-item",
+                      { attrs: { "aria-role": "listitem", value: "week" } },
+                      [_vm._v("in Weeks")]
+                    )
+                  ],
+                  1
+                )
               ],
               1
             ),
             _vm._v(" "),
-            _c("timeline", {
-              ref: "timeline",
-              attrs: {
-                items: _vm.items,
-                groups: _vm.groups,
-                options: _vm.options
-              },
-              on: {
-                "double-click": _vm.dpClick,
-                itemover: _vm.itemOver,
-                itemout: _vm.itemOut
-              }
-            })
+            _vm.MsgIsActive
+              ? _c(
+                  "b-message",
+                  {
+                    attrs: {
+                      title: "No Items",
+                      "aria-close-label": "Close message"
+                    }
+                  },
+                  [
+                    _vm._v(
+                      "\n            Since there a no Items, its not possible to show the timeline, yet. Please add Items and Groups first.\n        "
+                    )
+                  ]
+                )
+              : _vm._e(),
+            _vm._v(" "),
+            !_vm.MsgIsActive
+              ? _c("timeline", {
+                  ref: "timeline",
+                  attrs: {
+                    items: _vm.items,
+                    groups: _vm.groups,
+                    options: _vm.options
+                  },
+                  on: {
+                    "double-click": _vm.dpClick,
+                    itemover: _vm.itemOver,
+                    itemout: _vm.itemOut
+                  }
+                })
+              : _vm._e()
           ],
           1
         )
@@ -28456,7 +28796,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("form", { attrs: { action: "" } }, [
-    _c("div", { staticClass: "modal-card", staticStyle: { width: "400px" } }, [
+    _c("div", { staticClass: "modal-card", staticStyle: { width: "1200px" } }, [
       _c("header", { staticClass: "modal-card-head" }, [
         _c("p", { staticClass: "modal-card-title" }, [_vm._v("Item")]),
         _vm._v(" "),
@@ -28471,131 +28811,230 @@ var render = function() {
         })
       ]),
       _vm._v(" "),
-      _c(
-        "section",
-        { staticClass: "modal-card-body" },
-        [
+      _c("section", { staticClass: "modal-card-body" }, [
+        _c("div", { staticClass: "columns" }, [
           _c(
-            "b-field",
-            { attrs: { label: "Title" } },
-            [
-              _c("b-input", {
-                attrs: { type: "text", placeholder: "Title", required: "" },
-                model: {
-                  value: _vm.item.title,
-                  callback: function($$v) {
-                    _vm.$set(_vm.item, "title", $$v)
-                  },
-                  expression: "item.title"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-field",
-            { attrs: { label: "Content" } },
-            [
-              _c("b-input", {
-                attrs: { type: "text", placeholder: "Title" },
-                model: {
-                  value: _vm.item.content,
-                  callback: function($$v) {
-                    _vm.$set(_vm.item, "content", $$v)
-                  },
-                  expression: "item.content"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-field",
-            { attrs: { label: "Group" } },
+            "div",
+            { staticClass: "column" },
             [
               _c(
-                "b-select",
-                {
-                  attrs: {
-                    placeholder: "Select a group",
-                    required: "",
-                    expanded: ""
-                  },
-                  model: {
-                    value: _vm.item.group,
-                    callback: function($$v) {
-                      _vm.$set(_vm.item, "group", $$v)
+                "b-field",
+                { attrs: { label: "Title" } },
+                [
+                  _c("b-input", {
+                    attrs: { type: "text", placeholder: "Title" },
+                    model: {
+                      value: _vm.item.content,
+                      callback: function($$v) {
+                        _vm.$set(_vm.item, "content", $$v)
+                      },
+                      expression: "item.content"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-field",
+                { attrs: { label: "Content" } },
+                [
+                  _c("b-input", {
+                    attrs: { maxlength: "200", type: "textarea" },
+                    model: {
+                      value: _vm.item.description,
+                      callback: function($$v) {
+                        _vm.$set(_vm.item, "description", $$v)
+                      },
+                      expression: "item.description"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "div",
+                { staticClass: "buttons" },
+                [
+                  _c(
+                    "b-button",
+                    {
+                      attrs: { size: "is-small", "icon-left": "plus-thick" },
+                      on: { click: _vm.addLink }
                     },
-                    expression: "item.group"
-                  }
-                },
-                _vm._l(_vm.groups, function(group) {
-                  return _c(
-                    "option",
-                    { key: group.id, domProps: { value: group.id } },
-                    [
-                      _vm._v(
-                        "\n                        " +
-                          _vm._s(group.content) +
-                          "\n                    "
-                      )
-                    ]
-                  )
-                }),
-                0
+                    [_vm._v("Add Link")]
+                  ),
+                  _vm._v(" "),
+                  _vm._l(_vm.item.links, function(link) {
+                    return _c(
+                      "div",
+                      { staticStyle: { width: "100%" } },
+                      [
+                        _c("link-button", {
+                          attrs: { editmode: "true", item: link }
+                        })
+                      ],
+                      1
+                    )
+                  })
+                ],
+                2
               )
             ],
             1
           ),
           _vm._v(" "),
           _c(
-            "b-field",
-            { attrs: { label: "Start" } },
+            "div",
+            { staticClass: "is-350" },
             [
-              _c("b-datepicker", {
-                attrs: {
-                  placeholder: "Click to select...",
-                  icon: "calendar-today",
-                  "trap-focus": ""
-                },
-                model: {
-                  value: _vm.item.start,
-                  callback: function($$v) {
-                    _vm.$set(_vm.item, "start", $$v)
-                  },
-                  expression: "item.start"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "b-field",
-            { attrs: { label: "End" } },
-            [
-              _c("b-datepicker", {
-                attrs: {
-                  placeholder: "Click to select...",
-                  icon: "calendar-today",
-                  "trap-focus": ""
-                },
-                model: {
-                  value: _vm.item.end,
-                  callback: function($$v) {
-                    _vm.$set(_vm.item, "end", $$v)
-                  },
-                  expression: "item.end"
-                }
-              })
+              _c("h2", { staticClass: "subtitle" }, [_vm._v("Options")]),
+              _vm._v(" "),
+              _c(
+                "b-field",
+                { attrs: { label: "Title (on Mouse over)" } },
+                [
+                  _c("b-input", {
+                    attrs: { type: "text", placeholder: "Title", required: "" },
+                    model: {
+                      value: _vm.item.title,
+                      callback: function($$v) {
+                        _vm.$set(_vm.item, "title", $$v)
+                      },
+                      expression: "item.title"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-field",
+                { attrs: { label: "Type" } },
+                [
+                  _c(
+                    "b-select",
+                    {
+                      attrs: {
+                        placeholder: "Select a type",
+                        required: "",
+                        expanded: ""
+                      },
+                      model: {
+                        value: _vm.item.type,
+                        callback: function($$v) {
+                          _vm.$set(_vm.item, "type", $$v)
+                        },
+                        expression: "item.type"
+                      }
+                    },
+                    _vm._l(_vm.types, function(type) {
+                      return _c(
+                        "option",
+                        { key: type.id, domProps: { value: type.id } },
+                        [
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(type.text) +
+                              "\n                            "
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-field",
+                { attrs: { label: "Group" } },
+                [
+                  _c(
+                    "b-select",
+                    {
+                      attrs: {
+                        placeholder: "Select a group",
+                        required: "",
+                        expanded: ""
+                      },
+                      model: {
+                        value: _vm.item.group,
+                        callback: function($$v) {
+                          _vm.$set(_vm.item, "group", $$v)
+                        },
+                        expression: "item.group"
+                      }
+                    },
+                    _vm._l(_vm.groups, function(group) {
+                      return _c(
+                        "option",
+                        { key: group.id, domProps: { value: group.id } },
+                        [
+                          _vm._v(
+                            "\n                                " +
+                              _vm._s(group.content) +
+                              "\n                            "
+                          )
+                        ]
+                      )
+                    }),
+                    0
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-field",
+                { attrs: { label: "Start" } },
+                [
+                  _c("b-datepicker", {
+                    attrs: {
+                      placeholder: "Click to select...",
+                      icon: "calendar-today",
+                      "trap-focus": ""
+                    },
+                    model: {
+                      value: _vm.item.start,
+                      callback: function($$v) {
+                        _vm.$set(_vm.item, "start", $$v)
+                      },
+                      expression: "item.start"
+                    }
+                  })
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _c(
+                "b-field",
+                { attrs: { label: "End" } },
+                [
+                  _c("b-datepicker", {
+                    attrs: {
+                      placeholder: "Click to select...",
+                      icon: "calendar-today",
+                      "trap-focus": ""
+                    },
+                    model: {
+                      value: _vm.item.end,
+                      callback: function($$v) {
+                        _vm.$set(_vm.item, "end", $$v)
+                      },
+                      expression: "item.end"
+                    }
+                  })
+                ],
+                1
+              )
             ],
             1
           )
-        ],
-        1
-      ),
+        ])
+      ]),
       _vm._v(" "),
       _c("footer", { staticClass: "modal-card-foot" }, [
         _c(
@@ -28630,12 +29069,134 @@ var render = function() {
                 attrs: { type: "button" },
                 on: { click: _vm.deleteEntry }
               },
-              [_vm._v("delete")]
+              [_vm._v("\n                delete\n            ")]
             )
           : _vm._e()
       ])
     ])
   ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/tools/LinkButton.vue?vue&type=template&id=65f12aeb&scoped=true&":
+/*!*******************************************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/components/tools/LinkButton.vue?vue&type=template&id=65f12aeb&scoped=true& ***!
+  \*******************************************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return !_vm.isDeleted
+    ? _c(
+        "section",
+        [
+          _vm.inEdit
+            ? _c("div", { staticClass: "editer" }, [
+                _c("div", { staticClass: "columns" }, [
+                  _c(
+                    "div",
+                    { staticClass: "column" },
+                    [
+                      _c(
+                        "b-field",
+                        [
+                          _c("b-input", {
+                            attrs: {
+                              placeholder: "Title",
+                              type: "text",
+                              icon: "tag-text"
+                            },
+                            model: {
+                              value: _vm.item.title,
+                              callback: function($$v) {
+                                _vm.$set(_vm.item, "title", $$v)
+                              },
+                              expression: "item.title"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "column" },
+                    [
+                      _c(
+                        "b-field",
+                        [
+                          _c("b-input", {
+                            attrs: {
+                              placeholder: "URL",
+                              type: "search",
+                              icon: "link-variant",
+                              "icon-clickable": ""
+                            },
+                            on: { "icon-click": _vm.goToUrl },
+                            model: {
+                              value: _vm.item.href,
+                              callback: function($$v) {
+                                _vm.$set(_vm.item, "href", $$v)
+                              },
+                              expression: "item.href"
+                            }
+                          })
+                        ],
+                        1
+                      )
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "is-50" },
+                    [
+                      _c("b-button", {
+                        attrs: { "icon-left": "content-save-outline" },
+                        on: { click: _vm.mainClick }
+                      }),
+                      _vm._v(" "),
+                      _c("b-button", {
+                        attrs: { "icon-left": "delete" },
+                        on: { click: _vm.deleteItem }
+                      })
+                    ],
+                    1
+                  )
+                ])
+              ])
+            : _vm._e(),
+          _vm._v(" "),
+          !_vm.inEdit
+            ? _c(
+                "b-button",
+                {
+                  attrs: { type: "is-success is-light", expanded: "" },
+                  on: { click: _vm.mainClick }
+                },
+                [_vm._v(_vm._s(_vm.item.title))]
+              )
+            : _vm._e()
+        ],
+        1
+      )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -103706,7 +104267,44 @@ var Content = new Vue({
     DataSet: vue2vis__WEBPACK_IMPORTED_MODULE_1__["DataSet"]
   },
   data: {
-    showMenu: true
+    showMenu: true,
+    groupsColumns: [{
+      field: 'id',
+      label: 'ID',
+      width: '40',
+      numeric: true
+    }, {
+      field: 'title',
+      label: 'Title'
+    }, {
+      field: 'content',
+      label: 'Content'
+    }],
+    itemColumns: [{
+      field: 'id',
+      label: 'ID',
+      width: '40',
+      numeric: true
+    }, {
+      field: 'group',
+      label: 'Group',
+      width: '40',
+      numeric: true
+    }, {
+      field: 'title',
+      label: 'Title'
+    }, {
+      field: 'content',
+      label: 'Content'
+    }, {
+      field: 'start',
+      label: 'Start',
+      centered: true
+    }, {
+      field: 'end',
+      label: 'End',
+      centered: true
+    }]
   }
 });
 
@@ -104088,6 +104686,93 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TimelineItemModelForm_vue_vue_type_template_id_2c085dc4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
 
 /* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_TimelineItemModelForm_vue_vue_type_template_id_2c085dc4_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
+/***/ "./resources/js/components/tools/LinkButton.vue":
+/*!******************************************************!*\
+  !*** ./resources/js/components/tools/LinkButton.vue ***!
+  \******************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _LinkButton_vue_vue_type_template_id_65f12aeb_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./LinkButton.vue?vue&type=template&id=65f12aeb&scoped=true& */ "./resources/js/components/tools/LinkButton.vue?vue&type=template&id=65f12aeb&scoped=true&");
+/* harmony import */ var _LinkButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./LinkButton.vue?vue&type=script&lang=js& */ "./resources/js/components/tools/LinkButton.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _LinkButton_vue_vue_type_style_index_0_id_65f12aeb_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./LinkButton.vue?vue&type=style&index=0&id=65f12aeb&scoped=true&lang=css& */ "./resources/js/components/tools/LinkButton.vue?vue&type=style&index=0&id=65f12aeb&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_3__["default"])(
+  _LinkButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _LinkButton_vue_vue_type_template_id_65f12aeb_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _LinkButton_vue_vue_type_template_id_65f12aeb_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  "65f12aeb",
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/components/tools/LinkButton.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/components/tools/LinkButton.vue?vue&type=script&lang=js&":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/components/tools/LinkButton.vue?vue&type=script&lang=js& ***!
+  \*******************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/babel-loader/lib??ref--4-0!../../../../node_modules/vue-loader/lib??vue-loader-options!./LinkButton.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/tools/LinkButton.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkButton_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/components/tools/LinkButton.vue?vue&type=style&index=0&id=65f12aeb&scoped=true&lang=css&":
+/*!***************************************************************************************************************!*\
+  !*** ./resources/js/components/tools/LinkButton.vue?vue&type=style&index=0&id=65f12aeb&scoped=true&lang=css& ***!
+  \***************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkButton_vue_vue_type_style_index_0_id_65f12aeb_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/style-loader!../../../../node_modules/css-loader??ref--6-1!../../../../node_modules/vue-loader/lib/loaders/stylePostLoader.js!../../../../node_modules/postcss-loader/src??ref--6-2!../../../../node_modules/vue-loader/lib??vue-loader-options!./LinkButton.vue?vue&type=style&index=0&id=65f12aeb&scoped=true&lang=css& */ "./node_modules/style-loader/index.js!./node_modules/css-loader/index.js?!./node_modules/vue-loader/lib/loaders/stylePostLoader.js!./node_modules/postcss-loader/src/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/tools/LinkButton.vue?vue&type=style&index=0&id=65f12aeb&scoped=true&lang=css&");
+/* harmony import */ var _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkButton_vue_vue_type_style_index_0_id_65f12aeb_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkButton_vue_vue_type_style_index_0_id_65f12aeb_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__);
+/* harmony reexport (unknown) */ for(var __WEBPACK_IMPORT_KEY__ in _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkButton_vue_vue_type_style_index_0_id_65f12aeb_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__) if(["default"].indexOf(__WEBPACK_IMPORT_KEY__) < 0) (function(key) { __webpack_require__.d(__webpack_exports__, key, function() { return _node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkButton_vue_vue_type_style_index_0_id_65f12aeb_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0__[key]; }) }(__WEBPACK_IMPORT_KEY__));
+ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_style_loader_index_js_node_modules_css_loader_index_js_ref_6_1_node_modules_vue_loader_lib_loaders_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_6_2_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkButton_vue_vue_type_style_index_0_id_65f12aeb_scoped_true_lang_css___WEBPACK_IMPORTED_MODULE_0___default.a); 
+
+/***/ }),
+
+/***/ "./resources/js/components/tools/LinkButton.vue?vue&type=template&id=65f12aeb&scoped=true&":
+/*!*************************************************************************************************!*\
+  !*** ./resources/js/components/tools/LinkButton.vue?vue&type=template&id=65f12aeb&scoped=true& ***!
+  \*************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkButton_vue_vue_type_template_id_65f12aeb_scoped_true___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../../node_modules/vue-loader/lib??vue-loader-options!./LinkButton.vue?vue&type=template&id=65f12aeb&scoped=true& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/components/tools/LinkButton.vue?vue&type=template&id=65f12aeb&scoped=true&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkButton_vue_vue_type_template_id_65f12aeb_scoped_true___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_LinkButton_vue_vue_type_template_id_65f12aeb_scoped_true___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
 
 
 

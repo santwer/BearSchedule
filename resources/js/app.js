@@ -13,6 +13,54 @@ const Content = new Vue({
         DataSet
     },
     data: {
-        showMenu: true
+        showMenu: true,
+        groupsColumns: [
+            {
+                field: 'id',
+                label: 'ID',
+                width: '40',
+                numeric: true
+            },
+            {
+                field: 'title',
+                label: 'Title',
+            },
+            {
+                field: 'content',
+                label: 'Content',
+            },
+        ],
+        itemColumns: [
+            {
+                field: 'id',
+                label: 'ID',
+                width: '40',
+                numeric: true
+            },
+            {
+                field: 'group',
+                label: 'Group',
+                width: '40',
+                numeric: true
+            },
+            {
+                field: 'title',
+                label: 'Title',
+            },
+            {
+                field: 'content',
+                label: 'Content',
+            },
+            {
+                field: 'start',
+                label: 'Start',
+                centered: true
+            },
+            {
+                field: 'end',
+                label: 'End',
+                centered: true
+            },
+        ]
     },
 });

@@ -32,7 +32,7 @@ class CreateItemsTable extends Migration
 
             $table->timestamps();
 
-            $table->foreign('group')->references('id')->on('groups');
+            $table->foreign('group')->references('id')->on('groups')->onDelete('cascade');
         });
     }
 

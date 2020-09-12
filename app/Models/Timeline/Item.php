@@ -13,10 +13,13 @@ class Item extends Model
     protected $fillable = [
         'title', 'content', 'className', 'style', 'align',
         'end', 'start', 'group', 'selectable', 'subgroup',
-        'type', 'limitSize', 'editable', 'project_id'
+        'type', 'limitSize', 'editable', 'project_id', 'description'
     ];
 
     public function goups() {
         return $this->belongsTo(Group::class, 'id', 'group');
+    }
+    public function links() {
+        return $this->belongsToMany(ItemLink::class, 'item_item_link');
     }
 }

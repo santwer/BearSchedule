@@ -1,11 +1,27 @@
 <template>
     <div>
-        <div v-if="dummeLoop">
+        <div v-if="dummeLoop" ref="fullline" id="currentContentTime">
             <div class="buttons">
                 <timeline-item-model ref="itemmodel" :project="project"></timeline-item-model>
                 <timeline-group-model ref="groupmodel" :project="project"></timeline-group-model>
+
+
+                <b-dropdown aria-role="list" v-model="selectedOption">
+                    <button class="button is-primary" slot="trigger" slot-scope="{ activeMenu }">
+                        <span>Timeline mode</span>
+                        <b-icon :icon="activeMenu ? 'menu-up' : 'menu-down'"></b-icon>
+                    </button>
+
+                    <b-dropdown-item aria-role="listitem" value="default">Default</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="week">in Weeks</b-dropdown-item>
+                </b-dropdown>
             </div>
+
+            <b-message title="No Items" v-if="MsgIsActive" aria-close-label="Close message">
+                Since there a no Items, its not possible to show the timeline, yet. Please add Items and Groups first.
+            </b-message>
             <timeline ref="timeline"
+                      v-if="!MsgIsActive"
                       @double-click="dpClick"
                       @itemover="itemOver"
                       @itemout="itemOut"
@@ -35,15 +51,21 @@
                 dummeLoop: false,
                 groups: [],
                 items: [],
+                MsgIsActive: false,
                 options: {
                     editable: false,
                 },
+                activeMenu: false,
+                selectedOption: null,
 
                 currentItem: null,
             }
         },
         methods: {
             getData: function () {
+                const loadingComponent = this.$buefy.loading.open({
+                    container: this.$el
+                });
                 var that = this;
                 $.get('/ajax/timeline/getdata', {project: this.project}, function (data) {
                     if (typeof data.groups !== "undefined") {
@@ -55,15 +77,20 @@
                     if (typeof data.options !== "undefined") {
                         that.options = data.options;
                     }
-
                     that.dummeLoop = true;
+                    that.MsgIsActive = that.items.length  === 0;
+                    console.log(that.items, that.items.length  === 0, that.MsgIsActive);
+                    setTimeout(() => loadingComponent.close(), 1000);
                 }, 'json')
             },
             dpClick: function (e) {
                 if(this.currentItem !== null) {
                     this.itemDpClick(this.currentItem);
-                } if(e.group !== null && e.item === null && e.x < 0) {
+                } else if(e.group !== null && e.item === null && e.x < 0) {
                     this.groupDpClick(e.group);
+                }
+                else if(e.group !== null && e.what === 'background' && typeof e.target !== "undefined") {
+                    console.log('dp bg', e);
                 }
                 else {
                     console.log('dp', e);
@@ -72,6 +99,9 @@
             itemDpClick: function (itemId) {
                 var item = this.findObjectInArrayByProperty(this.items, 'id', itemId);
                 this.$refs.itemmodel.openModelItem(item);
+                if(this.MsgIsActive) {
+                    this.getData();
+                }
             },
             groupDpClick: function (groupId) {
                 var item = this.findObjectInArrayByProperty(this.groups, 'id', groupId);
@@ -108,6 +138,24 @@
             },
             findObjectInArrayByProperty: function(array, propertyName, propertyValue) {
                 return array.find((o) => { return o[propertyName] === propertyValue });
+            }
+        },
+        watch: {
+            selectedOption: function (value, n) {
+                if (value === 'week') {
+                    this.options.timeAxis = {
+                        scale: 'week',
+                        step: 1
+                    };
+                    this.options.format = {
+                        minorLabels: {week: 'w'}
+                    };
+                } else {
+                    this.options.timeAxis = {
+                    };
+                    this.format.timeAxis = {
+                    };
+                }
             }
         },
         mounted() {

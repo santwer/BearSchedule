@@ -12,17 +12,26 @@
 
 <body>
 <section class="hero mainBgColor" id="header">
-    <div class="heading-bar"></div>
+    <div class="heading-bar">{{__('Welcome')}} {{ Auth::user()->name }}</div>
     <div class="hero-body">
         <div class="container">
             <h1 class="title">
-                {{ env('APP_NAME', 'Education') }}
+                {{ env('APP_NAME', 'Projects') }}
             </h1>
             <h2 class="subtitle">
                 {{ __('Project schedule') }}
             </h2>
         </div>
 
+    </div>
+    <div class="logout-area">
+        <a href="{{ route('logout') }}"
+           onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <button class="button is-primary ">{{ __('Logout') }}</button>
+        </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+            @csrf
+        </form>
     </div>
 </section>
 <section class="hero" id="content">

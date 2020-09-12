@@ -22491,7 +22491,8 @@ body {
 .box {
   margin-top: 5rem;
 }
-.avatar {
+.avatar,
+.avatar-borderless {
   margin-top: -70px;
   padding-bottom: 20px;
 }
@@ -22545,6 +22546,9 @@ p.subtitle {
   height: 25px;
   background: #4a0072;
   border-bottom: 1px solid #ae52d4;
+  color: #fff;
+  text-align: right;
+  padding-right: 10px ;
 }
 .correct-hero {
   padding: 12px 20px;
@@ -22577,8 +22581,21 @@ p.subtitle {
 .show-menu-btn {
   position: absolute;
 }
+.logout-area {
+  position: absolute;
+  top: 110px;
+  right: 10px;
+}
 /*
 7b1fa2 pimary
 ae52d4 light
 dark 4a0072
 */
+/* alternating column backgrounds */
+.vis-time-axis .vis-grid.vis-odd {
+  background: rgba(0, 0, 0, 0.03);
+}
+.vis-time-axis .vis-grid.vis-saturday,
+.vis-time-axis .vis-grid.vis-sunday {
+  background: rgba(174, 82, 212, 0.11);
+}

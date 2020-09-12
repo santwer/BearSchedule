@@ -108,24 +108,30 @@
             },
             deleteEntry: function () {
                 var that = this;
-                $.ajax({
-                    method: "DELETE",
-                    url: "/ajax/timeline/group",
-                    data: that.item,
-                    dataType: 'json'
-                }).done(function (data) {
-                    var msg = `Delete successfully`;
-                    that.$buefy.toast.open(msg);
-                    that.$parent.$parent.$parent.deleteGroupInTimeLine(that.backup.id);
-                    that.$emit('close');
-                }).fail(function (data) {
-                    var msg = (typeof data.responseJSON.message !== "undefined") ? data.responseJSON.message : `Delete didn't work. Come back later.`;
-                    that.$buefy.toast.open({
-                        duration: 5000,
-                        message: msg,
-                        type: 'is-danger'
-                    });
-                })
+                this.$buefy.dialog.confirm({
+                        message: 'You want to Delete this Group?',
+                        onConfirm: function () {
+
+                            $.ajax({
+                                method: "DELETE",
+                                url: "/ajax/timeline/group",
+                                data: that.item,
+                                dataType: 'json'
+                            }).done(function (data) {
+                                var msg = `Delete successfully`;
+                                that.$buefy.toast.open(msg);
+                                that.$parent.$parent.$parent.deleteGroupInTimeLine(that.backup.id);
+                                that.$emit('close');
+                            }).fail(function (data) {
+                                var msg = (typeof data.responseJSON.message !== "undefined") ? data.responseJSON.message : `Delete didn't work. Come back later.`;
+                                that.$buefy.toast.open({
+                                    duration: 5000,
+                                    message: msg,
+                                    type: 'is-danger'
+                                });
+                            })
+                        }
+                });
             }
         },
         mounted() {

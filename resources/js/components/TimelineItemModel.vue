@@ -25,7 +25,8 @@
                     title: null,
                     content: '',
                     group: null,
-                    project_id: this.project
+                    project_id: this.project,
+                    links: []
                 };
                 this.$emit('addItem', this.setItem)
                 this.openModal();
