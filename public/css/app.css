@@ -22603,6 +22603,15 @@ p.subtitle {
 ae52d4 light
 dark 4a0072
 */
+/*
+7b1fa2 pimary
+ae52d4 light
+dark 4a0072
+*/
+.vis-item {
+  border-color: #ae52d4;
+  background-color: #ebd5f5;
+}
 /* alternating column backgrounds */
 .vis-time-axis .vis-grid.vis-odd {
   background: rgba(0, 0, 0, 0.03);
