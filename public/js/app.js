@@ -135,7 +135,7 @@ __webpack_require__.r(__webpack_exports__);
   components: {
     AjaxSearchInput: _tools_AjaxSearchInput__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
-  props: ['users'],
+  props: ['users', 'role'],
   data: function data() {
     return {
       userData: [],
@@ -252,7 +252,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "StudentsTimeline",
-  props: ['project'],
+  props: ['project', 'role'],
   components: {
     TimelineGroupModel: _TimelineGroupModel__WEBPACK_IMPORTED_MODULE_2__["default"],
     TimelineItemModel: _TimelineItemModel__WEBPACK_IMPORTED_MODULE_1__["default"],
@@ -276,6 +276,9 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   methods: {
+    canAddItems: function canAddItems() {
+      return this.role === 'ADMIN' || this.role === 'EDITOR';
+    },
     getData: function getData() {
       var loadingComponent = this.$buefy.loading.open({
         container: this.$el
@@ -28743,6 +28746,7 @@ var render = function() {
                       {
                         attrs: {
                           placeholder: "Select a role",
+                          disabled: _vm.role !== "ADMIN",
                           name: _vm.inputName(props.row.id, "role")
                         },
                         model: {
@@ -28776,18 +28780,20 @@ var render = function() {
                   "b-table-column",
                   { attrs: { label: "" } },
                   [
-                    _c("b-button", {
-                      attrs: {
-                        size: "is-small",
-                        "icon-left": "window-close",
-                        "data-id": props.row.id
-                      },
-                      on: {
-                        click: function($event) {
-                          return _vm.deleteEntry(props.row.id)
-                        }
-                      }
-                    }),
+                    _vm.role === "ADMIN"
+                      ? _c("b-button", {
+                          attrs: {
+                            size: "is-small",
+                            "icon-left": "window-close",
+                            "data-id": props.row.id
+                          },
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteEntry(props.row.id)
+                            }
+                          }
+                        })
+                      : _vm._e(),
                     _vm._v(" "),
                     _c("input", {
                       attrs: {
@@ -28804,10 +28810,12 @@ var render = function() {
         ])
       }),
       _vm._v(" "),
-      _c("ajax-search-input", {
-        attrs: { src: "/ajax/autocomplete/User", headline: "Add User" },
-        on: { selectitem: _vm.addUser }
-      })
+      _vm.role === "ADMIN"
+        ? _c("ajax-search-input", {
+            attrs: { src: "/ajax/autocomplete/User", headline: "Add User" },
+            on: { selectitem: _vm.addUser }
+          })
+        : _vm._e()
     ],
     1
   )
@@ -28844,15 +28852,19 @@ var render = function() {
               "div",
               { staticClass: "buttons" },
               [
-                _c("timeline-item-model", {
-                  ref: "itemmodel",
-                  attrs: { project: _vm.project }
-                }),
+                _vm.canAddItems()
+                  ? _c("timeline-item-model", {
+                      ref: "itemmodel",
+                      attrs: { project: _vm.project }
+                    })
+                  : _vm._e(),
                 _vm._v(" "),
-                _c("timeline-group-model", {
-                  ref: "groupmodel",
-                  attrs: { project: _vm.project }
-                }),
+                _vm.canAddItems()
+                  ? _c("timeline-group-model", {
+                      ref: "groupmodel",
+                      attrs: { project: _vm.project }
+                    })
+                  : _vm._e(),
                 _vm._v(" "),
                 _c(
                   "b-dropdown",

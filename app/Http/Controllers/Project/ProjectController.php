@@ -27,8 +27,9 @@ class ProjectController extends Controller
 
         $groups = Group::where('project_id', $project)->get();
         $items = Item::where('project_id', $project)->get();
+        $role = $this->getRoleInProject($project);
 
-        $this->viewVariables = array_merge(compact('project', 'items', 'groups', 'settings'), $this->viewVariables) ;
+        $this->viewVariables = array_merge(compact('project', 'items', 'groups', 'settings', 'role'), $this->viewVariables) ;
 
 
         return view('login.project', $this->viewVariables);

@@ -6,7 +6,7 @@
             data-tab="{{ isset($activeTab) ? $activeTab : 'timeline' }}" ref="projecttab">
         <b-tab-item label="Timeline" value="timeline">
 
-            <students-timeline project="{{$project}}"></students-timeline>
+            <students-timeline project="{{$project}}" role="{{ $role }}"></students-timeline>
 
         </b-tab-item>
         <b-tab-item label="Items" value="items">
@@ -20,22 +20,25 @@
         <b-tab-item label="Settings" value="settings">
             <form method="POST" action="{{ route('project.update', [$project]) }}">
                 @csrf
-            <div class="columns">
-                <div class="column">
+                <div class="columns">
+                    <div class="column">
 
 
                         <b-field label="Project Name">
-                            <b-input name="name" value="{{ old('name', $settings->name) }}"></b-input>
+                            <b-input name="name"
+                                     value="{{ old('name', $settings->name) }}" {{ $role !== 'ADMIN' ? 'disabled' : '' }}></b-input>
                         </b-field>
 
+                    </div>
+                    <div class="column">
+                        <project-users :users="{{ $settings->users }}"  role="{{ $role }}"></project-users>
+                    </div>
                 </div>
-                <div class="column">
-                        <project-users  :users="{{ $settings->users }}"></project-users>
-                </div>
-            </div>
-                <b-button icon-left="content-save" native-type="submit">
-                    Save
-                </b-button>
+                @if($role == 'ADMIN')
+                    <b-button icon-left="content-save" native-type="submit">
+                        Save
+                    </b-button>
+                @endif
             </form>
         </b-tab-item>
     </b-tabs>

@@ -2,8 +2,8 @@
     <div>
         <div v-if="dummeLoop" ref="fullline" id="currentContentTime">
             <div class="buttons">
-                <timeline-item-model ref="itemmodel" :project="project"></timeline-item-model>
-                <timeline-group-model ref="groupmodel" :project="project"></timeline-group-model>
+                <timeline-item-model ref="itemmodel" :project="project" v-if="canAddItems()"></timeline-item-model>
+                <timeline-group-model ref="groupmodel" :project="project"  v-if="canAddItems()"></timeline-group-model>
 
 
                     <b-dropdown aria-role="list" v-model="selectedOption" class="is-float-right">
@@ -56,7 +56,7 @@
 
     export default {
         name: "StudentsTimeline",
-        props: ['project'],
+        props: ['project', 'role'],
         components: {
             TimelineGroupModel,
             TimelineItemModel,
@@ -81,6 +81,9 @@
             }
         },
         methods: {
+            canAddItems: function () {
+                return this.role === 'ADMIN' || this.role === 'EDITOR';
+            },
             getData: function () {
                 const loadingComponent = this.$buefy.loading.open({
                     container: this.$el

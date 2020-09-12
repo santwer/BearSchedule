@@ -9,7 +9,7 @@
                     {{ props.row.email }}
                 </b-table-column>
                 <b-table-column field="pivot.role" label="Role" sortable>
-                    <b-select placeholder="Select a role" v-model="props.row.pivot.role"
+                    <b-select placeholder="Select a role" v-model="props.row.pivot.role" :disabled="role !== 'ADMIN'"
                               :name="inputName(props.row.id, 'role')">
                         <option
                             v-for="option in roles"
@@ -20,14 +20,14 @@
                     </b-select>
                 </b-table-column>
                 <b-table-column label="">
-                    <b-button size="is-small" icon-left="window-close" :data-id="props.row.id"
+                    <b-button size="is-small" icon-left="window-close" :data-id="props.row.id" v-if="role === 'ADMIN'"
                               @click="deleteEntry(props.row.id)"></b-button>
                     <input type="hidden" :name="inputName(props.row.id, 'action')"></input>
                 </b-table-column>
             </template>
         </b-table>
 
-        <ajax-search-input src="/ajax/autocomplete/User" headline="Add User" v-on:selectitem="addUser"></ajax-search-input>
+        <ajax-search-input  v-if="role === 'ADMIN'" src="/ajax/autocomplete/User" headline="Add User" v-on:selectitem="addUser"></ajax-search-input>
     </div>
 </template>
 
@@ -37,7 +37,7 @@
 
         name: "ProjectUsers",
         components: {AjaxSearchInput},
-        props: ['users'],
+        props: ['users', 'role'],
         data() {
             return {
                 userData: [],
