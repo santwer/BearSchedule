@@ -25,7 +25,7 @@
                     </b-input>
                 </b-field>
                 <b-field label="Group">
-                    <b-select placeholder="Select a group" v-model="item.group" required expanded>
+                    <b-select placeholder="Select a group" v-model="item.parent" required expanded>
                         <option
                             v-for="group in groups"
                             :value="group.id"
@@ -57,7 +57,7 @@
                     content: '',
                     start: null,
                     end: null,
-                    group: null,
+                    parent: null,
                 },
                 backup: {},
                 csrf: null,
@@ -90,7 +90,7 @@
                     that.$buefy.toast.open(msg);
                     that.backup.content = that.item.content;
                     that.backup.title = that.item.title;
-                    that.backup.group = that.item.group;
+                    that.backup.parent = that.item.parent;
                     that.$emit('close');
                     if (typeof that.item.id === "undefined" || that.item.id === null) {
                         that.backup.id = data.data.id;

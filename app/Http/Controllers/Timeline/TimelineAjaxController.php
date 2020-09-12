@@ -45,25 +45,35 @@ class TimelineAjaxController extends Controller
         }
         $project_id = $request->get('project');
 
-        $groups = Group::where('project_id', $project_id)->get();
-        $items = $this->getItems($project_id);
-
         $options = [
             'editable' => false,
             'minHeight' => '550px',
         ];
 
         return response()->timeline([
-            'groups' => $groups,
-            'items' => $items,
+            'groups' => $this->getGroups($project_id),
+            'items' => $this->getItems($project_id),
             'options' => $options,
         ], 200);
     }
 
-    private function getItems(int $projectId) {
+    private function getItems(int $projectId)
+    {
         $items = Item::where('project_id', $projectId)->with('links')->get();
 
         return $items;
+    }
+
+    private function getGroups(int $project)
+    {
+        return Group::where('project_id', $project)->get()->map(function ($group) {
+            $var = $group->nestedgroups->map(function ($nested) {
+                return $nested->id;
+            });
+            unset($group->nestedgroups);
+            if (!$var->isEmpty()) $group->nestedGroups = $var;
+            return $group;
+        });
     }
 
     public function setGroup(Request $request)
@@ -84,14 +94,6 @@ class TimelineAjaxController extends Controller
         $group = $this->fillModelFillableByRequest($group, $request);
 
         if ($group->save()) {
-
-            if ($request->has('group') && !empty($nestGrp = $request->get('group'))) {
-                $parentGrp = Group::find($nestGrp);
-                if ($parentGrp !== null) {
-                    $parentGrp->nestedGroups[] = $group->id;
-                }
-            }
-
             return response()->ajax($group, 'Saved successfully', 200);
         }
         return response()->ajax(null, 'Error can not save.', 400);
@@ -127,7 +129,7 @@ class TimelineAjaxController extends Controller
         $item = $this->fillModelFillableByRequest($item, $request, ['start', 'end']);
 
         if ($item->save()) {
-            if($request->has('links')) {
+            if ($request->has('links')) {
                 $this->saveLinks($request->get('links'), $item->id);
             }
             $responseItem = Item::with('links')->find($item->id);
@@ -157,13 +159,14 @@ class TimelineAjaxController extends Controller
         return $model;
     }
 
-    private function saveLinks(array $links,int $itemId) {
-        foreach($links as $link) {
-            if(isset($link['href']) && !empty($link['href'])) {
-                if(!isset($link['title']) || empty($link['href'])) {
+    private function saveLinks(array $links, int $itemId)
+    {
+        foreach ($links as $link) {
+            if (isset($link['href']) && !empty($link['href'])) {
+                if (!isset($link['title']) || empty($link['href'])) {
                     $link['title'] = $link['href'];
                 }
-                if(isset($link['id']) && !empty($link['id'])) {
+                if (isset($link['id']) && !empty($link['id'])) {
                     $linkItem = ItemLink::find($link['id']);
                 } else {
                     $linkItem = new ItemLink;
@@ -172,10 +175,10 @@ class TimelineAjaxController extends Controller
                 $linkItem->href = $link['href'];
                 $linkItem->title = $link['href'];
                 $linkItem->save();
-                if(!isset($link['id']) || empty($link['id'])) {
+                if (!isset($link['id']) || empty($link['id'])) {
                     $linkItem->items()->attach($itemId);
                 }
-            } else if(empty($link['href']) && isset($link['id'])  && !empty($link['id'])) {
+            } else if (empty($link['href']) && isset($link['id']) && !empty($link['id'])) {
                 ItemLink::find($link['id'])->delete();
             }
 

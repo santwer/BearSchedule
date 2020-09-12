@@ -490,7 +490,7 @@ __webpack_require__.r(__webpack_exports__);
       this.setItem = {
         title: null,
         content: '',
-        group: null,
+        parent: null,
         project_id: this.project
       };
       this.$emit('addItem', this.setItem);
@@ -585,7 +585,7 @@ __webpack_require__.r(__webpack_exports__);
         content: '',
         start: null,
         end: null,
-        group: null
+        parent: null
       },
       backup: {},
       csrf: null,
@@ -618,7 +618,7 @@ __webpack_require__.r(__webpack_exports__);
         that.$buefy.toast.open(msg);
         that.backup.content = that.item.content;
         that.backup.title = that.item.title;
-        that.backup.group = that.item.group;
+        that.backup.parent = that.item.parent;
         that.$emit('close');
 
         if (typeof that.item.id === "undefined" || that.item.id === null) {
@@ -29187,11 +29187,11 @@ var render = function() {
                     expanded: ""
                   },
                   model: {
-                    value: _vm.item.group,
+                    value: _vm.item.parent,
                     callback: function($$v) {
-                      _vm.$set(_vm.item, "group", $$v)
+                      _vm.$set(_vm.item, "parent", $$v)
                     },
-                    expression: "item.group"
+                    expression: "item.parent"
                   }
                 },
                 _vm._l(_vm.groups, function(group) {

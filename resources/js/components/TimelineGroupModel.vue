@@ -22,7 +22,7 @@
                 this.setItem = {
                     title: null,
                     content: '',
-                    group: null,
+                    parent: null,
                     project_id: this.project
                 };
                 this.$emit('addItem', this.setItem)
