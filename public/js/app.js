@@ -849,14 +849,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: "TimelineItemModelForm",
@@ -921,7 +913,7 @@ __webpack_require__.r(__webpack_exports__);
         that.$buefy.toast.open(msg);
         that.backup.start = that.item.start;
         that.backup.end = that.item.end;
-        that.backup.content = that.item.content;
+        that.backup.content = that.item.title;
         that.backup.title = that.item.title;
         that.backup.description = that.item.description;
         that.backup.group = that.item.group;
@@ -34440,11 +34432,11 @@ var render = function() {
                   _c("b-input", {
                     attrs: { type: "text", placeholder: "Title" },
                     model: {
-                      value: _vm.item.content,
+                      value: _vm.item.title,
                       callback: function($$v) {
-                        _vm.$set(_vm.item, "content", $$v)
+                        _vm.$set(_vm.item, "title", $$v)
                       },
-                      expression: "item.content"
+                      expression: "item.title"
                     }
                   })
                 ],
@@ -34524,24 +34516,6 @@ var render = function() {
             { staticClass: "is-350" },
             [
               _c("h2", { staticClass: "subtitle" }, [_vm._v("Options")]),
-              _vm._v(" "),
-              _c(
-                "b-field",
-                { attrs: { label: "Title (on Mouse over)" } },
-                [
-                  _c("b-input", {
-                    attrs: { type: "text", placeholder: "Title", required: "" },
-                    model: {
-                      value: _vm.item.title,
-                      callback: function($$v) {
-                        _vm.$set(_vm.item, "title", $$v)
-                      },
-                      expression: "item.title"
-                    }
-                  })
-                ],
-                1
-              ),
               _vm._v(" "),
               _c(
                 "b-field",

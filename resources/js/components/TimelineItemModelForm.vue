@@ -14,7 +14,7 @@
                         <b-field label="Title">
                             <b-input
                                 type="text"
-                                v-model="item.content"
+                                v-model="item.title"
                                 placeholder="Title">
                             </b-input>
                         </b-field>
@@ -38,14 +38,6 @@
                     </div>
                     <div class="is-350">
                         <h2 class="subtitle">Options</h2>
-                        <b-field label="Title (on Mouse over)">
-                            <b-input
-                                type="text"
-                                v-model="item.title"
-                                placeholder="Title"
-                                required>
-                            </b-input>
-                        </b-field>
                         <b-field label="Type">
                             <b-select placeholder="Select a type" v-model="item.type" required expanded>
                                 <option
@@ -153,7 +145,7 @@
                     that.$buefy.toast.open(msg);
                     that.backup.start = that.item.start;
                     that.backup.end = that.item.end;
-                    that.backup.content = that.item.content;
+                    that.backup.content = that.item.title;
                     that.backup.title = that.item.title;
                     that.backup.description = that.item.description;
                     that.backup.group = that.item.group;
