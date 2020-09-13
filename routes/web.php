@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\Timeline\TimelineAjaxController;
 use \App\Http\Controllers\Project\ProjectController;
 use \App\Http\Controllers\AutoComplete\AutoCompleteController;
+use \App\Http\Controllers\Share\ShareController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -27,6 +28,8 @@ Route::middleware(['auth'])->group(function () {
     Route::group(['prefix' => 'ajax/'], function () {
         Route::group(['prefix' => 'timeline/'], function () {
             Route::get('getdata', [TimelineAjaxController::class, 'getData']);
+            Route::get('getShareLink', [TimelineAjaxController::class, 'getShareLink']);
+            Route::get('deleteShareLink', [TimelineAjaxController::class, 'deleteShareLink']);
             Route::put('item', [TimelineAjaxController::class, 'setItem']);
             Route::delete('item', [TimelineAjaxController::class, 'destroyItem']);
             Route::put('group', [TimelineAjaxController::class, 'setGroup']);
@@ -35,5 +38,14 @@ Route::middleware(['auth'])->group(function () {
         Route::get('autocomplete/{controller}', [AutoCompleteController::class, 'index']);
     });
 });
+Route::group(['prefix' => 'share/'], function () {
+    Route::get('{unique}/', [ShareController::class, 'index']);
+    Route::get('{unique}/ajax/getdata', [ShareController::class, 'getData']);
+    Route::get('{unique}/share.js', [ShareController::class, 'getShareJs']);
+    Route::get('{unique}/share.css', [ShareController::class, 'getShareCss']);
+
+});
+
+
 
 Auth::routes();

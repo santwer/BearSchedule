@@ -13,4 +13,6 @@ const mix = require('laravel-mix');
 
 mix.js('resources/js/app.js', 'public/js')
     .js('resources/js/login.js', 'public/js')
-    .less('resources/less/app.less', 'public/css');
+    .js('resources/js/share.js', 'public/js')
+    .less('resources/less/app.less', 'public/css')
+    .less('resources/less/share.less', 'public/css');

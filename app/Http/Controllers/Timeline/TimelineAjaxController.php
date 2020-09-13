@@ -11,6 +11,7 @@ use App\Models\Timeline\Item;
 use App\Models\Timeline\ItemLink;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Ramsey\Uuid\Uuid;
 
 class TimelineAjaxController extends Controller
 {
@@ -55,6 +56,36 @@ class TimelineAjaxController extends Controller
             'items' => $this->getItems($project_id),
             'options' => $options,
         ], 200);
+    }
+
+    public function getShareLink(Request $request)
+    {
+        if (!$request->has('project')) {
+            return response()->ajax(null, 'Id not set', 400);
+        }
+        $project_id = $request->get('project');
+        $project = auth()->user()->projects()->find($project_id);
+        if($project === null) {
+            return response()->ajax(null, 'Unknown Error', 400);
+        }
+        $project->share = Uuid::uuid4();
+        $project->save();
+        return response()->ajax($project->shareUrl(), 'Success', 200);
+    }
+    public function deleteShareLink(Request $request)
+    {
+        if (!$request->has('project')) {
+            return response()->ajax(null, 'Id not set', 400);
+        }
+        $project_id = $request->get('project');
+        $project = auth()->user()->projects()->find($project_id);
+        if($project === null) {
+            return response()->ajax(null, 'Unknown Error', 400);
+        }
+        $project->share = null;
+        $project->save();
+        return response()->ajax(null, 'Success', 200);
+
     }
 
     private function getOptions(int $project_id):array

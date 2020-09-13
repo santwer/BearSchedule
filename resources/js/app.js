@@ -6,7 +6,8 @@ window.Buefy = require('buefy');
 
 import StudentsTimeline from "./components/StudentsTimeline";
 import ProjectUsers from "./components/ProjectUsers";
-import { DataSet, Timeline } from 'vue2vis';
+import {DataSet, Timeline} from 'vue2vis';
+
 const Content = new Vue({
     el: '#content',
     components: {
@@ -17,6 +18,9 @@ const Content = new Vue({
     data: {
         activeTabProject: 'timeline',
         showMenu: true,
+        sharelink: '',
+        projectId: null,
+        shareswitch: true,
         groupsColumns: [
             {
                 field: 'id',
@@ -66,10 +70,39 @@ const Content = new Vue({
             },
         ]
     },
+    methods: {
+        isEmpty: function (str) {
+            return (!str || 0 === str.length);
+        },
+        goToUrl: function () {
+            window.open(this.sharelink);
+        }
+    },
+    watch: {
+        sharelink: function (neu) {
+            this.shareswitch = !this.isEmpty(neu);
+        },
+        shareswitch: function (neu) {
+            var that = this;
+            if(neu === true) {
+                $.get('/ajax/timeline/getShareLink', { project: this.projectId }, function (data) {
+                    that.sharelink = data.data;
+                }, 'json')
+            } else {
+                $.get('/ajax/timeline/getShareLink', { project: this.projectId }, function (data) {
+                    that.sharelink = "";
+                }, 'json')
+            }
+        }
+    },
     mounted() {
-        if(typeof this.$refs.projecttab !== "undefined") {
+        if (typeof this.$refs.projecttab !== "undefined") {
             var setTab = $(this.$refs.projecttab.$el).data('tab');
             this.activeTabProject = setTab;
         }
+        var $shareObj = $(this.$refs.sharelink.$el).find('input');
+        this.sharelink = $shareObj.data('link');
+        this.projectId = $shareObj.data('project');
+        this.shareswitch = !this.isEmpty(this.sharelink);
     }
 });

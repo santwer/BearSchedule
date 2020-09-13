@@ -22,7 +22,6 @@ class CreateItemItemLinks extends Migration
                 ->onDelete('cascade');
 
             $table->foreign('item_link_id', 'key_linkid')->references('id')->on('item_links')
-
                 ->onDelete('cascade');
             $table->timestamps();
         });

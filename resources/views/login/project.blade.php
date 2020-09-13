@@ -5,7 +5,7 @@
             data-tab="{{ isset($activeTab) ? $activeTab : 'timeline' }}" ref="projecttab">
         <b-tab-item label="Timeline" value="timeline">
 
-            <students-timeline project="{{$project}}" role="{{ $role }}"></students-timeline>
+            <students-timeline project="{{$project}}" role="{{ $role }}" datapath="/ajax/timeline/getdata"></students-timeline>
 
         </b-tab-item>
         <b-tab-item label="Items" value="items">
@@ -14,6 +14,21 @@
         </b-tab-item>
         <b-tab-item label="Groups" value="groups">
             <b-table :data="{{ $groups }}" :columns="groupsColumns"></b-table>
+
+        </b-tab-item>
+        <b-tab-item label="Share" value="share">
+            <div class="field">
+                <b-switch v-model="shareswitch">Share</b-switch>
+            </div>
+
+            <b-field label="Link" v-if="shareswitch">
+                <b-input placeholder="URL"
+                         type="search"
+                         icon="link-variant"
+                         icon-clickable
+                         ref="sharelink" v-model="sharelink" data-project="{{$project}}" data-link="{{ $settings->shareUrl() }}"
+                         @icon-click="goToUrl"></b-input>
+            </b-field>
 
         </b-tab-item>
         <b-tab-item label="Settings" value="settings">

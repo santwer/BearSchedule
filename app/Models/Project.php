@@ -13,9 +13,24 @@ class Project extends Model
         return $this->belongsToMany(User::class, 'project_user')->withPivot(['role', 'updated_at', 'created_at']);
     }
 
+    public function apikeys()
+    {
+        return $this->belongsToMany(ApiKey::class, 'project_api_key');
+    }
+
     public function options()
     {
         return $this->hasMany(ProjectOption::class, 'project_id', 'id');
+    }
+
+    public function shareUrl()
+    {
+        if($this->share === null) {
+            return null;
+        }
+        else {
+            return env('APP_URL').'/share/'.str_replace('-', '', $this->share).'/';
+        }
     }
 
     public function option(string $option, ?string $field = null) {

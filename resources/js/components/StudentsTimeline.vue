@@ -57,7 +57,7 @@
 
     export default {
         name: "StudentsTimeline",
-        props: ['project', 'role'],
+        props: ['project', 'role', 'datapath'],
         components: {
             TimelineGroupModel,
             TimelineItemModel,
@@ -77,7 +77,7 @@
                 activeZoom: false,
                 selectedOption: null,
                 selectedZoom: null,
-
+                getPath: '',
                 currentItem: null,
             }
         },
@@ -90,7 +90,7 @@
                     container: this.$el
                 });
                 var that = this;
-                $.get('/ajax/timeline/getdata', {project: this.project}, function (data) {
+                $.get(this.getPath, {project: this.project}, function (data) {
                     if (typeof data.groups !== "undefined") {
                         that.groups = data.groups;
                     }
@@ -241,6 +241,9 @@
             }
         },
         mounted() {
+            if(typeof this.datapath !== "undefinded") {
+                this.getPath = this.datapath;
+            }
             this.getData();
         }
     }
