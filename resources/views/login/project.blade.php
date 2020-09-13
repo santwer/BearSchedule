@@ -18,7 +18,7 @@
         </b-tab-item>
         <b-tab-item label="Share" value="share">
             <div class="field">
-                <b-switch v-model="shareswitch">Share</b-switch>
+                <b-switch v-model="shareswitch"  {{ $role !== 'ADMIN' ? 'disabled' : '' }}>Share</b-switch>
             </div>
 
             <b-field label="Link" v-if="shareswitch">
