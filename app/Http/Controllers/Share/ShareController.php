@@ -29,6 +29,7 @@ class ShareController extends Controller
             response()->json('No Data', 404);
         }
         $file = file_get_contents(public_path('js/share.js'));
+        $file = str_replace('{$csrf_token}', csrf_token(), $file);
         return response()->make($file, 200, ['content-type' => 'application/javascript']);
     }
 
@@ -43,6 +44,9 @@ class ShareController extends Controller
 
     public function getData(Request $request, string $unique)
     {
+        if($request->header('X-CSRF-TOKEN') !== csrf_token()) {
+            response()->json('Not authorizied', 404);
+        }
         if ($this->checkShare($unique)) {
             response()->json('No Data', 404);
         }

@@ -13,7 +13,7 @@ const Content = new Vue({
     data: {
     },
     mounted() {
-
+        //csrf_token()
     },
     beforeCreate() {
         var script = document.currentScript;
@@ -23,5 +23,10 @@ const Content = new Vue({
         if(typeof result[1] !== "undefined" && result !== "") {
             $('#project-timeline').html('<students-timeline datapath="/share/' + result[1] + '/ajax/getdata"></students-timeline>');
         }
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': '{$csrf_token}'
+            }
+        });
     }
 });
