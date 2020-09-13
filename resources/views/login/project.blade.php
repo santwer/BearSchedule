@@ -28,8 +28,9 @@
                          icon-clickable
                          ref="sharelink" v-model="sharelink" data-project="{{$project}}" data-link="{{ $settings->shareUrl() }}"
                          @icon-click="goToUrl"></b-input>
-            </b-field>
 
+            </b-field>
+            <b-button @click="goToUrl" icon-left="link-variant">Open</b-button>
         </b-tab-item>
         <b-tab-item label="Settings" value="settings">
             <form method="POST" action="{{ route('project.update', [$project]) }}">

@@ -27,8 +27,9 @@
                     @show
                 </div>
                 <p class="has-text-grey">
+                    <a href="{{ route('login') }}">Login</a> &nbsp;·&nbsp;
                     <a href="{{ route('register') }}">Sign Up</a> &nbsp;·&nbsp;
-                    <a href="../">Forgot Password</a> &nbsp;·&nbsp;
+                    <a href="{{ route('password.request') }}">Forgot Password</a> &nbsp;·&nbsp;
                     <a href="#">Need Help?</a>
                 </p>
             </div>
