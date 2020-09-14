@@ -46,9 +46,11 @@
         },
         methods: {
             mainClick: function () {
-                if(this.editmode) {
+                if(this.editmode === 'true') {
                     this.inEdit = !this.inEdit;
                     return;
+                } else {
+                    this.goToUrl();
                 }
             },
             goToUrl: function () {

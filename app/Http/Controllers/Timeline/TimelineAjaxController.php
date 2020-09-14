@@ -224,7 +224,7 @@ class TimelineAjaxController extends Controller
                 }
 
                 $linkItem->href = $link['href'];
-                $linkItem->title = $link['href'];
+                $linkItem->title = $link['title'];
                 $linkItem->save();
                 if (!isset($link['id']) || empty($link['id'])) {
                     $linkItem->items()->attach($itemId);

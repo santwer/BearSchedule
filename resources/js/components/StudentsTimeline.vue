@@ -53,6 +53,7 @@
     import {DataSet, Timeline} from 'vue2vis';
     import TimelineItemModel from "./TimelineItemModel";
     import TimelineGroupModel from "./TimelineGroupModel";
+    import TimelineItemShowModel from "./TimelineItemShowModel";
     const Handlebars = require("handlebars");
 
     export default {
@@ -124,14 +125,33 @@
             },
             itemDpClick: function (itemId) {
                 var item = this.findObjectInArrayByProperty(this.items, 'id', itemId);
-                this.$refs.itemmodel.openModelItem(item);
-                if(this.MsgIsActive) {
-                    this.getData();
+                if(typeof this.$refs.itemmodel === "undefined") {
+                    this.openItemShowModal(item)
+                } else {
+                    this.$refs.itemmodel.openModelItem(item);
+                    if (this.MsgIsActive) {
+                        this.getData();
+                    }
                 }
             },
             groupDpClick: function (groupId) {
-                var item = this.findObjectInArrayByProperty(this.groups, 'id', groupId);
-                this.$refs.groupmodel.openModelItem(item);
+                if(typeof this.$refs.groupmodel !== "undefined") {
+                    var item = this.findObjectInArrayByProperty(this.groups, 'id', groupId);
+                    this.$refs.groupmodel.openModelItem(item);
+                }
+            },
+            openItemShowModal: function (item) {
+                var that = this;
+                this.$buefy.modal.open({
+                    parent: this,
+                    component: TimelineItemShowModel,
+                    props: {
+                        item: item,
+                    },
+                    distroyOnHide: false,
+                    hasModalCard: true,
+                    trapFocus: true
+                })
             },
             newItemInTimeLine: function(data) {
                 this.items.push(data);
@@ -249,7 +269,7 @@
     }
 </script>
 
-<style scoped>
+<style scoped lang="less">
 .is-float-right {
     margin-left: auto;
 }
