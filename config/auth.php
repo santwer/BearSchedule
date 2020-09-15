@@ -114,4 +114,20 @@ return [
 
     'password_timeout' => 10800,
 
+
+    'microsoft' => [
+        'client_id'                     => env('MICROSOFT_CLIENT_ID', null),
+        'client_secret'                 => env('MICROSOFT_CLIENT_SECRET', null),
+        'redirect_route'                => 'auth.microsoft.callback',
+        'url_authorize'                 => 'https://login.microsoftonline.com/consumers/oauth2/v2.0/authorize',
+        'url_access_token'              => 'https://login.microsoftonline.com/consumers/oauth2/v2.0/token',
+        'url_resource_owner_details'    => '',
+        'scopes'                        => 'openid profile offline_access user.read',
+        'session'                       =>
+                                        [
+                                         'ms_state' => 'ms_state',
+                                         'access_token' => 'ms_state',
+                                        ]
+    ],
+
 ];

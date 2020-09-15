@@ -5,6 +5,7 @@ use \App\Http\Controllers\Timeline\TimelineAjaxController;
 use \App\Http\Controllers\Project\ProjectController;
 use \App\Http\Controllers\AutoComplete\AutoCompleteController;
 use \App\Http\Controllers\Share\ShareController;
+use \App\Http\Controllers\Auth\LoginMSController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -47,5 +48,11 @@ Route::group(['prefix' => 'share/'], function () {
 });
 
 
+
+//Auth Routes
+Route::group(['prefix' => 'auth/'], function () {
+    Route::get('microsoft/', [LoginMSController::class, 'oauth'])->name('auth.microsoft');
+    Route::get('microsoft/callback', [LoginMSController::class, 'callback'])->name('auth.microsoft.callback');
+});
 
 Auth::routes();

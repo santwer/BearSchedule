@@ -40,6 +40,13 @@
 
         </label>
     </div>
-    <button class="button is-block is-primary is-large is-fullwidth" type="submit">Login</button>
+    <div class="field">
+        <button class="button is-block is-primary is-large is-fullwidth" type="submit">Login</button>
+    </div>
+    <div class="field">
+        <b-button tag="a" size="is-medium" icon-left="microsoft-windows" href="{{ route('auth.microsoft') }}">
+            Login with Microsoft
+        </b-button>
+    </div>
 </form>
 @endsection
