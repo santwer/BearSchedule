@@ -111,9 +111,11 @@ const Content = new Vue({
             var setTab = $(this.$refs.projecttab.$el).data('tab');
             this.activeTabProject = setTab;
         }
-        var $shareObj = $(this.$refs.sharelink.$el).find('input');
-        this.sharelink = $shareObj.data('link');
-        this.projectId = $shareObj.data('project');
-        this.shareswitch = !this.isEmpty(this.sharelink);
+        if (typeof this.$refs.sharelink !== "undefined") {
+            var $shareObj = $(this.$refs.sharelink.$el).find('input');
+            this.sharelink = $shareObj.data('link');
+            this.projectId = $shareObj.data('project');
+            this.shareswitch = !this.isEmpty(this.sharelink);
+        }
     }
 });

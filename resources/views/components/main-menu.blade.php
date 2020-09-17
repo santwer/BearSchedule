@@ -1,7 +1,8 @@
 <div class="is-280 main-menu" id="main-menu" v-if="showMenu">
 
     <b-menu-list label="Menu">
-    <b-menu-item icon="information-outline" label="Home" tag="a" href="/"></b-menu-item>
+    <b-menu-item icon="information-outline" label="Home" tag="a" href="{{ route('home') }}"></b-menu-item>
+    <b-menu-item icon="cog" label="Settings" tag="a" href="{{ route('user.settings') }}"></b-menu-item>
     </b-menu-list>
     <b-tooltip label="Create new Project" class="menu-add-project">
         <b-button tag="a" href="/project/create" size="is-small" icon-left="plus-thick" ></b-button>

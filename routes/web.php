@@ -22,6 +22,7 @@ use \App\Http\Controllers\Auth\LoginMSController;
 Route::middleware(['auth'])->group(function () {
     Route::get('/', 'HomeController@index')
         ->name('home');
+    Route::get('/settings', [\App\Http\Controllers\HomeController::class, 'settings'])->name('user.settings');
     Route::get('project/create', [ProjectController::class, 'create']);
     Route::get('project/{project}', [ProjectController::class, 'index']);
     Route::post('project/{project}', [ProjectController::class, 'update'])->name('project.update');

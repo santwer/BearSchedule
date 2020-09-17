@@ -18,4 +18,11 @@ class HomeController extends Controller
 
         return view('login.index');
     }
+
+    public function settings()
+    {
+        $user = auth()->user();
+        $isDisabled = $user->uuid !== null;
+        return view('login.userSettings', compact('user', 'isDisabled'));
+    }
 }

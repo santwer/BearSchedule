@@ -127,7 +127,8 @@ return [
                                         [
                                          'ms_state' => 'ms_state',
                                          'access_token' => 'ms_state',
-                                        ]
+                                        ],
+        'stayedLoggedIn'                => true,
     ],
 
 ];

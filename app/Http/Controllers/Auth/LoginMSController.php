@@ -97,7 +97,7 @@ class LoginMSController extends Controller
         $user->name = $name;
         $user->password = Hash::make(time());
         $user->save();
-        Auth::login($user);
+        Auth::login($user, config('auth.microsoft.stayedLoggedIn', false));
         return redirect()->intended($this->redirectPath());
     }
 }
