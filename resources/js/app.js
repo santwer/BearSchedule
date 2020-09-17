@@ -7,13 +7,14 @@ window.Buefy = require('buefy');
 import StudentsTimeline from "./components/StudentsTimeline";
 import ProjectUsers from "./components/ProjectUsers";
 import {DataSet, Timeline} from 'vue2vis';
-
+import EditTable from "./components/tools/EditTable";
 const Content = new Vue({
     el: '#content',
     components: {
         StudentsTimeline,
         DataSet,
-        ProjectUsers
+        ProjectUsers,
+        EditTable
     },
     data: {
         activeTabProject: 'timeline',
@@ -76,7 +77,17 @@ const Content = new Vue({
         },
         goToUrl: function () {
             window.open(this.sharelink);
-        }
+        },
+        clickItems: function (id) {
+          if(typeof this.$refs.sttimeline !== "undefined") {
+              this.$refs.sttimeline.itemDpClick(id);
+          }
+        },
+        clickGroup: function (id) {
+            if(typeof this.$refs.sttimeline !== "undefined") {
+                this.$refs.sttimeline.groupDpClick(id);
+            }
+        },
     },
     watch: {
         sharelink: function (neu) {

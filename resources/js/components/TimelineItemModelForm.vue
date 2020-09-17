@@ -1,6 +1,6 @@
 <template>
     <form action="">
-        <div class="modal-card" style="width: 1200px;">
+        <div class="modal-card" style="width: 900px;">
             <header class="modal-card-head">
                 <p class="modal-card-title">Item</p>
                 <button
@@ -9,6 +9,8 @@
                     @click="$emit('close')"/>
             </header>
             <section class="modal-card-body">
+                <b-tabs>
+                    <b-tab-item label="Data">
                 <div class="columns">
                     <div class="column">
                         <b-field label="Title">
@@ -66,7 +68,7 @@
                                 trap-focus>
                             </b-datepicker>
                         </b-field>
-                        <b-field label="End">
+                        <b-field label="End" v-if="item.type === 'range' || item.type === 'background'">
                             <b-datepicker
                                 placeholder="Click to select..."
                                 v-model="item.end"
@@ -76,6 +78,23 @@
                         </b-field>
                     </div>
                 </div>
+                    </b-tab-item>
+                    <b-tab-item label="Tags" v-if="false">
+                        <b-field label="Enter some tags">
+                            <b-taginput
+                                v-model="item.tags"
+                                :data="filteredTags"
+                                autocomplete
+                                allow-new
+                                open-on-focus
+                                field="user.first_name"
+                                icon="label"
+                                placeholder="Add a tag"
+                                @typing="getFilteredTags">
+                            </b-taginput>
+                        </b-field>
+                    </b-tab-item>
+                </b-tabs>
             </section>
             <footer class="modal-card-foot">
                 <button class="button" type="button" @click="$emit('close')">Close</button>
@@ -105,13 +124,15 @@
                     end: null,
                     group: null,
                     subtitle: null,
-                    links: []
+                    links: [],
+                    tags: [],
                 },
+                filteredTags: [],
                 backup: {},
                 csrf: null,
                 groups: [],
                 types: [
-                    {id: 'box', text: 'default'},
+                    {id: 'box', text: 'box'},
                     {id: 'point', text: 'point'},
                     {id: 'range', text: 'range'},
                     {id: 'background', text: 'background'},
@@ -119,6 +140,15 @@
             }
         },
         methods: {
+            getFilteredTags(text) {
+                /*this.filteredTags = data.filter((option) => {
+                    return option.user.first_name
+                        .toString()
+                        .toLowerCase()
+                        .indexOf(text.toLowerCase()) >= 0
+                })*/
+              return [];
+            },
             saveForm: function () {
                 this.saveAction();
 
@@ -134,7 +164,6 @@
                     this.$emit('close');
                 }
                 var that = this;
-                console.log(that.item)
                 $.ajax({
                     method: "PUT",
                     url: "/ajax/timeline/item",
@@ -196,12 +225,10 @@
 
             },
             addLink: function () {
-                console.log(this.item.links)
                 if (typeof this.item.links === "undefined") {
                     this.item.links = [];
                 }
                 this.item.links.push({href: '', title: ''});
-                console.log(this.item.links)
             }
         },
         mounted() {

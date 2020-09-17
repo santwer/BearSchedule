@@ -23,11 +23,13 @@
                     start: new Date(),
                     end: new Date(),
                     title: null,
+                    type: 'range',
                     content: '',
                     subtitle: '',
                     group: null,
                     project_id: this.project,
-                    links: []
+                    links: [],
+                    tags: []
                 };
                 this.$emit('addItem', this.setItem)
                 this.openModal();

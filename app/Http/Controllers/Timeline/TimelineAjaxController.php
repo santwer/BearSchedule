@@ -105,6 +105,9 @@ class TimelineAjaxController extends Controller
             }
             $options[$option->option] = $option->value;
         }
+        if(!isset($options['template'])) {
+            $options['template'] = Handlebars::get('timeline.item.standard');
+        }
 
         return $options;
     }

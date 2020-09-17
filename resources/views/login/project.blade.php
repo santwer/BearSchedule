@@ -5,16 +5,14 @@
             data-tab="{{ isset($activeTab) ? $activeTab : 'timeline' }}" ref="projecttab">
         <b-tab-item label="Timeline" value="timeline">
 
-            <students-timeline project="{{$project}}" role="{{ $role }}" datapath="/ajax/timeline/getdata"></students-timeline>
+            <students-timeline project="{{$project}}" role="{{ $role }}" datapath="/ajax/timeline/getdata"  ref="sttimeline"></students-timeline>
 
         </b-tab-item>
         <b-tab-item label="Items" value="items">
-            <b-table :data="{{ $items }}" :columns="itemColumns"></b-table>
-
+            <edit-table :data="{{ $items }}" :columns="itemColumns" @click="clickItems"></edit-table>
         </b-tab-item>
         <b-tab-item label="Groups" value="groups">
-            <b-table :data="{{ $groups }}" :columns="groupsColumns"></b-table>
-
+            <edit-table :data="{{ $groups }}" :columns="groupsColumns" @click="clickGroup"></edit-table>
         </b-tab-item>
         <b-tab-item label="Share" value="share">
             <div class="field">
@@ -70,3 +68,9 @@
 
 
 @endsection
+<script>
+    import EditTable from "../../js/components/tools/EditTable";
+    export default {
+        components: {EditTable}
+    }
+</script>
