@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Helper\UserHelper;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -44,6 +45,23 @@ class User extends Authenticatable
 
     public static function ajaxSearch(string $q):Collection
     {
-        return self::where('email', 'like', $q)->selectRaw("id, name, email, CONCAT(name, ' (', email, ')') as value")->get();
+        $domains =  UserHelper::viewableUsers();
+        if(empty($domains) || $domains === null) {
+            return self::where('email', 'like', $q)
+                ->selectRaw("id, name, email, CONCAT(name, ' (', email, ')') as value")
+                ->get();
+        }
+        if(in_array('*', $domains)) {
+            return self::where('email', 'like', '%'.$q.'%')->orWhere('name', 'like', '%'.$q.'%')
+                ->selectRaw("id, name, email, CONCAT(name, ' (', email, ')') as value")
+                ->get();
+        }
+
+            return self::where('email', 'like', $q)->orWhere(function ($where) use($domains, $q) {
+                foreach ($domains as $domain) {
+                    $where->where('email', 'like', '%' . $q . '%@'.$domain);
+                }
+            })->selectRaw("id, name, email, CONCAT(name, ' (', email, ')') as value")
+            ->get();
     }
 }

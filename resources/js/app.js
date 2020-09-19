@@ -88,6 +88,12 @@ const Content = new Vue({
                 this.$refs.sttimeline.groupDpClick(id);
             }
         },
+        deleteAccount: function () {
+            this.$buefy.dialog.confirm({
+                message: 'Do you want to delete your Account? Projects with other Admins will be remaining.',
+                onConfirm: () => $('#delete_account').submit()
+            })
+        }
     },
     watch: {
         sharelink: function (neu) {

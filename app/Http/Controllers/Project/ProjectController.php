@@ -25,6 +25,10 @@ class ProjectController extends Controller
         if($settings === null) {
             return view('login.noproject', $this->viewVariables);
         }
+
+        if($request->has('activeTab')) {
+            $this->viewVariables['activeTab'] = $request->get('activeTab');
+        }
         $pageTitle = $settings->name;
 
         $groups = Group::where('project_id', $project)->get();
@@ -45,7 +49,8 @@ class ProjectController extends Controller
         $project->save();
         $this->viewVariables['activeTab'] = 'settings';
         $project->users()->attach(auth()->user()->id, ['role' => 'ADMIN']);
-        return $this->index($request, $project->id);
+        $vars = ['project' => $project->id, 'activeTab' => 'settings'];
+        return redirect()->route('project.open',$vars );
 
     }
 
@@ -53,7 +58,6 @@ class ProjectController extends Controller
         if($this->getRoleInProject($project) !== 'ADMIN') {
             return $this->index($request, $project);
         }
-        $this->viewVariables['activeTab'] = 'settings';
 
         if($request->has('name')) {
             $name = $request->get('name');
@@ -70,8 +74,9 @@ class ProjectController extends Controller
         if($request->has('option')) {
             $this->setOptions($request->get('option'), $settings->id);
         }
+        $vars = ['project' => $project, 'activeTab' => 'settings'];
 
-        return $this->index($request, $project);
+        return redirect()->route('project.open', $vars);
     }
 
 

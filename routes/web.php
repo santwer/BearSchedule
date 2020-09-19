@@ -23,8 +23,10 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/', 'HomeController@index')
         ->name('home');
     Route::get('/settings', [\App\Http\Controllers\HomeController::class, 'settings'])->name('user.settings');
+    Route::post('/settings', [\App\Http\Controllers\HomeController::class, 'saveSettings'])->name('user.settings.save');
+    Route::post('/settings/delete', [\App\Http\Controllers\HomeController::class, 'deleteAccount'])->name('user.settings.delete');
     Route::get('project/create', [ProjectController::class, 'create']);
-    Route::get('project/{project}', [ProjectController::class, 'index']);
+    Route::get('project/{project}', [ProjectController::class, 'index'])->name('project.open');
     Route::post('project/{project}', [ProjectController::class, 'update'])->name('project.update');
 
     Route::group(['prefix' => 'ajax/'], function () {
