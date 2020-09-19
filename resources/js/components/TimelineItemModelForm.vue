@@ -60,6 +60,17 @@
                                 </option>
                             </b-select>
                         </b-field>
+                        <b-field label="Color">
+                        <b-dropdown aria-role="list" expanded>
+                            <button class="button is-fullwidth" slot="trigger" slot-scope="{ colorPickerActive }" type="button">
+                                <span class="previewColor" :style="getCurrentColorStyle()"></span><span>{{ getCurrentColorName() }}</span>
+                                <b-icon :icon="colorPickerActive ? 'menu-up' : 'menu-down'"></b-icon>
+                            </button>
+                            <b-dropdown-item v-for="color in colors" aria-role="listitem" @click="setColor(color)">
+                                <span class="previewColor" :style="color.style"></span> {{ color.name }}
+                            </b-dropdown-item>
+                        </b-dropdown>
+                        </b-field>
                         <b-field label="Start">
                             <b-datepicker
                                 placeholder="Click to select..."
@@ -76,7 +87,9 @@
                                 trap-focus>
                             </b-datepicker>
                         </b-field>
+
                     </div>
+
                 </div>
                     </b-tab-item>
                     <b-tab-item label="Tags" v-if="false">
@@ -94,6 +107,10 @@
                             </b-taginput>
                         </b-field>
                     </b-tab-item>
+
+
+
+
                 </b-tabs>
             </section>
             <footer class="modal-card-foot">
@@ -116,6 +133,7 @@
         props: ['setItem'],
         data() {
             return {
+                colorPickerActive: false,
                 item: {
                     id: null,
                     title: '',
@@ -126,6 +144,7 @@
                     subtitle: null,
                     links: [],
                     tags: [],
+                    color: {},
                 },
                 filteredTags: [],
                 backup: {},
@@ -136,10 +155,51 @@
                     {id: 'point', text: 'point'},
                     {id: 'range', text: 'range'},
                     {id: 'background', text: 'background'},
+                ],
+                colors: [
+                    { id: 'default', name: 'Default', style: { backgroundColor: 'rgba(99, 164, 255, 0.4)' } },
+                    { id: '#d32f2f', name: 'Red', style: { backgroundColor:"#d32f2f" } },
+                    { id: '#c2185b', name: 'Pink', style: { backgroundColor:"#c2185b" } },
+                    { id: '#7b1fa2', name: 'Purple', style: { backgroundColor:"#7b1fa2" } },
+                    { id: '#512da8', name: 'Deep Purple', style: { backgroundColor:"#512da8" } },
+                    { id: '#303f9f', name: 'Indigo', style: { backgroundColor:"#303f9f" } },
+                    { id: '#1976d2', name: 'Blue', style: { backgroundColor:"#1976d2" } },
+                    { id: '#0288d1', name: 'Light Blue', style: { backgroundColor:"#0288d1" } },
+                    { id: '#0097a7', name: 'Cyan', style: { backgroundColor:"#0097a7" } },
+                    { id: '#00796b', name: 'Teal', style: { backgroundColor:"#00796b" } },
+                    { id: '#388e3c', name: 'Green', style: { backgroundColor:"#388e3c" } },
+                    { id: '#689f38', name: 'Light Green', style: { backgroundColor:"#689f38" } },
+                    { id: '#afb42b', name: 'Lime', style: { backgroundColor:"#afb42b" } },
+                    { id: '#fbc02d', name: 'Yellow', style: { backgroundColor:"#fbc02d" } },
+                    { id: '#ffa000', name: 'Amber', style: { backgroundColor:"#ffa000" } },
+                    { id: '#f57c00', name: 'Orange', style: { backgroundColor:"#f57c00" } },
+                    { id: '#e64a19', name: 'Deep Orange', style: { backgroundColor:"#e64a19" } },
+                    { id: '#9e9e9e', name: 'Grey', style: { backgroundColor:"#9e9e9e" } },
                 ]
             }
         },
         methods: {
+            setColor(colorItem) {
+                this.item.color = colorItem;
+            },
+            getCurrentColorName() {
+                if(typeof this.item.color === "undefined") {
+                    return 'Default';
+                }
+                if(typeof this.item.color.name === "undefined") {
+                    return 'Default';
+                }
+                return this.item.color.name;
+            },
+            getCurrentColorStyle() {
+                if(typeof this.item.color === "undefined") {
+                    return this.colors[0].style;
+                }
+                if(typeof this.item.color.style === "undefined") {
+                    return this.colors[0].style;
+                }
+                return this.item.color.style;
+            },
             getFilteredTags(text) {
                 /*this.filteredTags = data.filter((option) => {
                     return option.user.first_name
@@ -187,6 +247,7 @@
                         that.$parent.$parent.$parent.newItemInTimeLine(that.backup);
                     }
                     that.backup.links = data.data.links;
+                    that.backup.style = data.data.style;
                 }).fail(function (data) {
                     var msg = (typeof data.responseJSON.message !== "undefined") ? data.responseJSON.message : `Save didn't work. Come back later.`;
                     that.$buefy.toast.open({
@@ -270,5 +331,12 @@
         display: block;
         position: absolute;
         right: 20px;
+    }
+    .previewColor {
+        height: 15px;
+        width: 15px;
+        border: 1px solid #000;
+        margin-right: 10px;
+        display: inline-block;
     }
 </style>

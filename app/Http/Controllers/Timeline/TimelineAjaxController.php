@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Timeline;
 
 use App\Helper\Handlebars;
+use App\Helper\TimelineHelper;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use App\Models\ProjectOption;
@@ -159,20 +160,15 @@ class TimelineAjaxController extends Controller
      */
     public function setItem(Request $request)
     {
-        if (!$request->has('project_id')) {
-            return response()->ajax(null, 'Id not set', 400);
-        }
-        if (!$request->has('title') || empty($request->get('title'))) {
-            return response()->ajax(null, 'Title not set.', 400);
-        }
-        if (!$request->has('group') || empty($request->get('group'))) {
-            return response()->ajax(null, 'Group not set.', 400);
-        }
-        if (!$request->has('start')
-            || empty($request->get('start'))
-            || $request->get('start') === 'Invalid Date'
+        $validatedData = $request->validate([
+            'project_id' => 'required|int',
+            'title' => 'required|min:3',
+            'group' => 'required',
+            'start' => 'required|min:3',
+        ]);
+        if ($request->get('start') === 'Invalid Date'
         ) {
-            return response()->ajax(null, 'Start not set.', 400);
+            return response()->ajax(null, 'Start not set.', 422);
         }
 
         if (!$request->has('id') || empty($request->get('id'))) {
@@ -181,6 +177,14 @@ class TimelineAjaxController extends Controller
             $item = Item::find($request->get('id'));
         }
         $item = $this->fillModelFillableByRequest($item, $request, ['start', 'end']);
+
+        if ($request->has('color') && $request->get('color')['id'] != 'default') {
+            if(isset($request->get('color')['style']['backgroundColor'])) {
+                $item->style = 'background-color: '.$request->get('color')['style']['backgroundColor'].';'.
+                               'border-color: '.TimelineHelper::adjustBrightness($request->get('color')['style']['backgroundColor'], -50).';'.
+                               'color: '.TimelineHelper::getContrastColor($request->get('color')['style']['backgroundColor']).';';
+            }
+        }
 
         if ($item->save()) {
             if ($request->has('links')) {

@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{ asset('images/logo64.png') }}">
     <title>@yield('title') - {{ env('APP_NAME', 'Education') }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ mix('css/bulma.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
 </head>
 

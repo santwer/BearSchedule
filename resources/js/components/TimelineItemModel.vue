@@ -29,7 +29,8 @@
                     group: null,
                     project_id: this.project,
                     links: [],
-                    tags: []
+                    tags: [],
+                    color: {},
                 };
                 this.$emit('addItem', this.setItem)
                 this.openModal();
