@@ -42,7 +42,7 @@
                                      value="{{ old('name', $settings->name) }}" {{ $role !== 'ADMIN' ? 'disabled' : '' }}></b-input>
                         </b-field>
                         <b-field
-                            label="Item">
+                            label="Item Design">
                             <b-select placeholder="Select Itemtype" name="option[template]"
                                       value="{{ old('option.template', ($settings->option('template', 'value') === null ? 'null' : $settings->option('template', 'value'))) }}"
                                       {{ $role !== 'ADMIN' ? 'disabled' : '' }}
@@ -51,6 +51,21 @@
                                 <option value="timeline.item.default">with Subtitle</option>
                             </b-select>
                         </b-field>
+                        <b-field
+                            label="Initial Zoom">
+                            <b-select placeholder="Select Itemtype" name="option[displayscale]"
+                                      value="{{ old('option.displayscale', ($settings->option('displayscale', 'value') === null ? 'null' : $settings->option('displayscale', 'value'))) }}"
+                                      {{ $role !== 'ADMIN' ? 'disabled' : '' }}
+                                      expanded>
+                                <option value="null">Auto</option>
+                                <option value="year">Year</option>
+                                <option value="month">Month</option>
+                                <option value="week">Week</option>
+                                <option value="day">Day</option>
+                            </b-select>
+                        </b-field>
+
+
 
                     </div>
                     <div class="column">

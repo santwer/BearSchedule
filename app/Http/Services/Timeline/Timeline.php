@@ -11,32 +11,16 @@ use App\Models\Timeline\Item;
 use App\Models\Timeline\ItemLink;
 use App\Models\User;
 use Illuminate\Http\Request;
+use PhpOption\Option;
 use Ramsey\Uuid\Uuid;
 
 class Timeline extends BaseService
 {
     public function getOptions(int $project_id):array
     {
-        $timelineSettings = ['template'];
-        $projectOptions = ProjectOption::where('project_id', $project_id)->whereIn('option', $timelineSettings)->get();
-        $options = [
-            'editable' => false,
-            'minHeight' => '550px',
-        ];
-        foreach($projectOptions as $option) {
-            if($option->option === 'template') {
-                if(($value = Handlebars::get($option->value)) !== null) {
-                    $options[$option->option] = $value;
-                }
-                break;
-            }
-            $options[$option->option] = $option->value;
-        }
-        if(!isset($options['template'])) {
-            $options['template'] = Handlebars::get('timeline.item.standard');
-        }
+        $options = new Options($project_id);
 
-        return $options;
+        return $options->get();
     }
 
     public function getItems(int $projectId)

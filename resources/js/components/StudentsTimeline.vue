@@ -102,11 +102,18 @@
                         if(typeof data.options.template !== "undefined") {
                             data.options.template = Handlebars.compile(data.options.template);
                         }
+                        if(typeof data.options.displayscale !== "undefined") {
+                            var dates = that.setZoomRange(data.options.displayscale);
+                            if(typeof dates[1] !== "undefined") {
+                                data.options.start = dates[0];
+                                data.options.end = dates[1];
+                            }
+                            delete data.options.displayscale;
+                        }
                         that.options = data.options;
                     }
                     that.dummeLoop = true;
                     that.MsgIsActive = that.items.length  === 0;
-                    console.log(that.items, that.items.length  === 0, that.MsgIsActive);
                     setTimeout(() => loadingComponent.close(), 1000);
                 }, 'json')
             },
@@ -223,10 +230,8 @@
             },
             rangeChange: function () {
                 this.selectedZoom = null;
-            }
-        },
-        watch: {
-            selectedOption: function (value, n) {
+            },
+            setTimeAxisOption: function (value) {
                 if (value !== 'default') {
                     this.options.timeAxis = {
                         scale: value,
@@ -237,9 +242,8 @@
                         step: 1
                     };
                 }
-                this.$refs.timeline.setOptions(this.options);
             },
-            selectedZoom: function (value, n) {
+            setZoomRange: function(value) {
                 const today = new Date();
                 var dates = [];
                 switch (value) {
@@ -256,6 +260,16 @@
                         dates = this.getCurrentDay(today);
                         break;
                 }
+                return dates;
+            }
+        },
+        watch: {
+            selectedOption: function (value, n) {
+                this.setTimeAxisOption(value);
+                this.$refs.timeline.setOptions(this.options);
+            },
+            selectedZoom: function (value, n) {
+                var dates = this.setZoomRange(value);
                 if(typeof dates[1] !== "undefined")
                     this.$refs.timeline.setWindow(dates[0], dates[1]);
             }
