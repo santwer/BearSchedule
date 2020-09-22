@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Timeline;
 use App\Helper\Handlebars;
 use App\Helper\TimelineHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Services\Settings\Account;
+use App\Http\Services\Timeline\Timeline;
 use App\Models\Project;
 use App\Models\ProjectOption;
 use App\Models\Timeline\Group;
@@ -16,6 +18,10 @@ use Ramsey\Uuid\Uuid;
 
 class TimelineAjaxController extends Controller
 {
+    /**
+     * @var Timeline $logicClass
+     */
+    protected $logicClass = Timeline::class;
 
     public function destroyGroup(Request $request)
     {
@@ -49,12 +55,11 @@ class TimelineAjaxController extends Controller
             return response()->ajax(null, 'Id not set', 400);
         }
         $project_id = $request->get('project');
-        $options = $this->getOptions($project_id);
-
+        $options = $this->logicClass->getOptions($project_id);
 
         return response()->timeline([
-            'groups' => $this->getGroups($project_id),
-            'items' => $this->getItems($project_id),
+            'groups' => $this->logicClass->getGroups($project_id),
+            'items' => $this->logicClass->getItems($project_id),
             'options' => $options,
         ], 200);
     }
@@ -64,15 +69,16 @@ class TimelineAjaxController extends Controller
         if (!$request->has('project')) {
             return response()->ajax(null, 'Id not set', 400);
         }
-        $project_id = $request->get('project');
-        $project = auth()->user()->projects()->find($project_id);
+        $project = $this->logicClass->getShareLink(
+            auth()->user(),
+            $request->get('project')
+            );
         if($project === null) {
             return response()->ajax(null, 'Unknown Error', 400);
         }
-        $project->share = Uuid::uuid4();
-        $project->save();
-        return response()->ajax($project->shareUrl(), 'Success', 200);
+        return response()->ajax($project, 'Success', 200);
     }
+
     public function deleteShareLink(Request $request)
     {
         if (!$request->has('project')) {
@@ -89,47 +95,7 @@ class TimelineAjaxController extends Controller
 
     }
 
-    private function getOptions(int $project_id):array
-    {
-        $timelineSettings = ['template'];
-        $projectOptions = ProjectOption::where('project_id', $project_id)->whereIn('option', $timelineSettings)->get();
-        $options = [
-            'editable' => false,
-            'minHeight' => '550px',
-        ];
-        foreach($projectOptions as $option) {
-            if($option->option === 'template') {
-                if(($value = Handlebars::get($option->value)) !== null) {
-                    $options[$option->option] = $value;
-                }
-                break;
-            }
-            $options[$option->option] = $option->value;
-        }
-        if(!isset($options['template'])) {
-            $options['template'] = Handlebars::get('timeline.item.standard');
-        }
 
-        return $options;
-    }
-
-    private function getItems(int $projectId)
-    {
-        $items = Item::where('project_id', $projectId)->with('links')->get();
-        return $items;
-    }
-
-    private function getGroups(int $project)
-    {
-        return Group::where('project_id', $project)->get()->map(function ($group) {
-            $var = $group->nestedgroups->map(function ($nested) {
-                return $nested->id;
-            });
-            unset($group->nestedgroups);
-            if (!$var->isEmpty()) $group->nestedGroups = $var;
-            return $group;
-        });
-    }
 
     public function setGroup(Request $request)
     {
@@ -178,17 +144,20 @@ class TimelineAjaxController extends Controller
         }
         $item = $this->fillModelFillableByRequest($item, $request, ['start', 'end']);
 
-        if ($request->has('color') && $request->get('color')['id'] != 'default') {
-            if(isset($request->get('color')['style']['backgroundColor'])) {
-                $item->style = 'background-color: '.$request->get('color')['style']['backgroundColor'].';'.
-                               'border-color: '.TimelineHelper::adjustBrightness($request->get('color')['style']['backgroundColor'], -50).';'.
-                               'color: '.TimelineHelper::getContrastColor($request->get('color')['style']['backgroundColor']).';';
+        if ($request->has('color')) {
+            if( $request->get('color')['id'] == 'default') {
+                $item->style = $this->logicClass->getStyle(null);
             }
+            else if(isset($request->get('color')['style'])) {
+                $item->style = $this->logicClass->getStyle($request->get('color')['style']);
+            }
+        } else {
+            $item->style = $this->logicClass->getStyle(null);
         }
 
         if ($item->save()) {
             if ($request->has('links')) {
-                $this->saveLinks($request->get('links'), $item->id);
+                $this->logicClass->saveLinks($request->get('links'), $item->id);
             }
             $responseItem = Item::with('links')->find($item->id);
             return response()->ajax($responseItem, 'Saved successfully', 200);
@@ -215,33 +184,6 @@ class TimelineAjaxController extends Controller
             }
         }
         return $model;
-    }
-
-    private function saveLinks(array $links, int $itemId)
-    {
-        foreach ($links as $link) {
-            if (isset($link['href']) && !empty($link['href'])) {
-                if (!isset($link['title']) || empty($link['href'])) {
-                    $link['title'] = $link['href'];
-                }
-                if (isset($link['id']) && !empty($link['id'])) {
-                    $linkItem = ItemLink::find($link['id']);
-                } else {
-                    $linkItem = new ItemLink;
-                }
-
-                $linkItem->href = $link['href'];
-                $linkItem->title = $link['title'];
-                $linkItem->save();
-                if (!isset($link['id']) || empty($link['id'])) {
-                    $linkItem->items()->attach($itemId);
-                }
-            } else if (empty($link['href']) && isset($link['id']) && !empty($link['id'])) {
-                ItemLink::find($link['id'])->delete();
-            }
-
-
-        }
     }
 
 }

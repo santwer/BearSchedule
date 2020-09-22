@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\UserHelper;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Services\Settings\Account;
 use App\Models\Project;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -11,6 +12,10 @@ use Illuminate\Support\Facades\Hash;
 
 class HomeController extends Controller
 {
+    /**
+     * @var Account $logicClass
+     */
+    protected $logicClass = Account::class;
 
     /**
      * Show the application dashboard.
@@ -19,8 +24,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-
-
         return view('login.index');
     }
 
@@ -44,14 +47,10 @@ class HomeController extends Controller
             $changePassword = true;
         }
         $validatedData = $request->validate($validates);
-
-        $user = auth()->user();
-        $user->name = $validatedData['name'];
-        $user->email = $validatedData['email'];
-        if($changePassword) {
-            $user->password = Hash::make($validatedData['password']);
-        }
-        $user->save();
+        $this->logicClass->update(
+            auth()->user(),
+            $validatedData,
+            $changePassword);
 
         return redirect()->route('user.settings');
 
@@ -59,25 +58,7 @@ class HomeController extends Controller
 
     public function deleteAccount(Request $request)
     {
-        $projects = auth()->user()->projects()->with('users')->get();
-        $deleteProjectIds = [];
-        foreach($projects as $project) {
-            $gotOtherAdmin = false;
-            foreach($project->users as $user) {
-               if($user->id != auth()->user()->id && $user->pivot->role === Project::ROLES[1]) {
-                   $gotOtherAdmin = true;
-               }
-            }
-            if(!$gotOtherAdmin) {
-                $project->users()->sync([]);
-                $deleteProjectIds[] = $project->id;
-            }
-        }
-
-        $deleted =  Project::whereIn('id', $deleteProjectIds)->delete();
-        $deletedUser = User::find(auth()->user()->id)->delete();
-
+        $this->logicClass->delete(auth()->user());
         return (new LoginController())->logout($request);
-
     }
 }

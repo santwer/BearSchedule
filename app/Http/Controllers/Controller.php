@@ -10,4 +10,13 @@ use Illuminate\Routing\Controller as BaseController;
 class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
+
+    protected $logicClass = null;
+
+    public function __construct()
+    {
+        if($this->logicClass !== null && class_exists($this->logicClass)) {
+            $this->logicClass = new $this->logicClass();
+        }
+    }
 }

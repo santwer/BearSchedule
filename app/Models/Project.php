@@ -8,6 +8,8 @@ class Project extends Model
 {
     const ROLES = ['SUBSCRIBER', 'ADMIN', 'EDITOR'];
 
+    protected $fillable = ['name', 'share'];
+
     public function users()
     {
         return $this->belongsToMany(User::class, 'project_user')->withPivot(['role', 'updated_at', 'created_at']);
