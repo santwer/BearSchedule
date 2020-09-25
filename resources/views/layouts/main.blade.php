@@ -58,7 +58,7 @@
         </div>
     </div>
 </section>
-<script async type="text/javascript" src="{{ mix('js/app.js') }}"></script>
+<script async type="module" src="{{ mix('js/app.js') }}"></script>
 </body>
 
 </html>

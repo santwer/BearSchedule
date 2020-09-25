@@ -2,7 +2,7 @@ window.$ = require('jquery');
 window.Vue = require('vue');
 window.Buefy = require('buefy');
 
-import StudentsTimeline from "./components/StudentsTimeline";
+import StudentsTimeline from "./components/Timeline/StudentsTimeline";
 import { DataSet, Timeline } from 'vue2vis';
 const Content = new Vue({
     el: '#project-timeline',

@@ -30,6 +30,7 @@
                     project_id: this.project,
                     links: [],
                     tags: [],
+                    status: null,
                     color: {},
                 };
                 this.$emit('addItem', this.setItem)

@@ -44,7 +44,7 @@
 </template>
 
 <script>
-    import LinkButton from "./tools/LinkButton";
+    import LinkButton from "../tools/LinkButton";
     export default {
         components: {LinkButton},
         props: ['item'],

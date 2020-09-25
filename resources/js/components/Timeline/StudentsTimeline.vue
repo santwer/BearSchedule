@@ -80,13 +80,23 @@
                 selectedZoom: null,
                 getPath: '',
                 currentItem: null,
+                handlebarHelperRegistered: false,
             }
         },
         methods: {
             canAddItems: function () {
                 return this.role === 'ADMIN' || this.role === 'EDITOR';
             },
+            registerHandlebarHelper: function () {
+                if(!this.handlebarHelperRegistered) {
+                    Handlebars.registerHelper('ifEquals', function (arg1, arg2, options) {
+                        return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+                    });
+                    this.handlebarHelperRegistered = true;
+                }
+            },
             getData: function () {
+                this.registerHandlebarHelper();
                 const loadingComponent = this.$buefy.loading.open({
                     container: this.$el
                 });

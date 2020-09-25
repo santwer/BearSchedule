@@ -40,6 +40,16 @@
                     </div>
                     <div class="is-350">
                         <h2 class="subtitle">Options</h2>
+                        <b-field label="Status">
+                            <b-select placeholder="Select a Status" v-model="item.status" expanded>
+                                <option
+                                    v-for="status in stati"
+                                    :value="status.id"
+                                    :key="status.id">
+                                    {{ status.text }}
+                                </option>
+                            </b-select>
+                        </b-field>
                         <b-field label="Type">
                             <b-select placeholder="Select a type" v-model="item.type" required expanded>
                                 <option
@@ -107,10 +117,6 @@
                             </b-taginput>
                         </b-field>
                     </b-tab-item>
-
-
-
-
                 </b-tabs>
             </section>
             <footer class="modal-card-foot">
@@ -125,7 +131,7 @@
 </template>
 
 <script>
-    import LinkButton from "./tools/LinkButton";
+    import LinkButton from "../tools/LinkButton";
 
     export default {
         name: "TimelineItemModelForm",
@@ -156,6 +162,13 @@
                     {id: 'range', text: 'range'},
                     {id: 'background', text: 'background'},
                 ],
+                stati: [
+                    {id: 'DEFAULT', text: 'Normal'},
+                    {id: 'DELAYED', text: 'Delayed'},
+                    {id: 'CRITICAL', text: 'Critical'},
+                    {id: 'TEST', text: 'Test'},
+                    {id: 'DONE', text: 'DONE'},
+                ],
                 colors: [
                     { id: 'default', name: 'Default', style: { backgroundColor: 'rgba(99, 164, 255, 0.4)' } },
                     { id: '#d32f2f', name: 'Red', style: { backgroundColor:"#d32f2f" } },
@@ -184,7 +197,7 @@
             },
             getCurrentColorName() {
                 if(typeof this.item.color === "undefined") {
-                    return 'Default';
+                    return this.getCurrentColorByStyle().name;
                 }
                 if(typeof this.item.color.name === "undefined") {
                     return 'Default';
@@ -193,12 +206,40 @@
             },
             getCurrentColorStyle() {
                 if(typeof this.item.color === "undefined") {
-                    return this.colors[0].style;
+                    return this.getCurrentColorByStyle().style;
                 }
                 if(typeof this.item.color.style === "undefined") {
                     return this.colors[0].style;
                 }
                 return this.item.color.style;
+            },
+            getCurrentColorByStyle() {
+                if(typeof this.item.style === "undefined") {
+                    return this.colors[0];
+                }
+                var str = this.computeCss(this.item.style);
+                if(typeof str['background-color'] != "undefined") {
+                    var bgColor = str['background-color'].substring(0, 7);
+                    var result = this.colors.filter(obj => {
+                        return obj.id === bgColor
+                    });
+                    if(result.length > 0) {
+                        return result[0];
+                    }
+                }
+
+                return this.colors[0].style;
+            },
+            computeCss: function (cssStr) {
+                var cssEntries = [];
+                var cssSplit = cssStr.split(';');
+                cssSplit.forEach(function (element) {
+                   var parts = element.split(':');
+                    if(typeof parts[1] !== "undefined") {
+                        cssEntries[parts[0]] = parts[1].trim();
+                    }
+                });
+                return cssEntries;
             },
             getFilteredTags(text) {
                 /*this.filteredTags = data.filter((option) => {
@@ -241,6 +282,7 @@
                     that.backup.type = that.item.type;
                     that.backup.links = that.item.links;
                     that.backup.subtitle = that.item.subtitle;
+                    that.backup.status = that.item.status;
                     that.$emit('close');
                     if (typeof that.item.id === "undefined" || that.item.id === null) {
                         that.backup.id = data.data.id;

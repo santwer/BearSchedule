@@ -13,7 +13,7 @@ class Item extends Model
     protected $fillable = [
         'title', 'content', 'className', 'style', 'align',
         'end', 'start', 'group', 'selectable', 'subgroup',
-        'type', 'limitSize', 'editable', 'project_id', 'description', 'subtitle'
+        'type', 'limitSize', 'editable', 'project_id', 'description', 'subtitle', 'status'
     ];
 
     public function goups() {

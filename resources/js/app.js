@@ -4,7 +4,7 @@ window.Buefy = require('buefy');
 //Vue.component('timeline', vue2vis.Timeline);
 //vue2vis.Timeline
 
-import StudentsTimeline from "./components/StudentsTimeline";
+import StudentsTimeline from "./components/Timeline/StudentsTimeline";
 import ProjectUsers from "./components/ProjectUsers";
 import {DataSet, Timeline} from 'vue2vis';
 import EditTable from "./components/tools/EditTable";
