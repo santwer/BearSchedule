@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Timeline;
 
+use App\DataHelper\ProjectLog\Actions;
+use App\DataHelper\ProjectLog\Types;
 use App\Helper\Handlebars;
+use App\Helper\ModelChangesHelper;
 use App\Helper\TimelineHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Services\Settings\Account;
 use App\Http\Services\Timeline\Timeline;
 use App\Models\Project;
+use App\Models\ProjectLog;
 use App\Models\ProjectOption;
 use App\Models\Timeline\Group;
 use App\Models\Timeline\Item;
@@ -28,7 +32,10 @@ class TimelineAjaxController extends Controller
         if (!$request->has('id')) {
             return response()->ajax(null, 'id not set.', 400);
         }
-        if (!Group::find($request->get('id'))->delete()) {
+        $grp = Group::find($request->get('id'));
+        ProjectLog::entry(Actions::DELETE, Types::GROUP, $grp->toJson(), '', auth()->user()->id, $grp->project_id, null, $request->get('id'));
+
+        if (!$grp->delete()) {
             return response()->ajax(null, 'Delete not possible', 400);
         }
         return response()->ajax(null, 'Delete successful', 200);
@@ -39,7 +46,10 @@ class TimelineAjaxController extends Controller
         if (!$request->has('id')) {
             return response()->ajax(null, 'id not set.', 400);
         }
-        if (!Item::find($request->get('id'))->delete()) {
+        $item = Item::find($request->get('id'));
+        ProjectLog::entry(Actions::DELETE, Types::ITEM, $item->toJson(), '', auth()->user()->id, $item->project_id, null, $request->get('id'));
+
+        if (!$item->delete()) {
             return response()->ajax(null, 'Delete not possible', 400);
         }
         return response()->ajax(null, 'Delete successful', 200);
@@ -76,6 +86,7 @@ class TimelineAjaxController extends Controller
         if($project === null) {
             return response()->ajax(null, 'Unknown Error', 400);
         }
+        ProjectLog::entry(Actions::ADD, Types::SHARE, '{"Share": "Disabled"}', '{"Share": "Active"}', auth()->user()->id, $request->get('project'));
         return response()->ajax($project, 'Success', 200);
     }
 
@@ -91,6 +102,7 @@ class TimelineAjaxController extends Controller
         }
         $project->share = null;
         $project->save();
+        ProjectLog::entry(Actions::DELETE, Types::SHARE, '{"Share": "Active"}', '{"Share": "Disabled"}', auth()->user()->id, $project_id);
         return response()->ajax(null, 'Success', 200);
 
     }
@@ -107,14 +119,20 @@ class TimelineAjaxController extends Controller
         }
         if (!$request->has('id') || empty($request->get('id'))) {
             $group = new Group;
+            $logAction = Actions::ADD;
             $group->visible = true;
         } else {
             $group = Group::find($request->get('id'));
+            $logAction = Actions::CHANGE;
         }
 
         $group = $this->fillModelFillableByRequest($group, $request);
-
+        $values = $group->getRawOriginal();
         if ($group->save()) {
+            $hpValues = ModelChangesHelper::getChangedValues($values, $group);
+            if($hpValues !== false) {
+                ProjectLog::entry($logAction, Types::GROUP, $hpValues[0], $hpValues[1], auth()->user()->id, $group->project_id,null,  $group->id);
+            }
             return response()->ajax($group, 'Saved successfully', 200);
         }
         return response()->ajax(null, 'Error can not save.', 400);
@@ -138,8 +156,10 @@ class TimelineAjaxController extends Controller
         }
 
         if (!$request->has('id') || empty($request->get('id'))) {
+            $logAction = Actions::ADD;
             $item = new Item;
         } else {
+            $logAction = Actions::CHANGE;
             $item = Item::find($request->get('id'));
         }
         $item = $this->fillModelFillableByRequest($item, $request, ['start', 'end']);
@@ -154,8 +174,12 @@ class TimelineAjaxController extends Controller
         } else {
             $item->style = $this->logicClass->getStyle(null);
         }
-
+         $values = $item->getRawOriginal();
         if ($item->save()) {
+            $hpValues = ModelChangesHelper::getChangedValues($values, $item);
+            if($hpValues !== false) {
+                ProjectLog::entry($logAction, Types::ITEM, $hpValues[0], $hpValues[1], auth()->user()->id, $item->project_id, $item->id);
+            }
             if ($request->has('links')) {
                 $this->logicClass->saveLinks($request->get('links'), $item->id);
             }

@@ -79,13 +79,12 @@
                 @endif
             </form>
         </b-tab-item>
+        @if($role == 'ADMIN')
+            <b-tab-item label="Logs" value="logs">
+                <log-table :data="{{ $logdata }}" ></log-table>
+            </b-tab-item>
+        @endif
     </b-tabs>
 
 
 @endsection
-<script>
-    import EditTable from "../../js/components/tools/EditTable";
-    export default {
-        components: {EditTable}
-    }
-</script>

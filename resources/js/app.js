@@ -8,13 +8,15 @@ import StudentsTimeline from "./components/Timeline/StudentsTimeline";
 import ProjectUsers from "./components/ProjectUsers";
 import {DataSet, Timeline} from 'vue2vis';
 import EditTable from "./components/tools/EditTable";
+import LogTable from "./components/tools/LogTable";
 const Content = new Vue({
     el: '#content',
     components: {
         StudentsTimeline,
         DataSet,
         ProjectUsers,
-        EditTable
+        EditTable,
+        LogTable
     },
     data: {
         activeTabProject: 'timeline',

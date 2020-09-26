@@ -13,7 +13,8 @@
                     <div class="content">
                         <p>
                             <strong>{{ item.subtitle }}</strong>  <small>{{  displayDate(item.start) }}</small> <small v-if="item.type === 'range'">- {{ displayDate(item.end) }}</small>
-                            <br>
+
+                            <br><span v-if="item.status !== 'DEFAULT'">Status: {{(item.status).toLowerCase() }}</span><br>
                             {{ item.description }}
                             </p>
                         <div v-for="link in item.links" style="width: 100%;">

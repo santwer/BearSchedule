@@ -271,6 +271,11 @@
                         break;
                 }
                 return dates;
+            },
+            methodThatForcesUpdate() {
+                // ...
+                this.$forceUpdate();  // Notice we have to use a $ here
+                // ...
             }
         },
         watch: {

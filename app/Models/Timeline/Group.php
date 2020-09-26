@@ -2,6 +2,7 @@
 
 namespace App\Models\Timeline;
 
+use App\Models\ProjectLog;
 use Illuminate\Database\Eloquent\Model;
 
 class Group extends Model
@@ -23,5 +24,9 @@ class Group extends Model
 
     public function nestedGroups() {
         return $this->hasMany(Group::class, 'parent', 'id');
+    }
+    public function log()
+    {
+        return $this->hasMany(ProjectLog::class, 'group_id', 'id');
     }
 }

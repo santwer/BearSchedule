@@ -43,6 +43,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Project::class, 'project_user')->withPivot(['role']);
     }
 
+    public function log()
+    {
+        return $this->hasMany(ProjectLog::class, 'user_id', 'id');
+    }
+
     public static function ajaxSearch(string $q):Collection
     {
         $domains =  UserHelper::viewableUsers();

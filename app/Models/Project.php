@@ -25,6 +25,11 @@ class Project extends Model
         return $this->hasMany(ProjectOption::class, 'project_id', 'id');
     }
 
+    public function log()
+    {
+        return $this->hasMany(ProjectLog::class, 'project_id', 'id');
+    }
+
     public function shareUrl()
     {
         if($this->share === null) {

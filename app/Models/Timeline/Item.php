@@ -2,6 +2,7 @@
 
 namespace App\Models\Timeline;
 
+use App\Models\ProjectLog;
 use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
@@ -21,5 +22,9 @@ class Item extends Model
     }
     public function links() {
         return $this->belongsToMany(ItemLink::class, 'item_item_link');
+    }
+    public function log()
+    {
+        return $this->hasMany(ProjectLog::class, 'group_id', 'id');
     }
 }
