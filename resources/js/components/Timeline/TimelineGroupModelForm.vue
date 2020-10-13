@@ -89,7 +89,6 @@
                     that.backup.title = that.item.content;
                     that.backup.parent = that.item.parent;
                     that.backup.show_share = that.item.show_share;
-                    console.log(that.item.show_share);
                     that.$emit('close');
                     if (typeof that.item.id === "undefined" || that.item.id === null) {
                         that.backup.id = data.data.id;
