@@ -18,7 +18,7 @@ class Item extends Model
     ];
 
     public function goups() {
-        return $this->belongsTo(Group::class, 'id', 'group');
+        return $this->belongsTo(Group::class, 'group', 'id');
     }
     public function links() {
         return $this->belongsToMany(ItemLink::class, 'item_item_link');

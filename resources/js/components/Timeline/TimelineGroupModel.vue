@@ -23,7 +23,8 @@
                     title: null,
                     content: '',
                     parent: null,
-                    project_id: this.project
+                    project_id: this.project,
+                    show_share: null,
                 };
                 this.$emit('addItem', this.setItem)
                 this.openModal();

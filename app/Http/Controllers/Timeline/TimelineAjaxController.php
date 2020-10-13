@@ -59,7 +59,7 @@ class TimelineAjaxController extends Controller
      * @param Request $request
      * @return mixed
      */
-    public function getData(Request $request)
+    public function getData(Request $request, bool $share = false)
     {
         if (!$request->has('project')) {
             return response()->ajax(null, 'Id not set', 400);
@@ -68,8 +68,8 @@ class TimelineAjaxController extends Controller
         $options = $this->logicClass->getOptions($project_id);
 
         return response()->timeline([
-            'groups' => $this->logicClass->getGroups($project_id),
-            'items' => $this->logicClass->getItems($project_id),
+            'groups' => $this->logicClass->getGroups($project_id, $share),
+            'items' => $this->logicClass->getItems($project_id, $share),
             'options' => $options,
         ], 200);
     }
@@ -198,9 +198,13 @@ class TimelineAjaxController extends Controller
 
     private function fillModelFillableByRequest($model, Request $request, $dateTimeCasts = [])
     {
+        $casts = $model->getCasts();
         foreach ($model->getFillable() as $fillable) {
             if ($request->has($fillable) && !empty($request->get($fillable))) {
-                if (in_array($fillable, $dateTimeCasts)) {
+                if (isset($casts[$fillable]) && $casts[$fillable] === 'boolean') {
+                    $model->{$fillable} = $request->get($fillable) == "true";
+                }
+                else if (in_array($fillable, $dateTimeCasts)) {
                     $model->{$fillable} = $this->convertToDateTime($request->get($fillable));
                 } else {
                     $model->{$fillable} = $request->get($fillable);

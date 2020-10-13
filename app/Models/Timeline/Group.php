@@ -11,18 +11,19 @@ class Group extends Model
         'subgroupStack' => 'array',
         'subgroupVisibility' => 'array',
         'nestedGroups' => 'array',
+        'show_share' => 'boolean'
     ];
     protected $fillable = [
         'title', 'content', 'className', 'style', 'subgroupStack',
         'subgroupVisibility', 'visible', 'treeLevel',
-        'showNested', 'project_id', 'parent'
+        'showNested', 'project_id', 'parent', 'show_share'
     ];
 
     public function items() {
         return $this->hasMany(Item::class, 'group', 'id');
     }
 
-    public function nestedGroups() {
+    public function nestedgroups() {
         return $this->hasMany(Group::class, 'parent', 'id');
     }
     public function log()

@@ -23,15 +23,33 @@ class Timeline extends BaseService
         return $options->get();
     }
 
-    public function getItems(int $projectId)
+    public function getItems(int $projectId, bool $share = false)
     {
-        $items = Item::where('project_id', $projectId)->with('links')->get();
+            $items = Item::where('project_id', $projectId);
+        if($share) {
+            $items = $items->with(['links', 'goups'])->whereHas('goups', function ($goups) {
+                $goups->where('show_share', 1);
+            })->get();
+        } else {
+            $items = $items->with('links')->get();
+        }
+
         return $items;
     }
 
-    public function getGroups(int $project)
+    public function getGroups(int $project, bool $share = false)
     {
-        return Group::where('project_id', $project)->get()->map(function ($group) {
+
+        $groups = Group::with(['nestedgroups' => function ($nestedGroups) use($share) {
+            if($share) {
+                $nestedGroups->where('show_share', 1);
+            }
+        } ])->where('project_id', $project)->where(function ($where) use($share) {
+            if($share) {
+                $where->where('show_share', true);
+            }
+        })->get();
+        $groups = $groups->map(function ($group) {
             $var = $group->nestedgroups->map(function ($nested) {
                 return $nested->id;
             });
@@ -39,6 +57,7 @@ class Timeline extends BaseService
             if (!$var->isEmpty()) $group->nestedGroups = $var;
             return $group;
         });
+        return $groups;
     }
 
     public function getShareLink(User $user,int $project_id):?string

@@ -52,7 +52,7 @@ class ShareController extends Controller
         }
         $request->request->add(['project' => $this->project->id]);
         $timeline = new TimelineController();
-        return $timeline->getData($request);
+        return $timeline->getData($request, true);
     }
 
 

@@ -9,23 +9,20 @@
                     @click="$emit('close')"/>
             </header>
             <section class="modal-card-body">
-                <b-field label="Title">
-                    <b-input
-                        type="text"
-                        v-model="item.title"
-                        placeholder="Title"
-                        required>
-                    </b-input>
-                </b-field>
-                <b-field label="Content">
+                <b-field label="Name">
                     <b-input
                         type="text"
                         v-model="item.content"
                         placeholder="Title">
                     </b-input>
                 </b-field>
+                <b-field label="show in share">
+                    <b-switch v-model="item.show_share">
+                        {{ item.show_share ? 'Yes' : 'No' }}
+                    </b-switch>
+                </b-field>
                 <b-field label="Group">
-                    <b-select placeholder="Select a group" v-model="item.parent" required expanded>
+                    <b-select placeholder="Select a group" v-model="item.parent" expanded>
                         <option
                             v-for="group in groups"
                             :value="group.id"
@@ -89,8 +86,10 @@
                     var msg = `Saved successfully`;
                     that.$buefy.toast.open(msg);
                     that.backup.content = that.item.content;
-                    that.backup.title = that.item.title;
+                    that.backup.title = that.item.content;
                     that.backup.parent = that.item.parent;
+                    that.backup.show_share = that.item.show_share;
+                    console.log(that.item.show_share);
                     that.$emit('close');
                     if (typeof that.item.id === "undefined" || that.item.id === null) {
                         that.backup.id = data.data.id;
@@ -136,7 +135,8 @@
         },
         mounted() {
             this.backup = this.setItem;
-            console.log('grp', this.setItem);
+            this.groups = this.$parent.$parent.$parent.groups;
+            //this.groups.unshift({id: -1, content: 'no group'});
             this.item = Object.assign({}, this.backup);
             this.csrf = $('meta[name=csrf-token]').attr('content');
             $.ajaxSetup({
@@ -144,8 +144,12 @@
                     'X-CSRF-TOKEN': this.csrf
                 }
             });
+            this.$nextTick(() => {
+                if(this.item.parent === null) {
+                    this.item.parent = -1;
+                }
+            })
 
-            this.groups = this.$parent.$parent.$parent.groups;
         }
     }
 </script>
