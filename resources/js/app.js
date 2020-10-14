@@ -95,6 +95,12 @@ const Content = new Vue({
                 message: 'Do you want to delete your Account? Projects with other Admins will be remaining.',
                 onConfirm: () => $('#delete_account').submit()
             })
+        },
+        deleteProject: function () {
+            this.$buefy.dialog.confirm({
+                message: 'Do you want to delete your Project?',
+                onConfirm: () => $('#delete_project').submit()
+            })
         }
     },
     watch: {

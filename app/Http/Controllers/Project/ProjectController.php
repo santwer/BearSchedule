@@ -144,4 +144,13 @@ class ProjectController extends Controller
         return $userRole->pivot->role;
     }
 
+    public function destroy(Request $request, int $project)
+    {
+        if ($this->getRoleInProject($project) !== 'ADMIN') {
+            return redirect()->back();
+        }
+        $project = Project::find($project)->delete();
+        return redirect()->route('home');
+    }
+
 }

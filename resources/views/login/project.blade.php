@@ -73,10 +73,21 @@
                     </div>
                 </div>
                 @if($role == 'ADMIN')
-                    <b-button icon-left="content-save" native-type="submit">
-                        Save
-                    </b-button>
+                    <div class="columns">
+                        <div class="column">
+                            <b-button icon-left="content-save" native-type="submit">
+                                Save
+                            </b-button>
+                        </div>
+                        <div class="column">
+                            <b-button icon-left="delete" type="is-danger" v-on:click="deleteProject">Delete</b-button>
+                        </div>
+                    </div>
+
                 @endif
+            </form>
+            <form method="POST" id="delete_project" action="{{ route('project.delete', [$project]) }}">
+            @csrf
             </form>
         </b-tab-item>
         @if($role == 'ADMIN')

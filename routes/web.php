@@ -28,6 +28,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('project/create', [ProjectController::class, 'create']);
     Route::get('project/{project}', [ProjectController::class, 'index'])->name('project.open');
     Route::post('project/{project}', [ProjectController::class, 'update'])->name('project.update');
+    Route::post('project/{project}/delete', [ProjectController::class, 'destroy'])->name('project.delete');
 
     Route::group(['prefix' => 'ajax/'], function () {
         Route::group(['prefix' => 'timeline/'], function () {
