@@ -143,11 +143,6 @@
                     'X-CSRF-TOKEN': this.csrf
                 }
             });
-            this.$nextTick(() => {
-                if(this.item.parent === null) {
-                    this.item.parent = -1;
-                }
-            })
 
         }
     }
