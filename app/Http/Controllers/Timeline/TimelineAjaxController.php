@@ -114,6 +114,9 @@ class TimelineAjaxController extends Controller
         if (!$request->has('content') || empty($request->get('content'))) {
             return response()->ajax(null, 'Name not set.', 400);
         }
+        $request->merge([
+            'title' => $request->get('content'),
+        ]);
         if (!$request->has('project_id')) {
             return response()->ajax(null, 'Id not set', 400);
         }
