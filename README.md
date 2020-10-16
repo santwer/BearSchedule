@@ -10,7 +10,7 @@
 
 </p>
 
-#BearSchedule
+# BearSchedule
 BearSchedule is a PHP/Laravel Project for easy use to show and share Project schedules.
 
 ## Requierements
@@ -31,12 +31,12 @@ $ php artisan key:generate
 Add all add all database connection data to env. Also its possible to add Microsoft Graph API Key.
 So you are able to login with Mircosoft.
 
-#####Migrate Database
+##### Migrate Database
 ```sh
 $ php artisan migrate
 ```
 
-#####config/users.php
+##### config/users.php
 
 It it possible to set up the product, that all Users can find each other or certain do. Base by Mail-Address.
 The description is in the heading file.
