@@ -13,6 +13,16 @@
                     <b-tab-item label="Data">
                 <div class="columns">
                     <div class="column">
+                        <b-field label="Group">
+                            <b-select placeholder="Select a group" v-model="item.group" required expanded>
+                                <option
+                                    v-for="group in groups"
+                                    :value="group.id"
+                                    :key="group.id">
+                                    {{ group.content }}
+                                </option>
+                            </b-select>
+                        </b-field>
                         <b-field label="Title">
                             <b-input
                                 type="text"
@@ -39,48 +49,6 @@
                         </div>
                     </div>
                     <div class="is-350">
-                        <h2 class="subtitle">Options</h2>
-                        <b-field label="Status">
-                            <b-select placeholder="Select a Status" v-model="item.status" expanded>
-                                <option
-                                    v-for="status in stati"
-                                    :value="status.id"
-                                    :key="status.id">
-                                    {{ status.text }}
-                                </option>
-                            </b-select>
-                        </b-field>
-                        <b-field label="Type">
-                            <b-select placeholder="Select a type" v-model="item.type" required expanded>
-                                <option
-                                    v-for="type in types"
-                                    :value="type.id"
-                                    :key="type.id">
-                                    {{ type.text }}
-                                </option>
-                            </b-select>
-                        </b-field>
-                        <b-field label="Group">
-                            <b-select placeholder="Select a group" v-model="item.group" required expanded>
-                                <option
-                                    v-for="group in groups"
-                                    :value="group.id"
-                                    :key="group.id">
-                                    {{ group.content }}
-                                </option>
-                            </b-select>
-                        </b-field>
-                        <b-field label="Color">
-                        <b-dropdown aria-role="list" expanded>
-                            <button class="button is-fullwidth" slot="trigger" slot-scope="{ colorPickerActive }" type="button">
-                                <span class="previewColor" :style="getCurrentColorStyle()"></span><span>{{ getCurrentColorName() }}</span>
-                                <b-icon :icon="colorPickerActive ? 'menu-up' : 'menu-down'"></b-icon>
-                            </button>
-                            <b-dropdown-item v-for="color in colors" aria-role="listitem" @click="setColor(color)">
-                                <span class="previewColor" :style="color.style"></span> {{ color.name }}
-                            </b-dropdown-item>
-                        </b-dropdown>
-                        </b-field>
                         <b-field label="Start">
                             <b-datepicker
                                 placeholder="Click to select..."
@@ -96,6 +64,37 @@
                                 icon="calendar-today"
                                 trap-focus>
                             </b-datepicker>
+                        </b-field>
+                        <b-field label="Type">
+                            <b-select placeholder="Select a type" v-model="item.type" required expanded>
+                                <option
+                                    v-for="type in types"
+                                    :value="type.id"
+                                    :key="type.id">
+                                    {{ type.text }}
+                                </option>
+                            </b-select>
+                        </b-field>
+                        <b-field label="Status">
+                            <b-select placeholder="Select a Status" v-model="item.status" expanded>
+                                <option
+                                    v-for="status in stati"
+                                    :value="status.id"
+                                    :key="status.id">
+                                    {{ status.text }}
+                                </option>
+                            </b-select>
+                        </b-field>
+                        <b-field label="Color">
+                        <b-dropdown aria-role="list" expanded>
+                            <button class="button is-fullwidth" slot="trigger" slot-scope="{ colorPickerActive }" type="button">
+                                <span class="previewColor" :style="getCurrentColorStyle()"></span><span>{{ getCurrentColorName() }}</span>
+                                <b-icon :icon="colorPickerActive ? 'menu-up' : 'menu-down'"></b-icon>
+                            </button>
+                            <b-dropdown-item v-for="color in colors" aria-role="listitem" @click="setColor(color)">
+                                <span class="previewColor" :style="color.style"></span> {{ color.name }}
+                            </b-dropdown-item>
+                        </b-dropdown>
                         </b-field>
 
                     </div>

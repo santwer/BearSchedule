@@ -112,6 +112,9 @@
                         if(typeof data.options.template !== "undefined") {
                             data.options.template = Handlebars.compile(data.options.template);
                         }
+                        if(typeof data.options.groupTemplate !== "undefined") {
+                            data.options.groupTemplate = Handlebars.compile(data.options.groupTemplate);
+                        }
                         if(typeof data.options.displayscale !== "undefined") {
                             var dates = that.setZoomRange(data.options.displayscale);
                             if(typeof dates[1] !== "undefined") {
@@ -121,6 +124,13 @@
                             delete data.options.displayscale;
                         }
                         that.options = data.options;
+                        that.options['snap'] = function (date, scale, step) {
+                            //console.log('snap', new Date(date.toDateString()))
+                            return new Date(date.toDateString());
+                            const hour = 60 * 1000;
+                            return Math.round(date / hour) * hour;
+                        }
+                        console.log('options', that.options)
                     }
                     that.dummeLoop = true;
                     that.MsgIsActive = that.items.length  === 0;

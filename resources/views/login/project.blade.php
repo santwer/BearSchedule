@@ -64,6 +64,26 @@
                                 <option value="day">Day</option>
                             </b-select>
                         </b-field>
+                        <b-field label="Axis orientation">
+                            <b-select placeholder="Select Itemtype" name="option[orientation.axis]"
+                                      value="{{ old('option.orientation.axis', ($settings->option('orientation.axis', 'value') === null ? 'null' : $settings->option('orientation.axis', 'value'))) }}"
+                                      {{ $role !== 'ADMIN' ? 'disabled' : '' }}
+                                      expanded>
+                                <option value="null">bottom</option>
+                                <option value="top">top</option>
+                                <option value="both">both</option>
+                                <option value="none">none</option>
+                            </b-select>
+                        </b-field>
+                        <b-field label="Item orientation">
+                            <b-select placeholder="Select Itemtype" name="option[orientation.item]"
+                                      value="{{ old('option.orientation.item', ($settings->option('orientation.item', 'value') === null ? 'null' : $settings->option('orientation.item', 'value'))) }}"
+                                      {{ $role !== 'ADMIN' ? 'disabled' : '' }}
+                                      expanded>
+                                <option value="null">bottom</option>
+                                <option value="top">top</option>
+                            </b-select>
+                        </b-field>
 
 
 

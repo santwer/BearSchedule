@@ -2,6 +2,7 @@
 
 namespace App\Http\Services\Timeline;
 
+use App\Helper\ArrayHelper;
 use App\Helper\Handlebars;
 use App\Http\Services\BaseService;
 use App\Models\ProjectOption;
@@ -18,8 +19,9 @@ class Options extends BaseService
         $projectOptions = ProjectOption::where('project_id', $project_id)->get();
 
         $this->options = [
-            'editable' => false,
+            'editable' => $this->getEdiable($project_id),
             'minHeight' => '550px',
+            'groupTemplate' => Handlebars::get('timeline.group.default')
         ];
         foreach($projectOptions as $option) {
             if(method_exists($this, $option->option)) {
@@ -31,12 +33,11 @@ class Options extends BaseService
         if(!isset($this->options['template'])) {
             $this->options['template'] = Handlebars::get('timeline.item.standard');
         }
-        //dd($this->options);
     }
 
     public function get():array
     {
-        return $this->options;
+        return ArrayHelper::dotArrayToMutli($this->options);
     }
 
 
@@ -45,5 +46,31 @@ class Options extends BaseService
             return $value;
         }
         return null;
+    }
+
+    private function getEdiable(int $projectId) {
+        $role = $this->getRoleInProject($projectId);
+
+        return [
+            'add' => false,
+            'remove' => false,
+            //$role === 'ADMIN' || $role === 'EDITOR'
+            'updateTime' => false,
+            'updateGroup' => false,
+        ];
+    }
+
+    private function getGroupEditable(int $projectId)
+    {
+        $role = $this->getRoleInProject($projectId);
+        return false;
+    }
+
+    private function getRoleInProject(int $projectId)
+    {
+        if(auth()->user() === null) return null;
+        $userRole = auth()->user()->projects()->find($projectId);
+        if ($userRole->pivot === null) return null;
+        return $userRole->pivot->role;
     }
 }
