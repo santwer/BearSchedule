@@ -125,12 +125,8 @@
                         }
                         that.options = data.options;
                         that.options['snap'] = function (date, scale, step) {
-                            //console.log('snap', new Date(date.toDateString()))
                             return new Date(date.toDateString());
-                            const hour = 60 * 1000;
-                            return Math.round(date / hour) * hour;
-                        }
-                        console.log('options', that.options)
+                        };
                     }
                     that.dummeLoop = true;
                     that.MsgIsActive = that.items.length  === 0;
@@ -283,9 +279,14 @@
                 return dates;
             },
             methodThatForcesUpdate() {
-                // ...
-                this.$forceUpdate();  // Notice we have to use a $ here
-                // ...
+                const loadingComponent = this.$buefy.loading.open({
+                    container: this.$el
+                });
+                this.MsgIsActive = true;
+                this.$nextTick(() => {
+                    this.MsgIsActive = false;
+                    setTimeout(() => loadingComponent.close(), 500);
+                });
             }
         },
         watch: {
@@ -297,6 +298,11 @@
                 var dates = this.setZoomRange(value);
                 if(typeof dates[1] !== "undefined")
                     this.$refs.timeline.setWindow(dates[0], dates[1]);
+            },
+            items: function (value, n) {
+                if(this.MsgIsActive && value.length > 0) {
+                    this.MsgIsActive = false;
+                }
             }
         },
         mounted() {

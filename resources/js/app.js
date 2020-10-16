@@ -118,6 +118,13 @@ const Content = new Vue({
                     that.sharelink = "";
                 }, 'json')
             }
+        },
+        activeTabProject: function (neu) {
+            if('timeline' === neu) {
+                if (typeof this.$refs.sttimeline !== "undefined") {
+                    this.$refs.sttimeline.methodThatForcesUpdate();
+                }
+            }
         }
     },
     mounted() {

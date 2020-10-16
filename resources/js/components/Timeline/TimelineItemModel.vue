@@ -20,8 +20,8 @@
         methods: {
             openModalNew: function() {
                 this.setItem = {
-                    start: new Date(),
-                    end: new Date(),
+                    start: this.getNewDate(),
+                    end: this.getNewDate(1),
                     title: null,
                     type: 'range',
                     content: '',
@@ -52,6 +52,12 @@
                     hasModalCard: true,
                     trapFocus: true
                 })
+            },
+            getNewDate(addDays) {
+                addDays = addDays || 0;
+                var date = new Date();
+                date.setDate(date.getDate() + addDays);
+                return new Date(date.toDateString())
             }
         }
     }
