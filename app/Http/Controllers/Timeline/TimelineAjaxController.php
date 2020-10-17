@@ -220,7 +220,10 @@ class TimelineAjaxController extends Controller
         $casts = $model->getCasts();
         foreach ($model->getFillable() as $fillable) {
             if ($request->has($fillable) && !empty($request->get($fillable))) {
-                if (isset($casts[$fillable]) && $casts[$fillable] === 'boolean') {
+                if (isset($casts[$fillable]) && $casts[$fillable] === 'integer') {
+                    $model->{$fillable} = is_integer($request->get($fillable)) ? $request->get($fillable) : null;
+                }
+                else if (isset($casts[$fillable]) && $casts[$fillable] === 'boolean') {
                     $model->{$fillable} = $request->get($fillable) == "true";
                 }
                 else if (in_array($fillable, $dateTimeCasts)) {

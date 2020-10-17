@@ -11,6 +11,7 @@ class Group extends Model
         'subgroupStack' => 'array',
         'subgroupVisibility' => 'array',
         'nestedGroups' => 'array',
+        'order' => 'integer',
         'show_share' => 'boolean'
     ];
     protected $fillable = [
