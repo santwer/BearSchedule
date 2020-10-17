@@ -87,6 +87,7 @@ class Options extends BaseService
     {
         if(auth()->user() === null) return null;
         $userRole = auth()->user()->projects()->find($projectId);
+        if($userRole === null) return null;
         if ($userRole->pivot === null) return null;
         return $userRole->pivot->role;
     }
