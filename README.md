@@ -10,7 +10,7 @@
 
 </p>
 
-<img src="https://www.kouky.de/images/logo.svg" height="64">
+<img src="https://raw.githubusercontent.com/santwer/BearSchedule/f579987d69dcafbb353bc38495c1f3054ff4efd8/.src/logo.svg" height="64">
 
 
 # BearSchedule
