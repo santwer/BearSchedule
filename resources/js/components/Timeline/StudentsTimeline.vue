@@ -127,7 +127,6 @@
                             }
                             delete data.options.displayscale;
                         }
-                        data.options.groupEditable = true;
                         that.options = data.options;
                         that.options['snap'] = function (date, scale, step) {
                             return new Date(date.toDateString());

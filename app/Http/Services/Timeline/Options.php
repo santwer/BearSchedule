@@ -24,6 +24,7 @@ class Options extends BaseService
         $this->options = [
             'editable' => $this->getEdiable($project_id),
             'minHeight' => '550px',
+            'groupEditable' => $this->getGroupEditable(),
             'groupTemplate' => $this->getGroupTemplate(),
             'groupOrder' => $this->getGroupOrder($project_id)
         ];
@@ -78,9 +79,9 @@ class Options extends BaseService
         return Handlebars::get('timeline.group.show');
     }
 
-    private function getGroupEditable(int $projectId)
+    private function getGroupEditable()
     {
-        return false;
+        return $this->role === 'ADMIN' || $this->role === 'EDITOR';
     }
 
     private function getRoleInProject(int $projectId)
