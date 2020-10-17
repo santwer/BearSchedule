@@ -15,7 +15,7 @@
                             <strong>{{ item.subtitle }}</strong>  <small>{{  displayDate(item.start) }}</small> <small v-if="item.type === 'range'">- {{ displayDate(item.end) }}</small>
 
                             <br><span v-if="item.status !== 'DEFAULT'">Status: {{(item.status).toLowerCase() }}</span><br>
-                            {{ item.description }}
+                            <span v-html="getHtmlDesc()">{{ item.description }}</span>
                             </p>
                         <div v-for="link in item.links" style="width: 100%;">
                             <link-button editmode="false" :item="link"></link-button>
@@ -55,6 +55,9 @@
                const options = { year: 'numeric', month: 'short', day: 'numeric' };
                var date = new Date(input);
                return date.toLocaleDateString(undefined, options);
+           },
+           getHtmlDesc: function () {
+               return this.item.description.replace(/(?:\r\n|\r|\n)/g, '<br>');
            }
         },
         mounted() {
