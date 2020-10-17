@@ -25,7 +25,7 @@ class Timeline extends BaseService
 
     public function getItems(int $projectId, bool $share = false)
     {
-            $items = Item::where('project_id', $projectId);
+            $items = Item::where('project_id', $projectId)->orderBy('start')->orderBy('id');
         if($share) {
             $items = $items->with(['links', 'goups'])->whereHas('goups', function ($goups) {
                 $goups->where('show_share', 1);
