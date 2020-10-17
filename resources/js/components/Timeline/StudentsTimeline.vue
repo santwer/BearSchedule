@@ -134,6 +134,9 @@
                        that.options['groupOrder'] = function (a, b) {
                             return a.order - b.order;
                         };
+                        that.options['order'] = function (a, b) {
+                            return a.start > b.start;
+                        };
 
                     }
 
