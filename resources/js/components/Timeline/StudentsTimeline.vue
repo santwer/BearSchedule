@@ -309,7 +309,10 @@
             },
             mouseUp: function (e) {
                 this.groupMoveable = null;
-                this.updateGroupOrder();
+                var $target = $(e.event.target);
+                if($target.hasClass('timeline-dots')) {
+                    this.updateGroupOrder();
+                }
             },
             mouseDown: function (e) {
                 var $target = $(e.event.target);
