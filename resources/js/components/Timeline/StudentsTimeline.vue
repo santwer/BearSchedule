@@ -42,6 +42,9 @@
                       @itemover="itemOver"
                       @itemout="itemOut"
                       @rangechanged="rangeChange"
+                      @mouse-down="mouseDown"
+                      @mouse-move="mouseMove"
+                      @mouse-up="mouseUp"
                       :items="items"
                       :groups="groups"
                       :options="options"></timeline>
@@ -81,6 +84,7 @@
                 getPath: '',
                 currentItem: null,
                 handlebarHelperRegistered: false,
+                groupMoveable: null,
             }
         },
         methods: {
@@ -123,11 +127,17 @@
                             }
                             delete data.options.displayscale;
                         }
+                        data.options.groupEditable = true;
                         that.options = data.options;
                         that.options['snap'] = function (date, scale, step) {
                             return new Date(date.toDateString());
                         };
+                       that.options['groupOrder'] = function (a, b) {
+                            return a.order - b.order;
+                        };
+
                     }
+
                     that.dummeLoop = true;
                     that.MsgIsActive = that.items.length  === 0;
                     setTimeout(() => loadingComponent.close(), 1000);
@@ -287,6 +297,42 @@
                     this.MsgIsActive = false;
                     setTimeout(() => loadingComponent.close(), 500);
                 });
+            },
+            updateGroupOrder: function () {
+                var that = this;
+                $.ajax({
+                    method: "PUT",
+                    url: "/ajax/timeline/grouporder",
+                    data: {groups: that.groups},
+                    dataType: 'json'
+                })
+            },
+            mouseUp: function (e) {
+                this.groupMoveable = null;
+                this.updateGroupOrder();
+            },
+            mouseDown: function (e) {
+                var $target = $(e.event.target);
+                var group = e.group;
+                if($target.hasClass('timeline-dots')) {
+                    this.groupMoveable = group;
+                }
+            },
+            mouseMove: function (e) {
+                if(this.groupMoveable !== null && e.group !== this.groupMoveable && this.canAddItems()) {
+                    this.setGroupOrder(e.group);
+                }
+            },
+            setGroupOrder: function (overgrp) {
+                overgrp = overgrp || null;
+                this.options.groupOrder = 'order';
+
+                var oldIndex = this.groups.findIndex(p => p.id === this.groupMoveable);
+                var newIndex = this.groups.findIndex(p => p.id === overgrp);
+
+                var b = this.groups[oldIndex].order;
+                this.groups[oldIndex].order = this.groups[newIndex].order;
+                this.groups[newIndex].order = b;
             }
         },
         watch: {
@@ -309,6 +355,11 @@
             if(typeof this.datapath !== "undefinded") {
                 this.getPath = this.datapath;
             }
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name=csrf-token]').attr('content')
+                }
+            });
             this.getData();
         }
     }

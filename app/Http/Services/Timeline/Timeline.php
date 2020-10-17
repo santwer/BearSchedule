@@ -48,15 +48,22 @@ class Timeline extends BaseService
             if($share) {
                 $where->where('show_share', true);
             }
-        })->get();
-        $groups = $groups->map(function ($group) {
+        })->orderBy('order')->orderBy('id')->get();
+        $order = 0;
+        foreach($groups as $i => $group)
+        {
             $var = $group->nestedgroups->map(function ($nested) {
                 return $nested->id;
             });
+            if($group->order === null) {
+                $group->order = $order;
+            }
+            $order = $order + 1;
             unset($group->nestedgroups);
             if (!$var->isEmpty()) $group->nestedGroups = $var;
-            return $group;
-        });
+            $groups[$i] = $group;
+        }
+
         return $groups;
     }
 

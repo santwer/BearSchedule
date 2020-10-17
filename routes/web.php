@@ -38,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
             Route::put('item', [TimelineAjaxController::class, 'setItem']);
             Route::delete('item', [TimelineAjaxController::class, 'destroyItem']);
             Route::put('group', [TimelineAjaxController::class, 'setGroup']);
+            Route::put('grouporder', [TimelineAjaxController::class, 'setGroupOrder']);
             Route::delete('group', [TimelineAjaxController::class, 'destroyGroup']);
         });
         Route::get('autocomplete/{controller}', [AutoCompleteController::class, 'index']);

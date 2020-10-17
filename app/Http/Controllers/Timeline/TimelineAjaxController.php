@@ -141,6 +141,22 @@ class TimelineAjaxController extends Controller
         return response()->ajax(null, 'Error can not save.', 400);
     }
 
+    public function setGroupOrder(Request $request)
+    {
+        $validatedData = $request->validate([
+            'groups' => 'required|array',
+        ]);
+        $groups = collect($validatedData['groups'])->each(function ($item) {
+           $grp = Group::find($item['id']);
+           if($grp !== null) {
+               $grp->order = $item['order'];
+           }
+            $grp->save();
+        });
+
+        return response()->json('done');
+    }
+
     /**
      * @param Request $request
      * @return mixed

@@ -6,22 +6,26 @@ use App\Helper\ArrayHelper;
 use App\Helper\Handlebars;
 use App\Http\Services\BaseService;
 use App\Models\ProjectOption;
+use App\Models\Timeline\Group;
 use Illuminate\Database\Eloquent\Collection;
 
 class Options extends BaseService
 {
     protected $options = [];
     protected $isTimeline = true;
+    protected $role = null;
 
     public function __construct(?int $project_id, bool $isTimeline = true)
     {
         $this->isTimeline = $isTimeline;
         $projectOptions = ProjectOption::where('project_id', $project_id)->get();
+        $this->role = $this->getRoleInProject($project_id);
 
         $this->options = [
             'editable' => $this->getEdiable($project_id),
             'minHeight' => '550px',
-            'groupTemplate' => Handlebars::get('timeline.group.default')
+            'groupTemplate' => $this->getGroupTemplate(),
+            'groupOrder' => $this->getGroupOrder($project_id)
         ];
         foreach($projectOptions as $option) {
             if(method_exists($this, $option->option)) {
@@ -49,8 +53,6 @@ class Options extends BaseService
     }
 
     private function getEdiable(int $projectId) {
-        $role = $this->getRoleInProject($projectId);
-
         return [
             'add' => false,
             'remove' => false,
@@ -60,9 +62,24 @@ class Options extends BaseService
         ];
     }
 
+    private function getGroupOrder(int $projectId) {
+        //groupOrder
+        $group = Group::where('project_id', $projectId)->first();
+        if($group === null) return 'id';
+        return 'order';
+    }
+
+    private function getGroupTemplate()
+    {
+        if($this->role === 'ADMIN' || $this->role === 'EDITOR') {
+            return Handlebars::get('timeline.group.default');
+        }
+
+        return Handlebars::get('timeline.group.show');
+    }
+
     private function getGroupEditable(int $projectId)
     {
-        $role = $this->getRoleInProject($projectId);
         return false;
     }
 
