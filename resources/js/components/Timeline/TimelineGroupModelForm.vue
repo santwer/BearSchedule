@@ -66,6 +66,13 @@
                 this.saveAction();
 
             },
+            getOrderNum: function () {
+                var max = Math.max.apply(Math, this.$parent.$parent.$parent.groups.map(function(o) { return o.order; }));
+                if(typeof max === "number") {
+                    return max + 1;
+                }
+                return null;
+            },
             saveAction: function () {
                 if (this.csrf === null) {
                     console.error('CSRF Meta not set. Update not possible');
@@ -77,6 +84,9 @@
                     this.$emit('close');
                 }
                 var that = this;
+                if(typeof that.item.order === "undefined") {
+                    that.item.order = that.getOrderNum();
+                }
                 $.ajax({
                     method: "PUT",
                     url: "/ajax/timeline/group",
@@ -89,6 +99,8 @@
                     that.backup.title = that.item.content;
                     that.backup.parent = that.item.parent;
                     that.backup.show_share = that.item.show_share;
+                    that.backup.order =that.item.order;
+                    //
                     that.$emit('close');
                     if (typeof that.item.id === "undefined" || that.item.id === null) {
                         that.backup.id = data.data.id;
