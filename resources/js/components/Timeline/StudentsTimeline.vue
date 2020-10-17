@@ -310,9 +310,8 @@
                 })
             },
             mouseUp: function (e) {
-                this.groupMoveable = null;
-                var $target = $(e.event.target);
-                if($target.hasClass('timeline-dots')) {
+                if(this.groupMoveable !== null) {
+                    this.groupMoveable = null;
                     this.updateGroupOrder();
                 }
             },
