@@ -10,6 +10,9 @@
 
 </p>
 
+<img src="https://www.kouky.de/images/logo.svg" height="64">
+
+
 # BearSchedule
 BearSchedule is a PHP/Laravel Project for easy use to show and share Project schedules.
 

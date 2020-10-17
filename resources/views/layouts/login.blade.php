@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" href="{{ asset('images/logo64.png') }}">
+    <link rel="icon" href="{{ asset('images/logo64.png') }}?v2">
     <title>@yield('title') - {{ env('APP_NAME', 'Education') }}</title>
     <link rel="stylesheet" type="text/css" href="{{ mix('css/bulma.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
@@ -21,7 +21,7 @@
                 <p class="subtitle has-text-black">@yield('subtitle')</p>
                 <div class="box">
                     <figure class="avatar-borderless">
-                        <img src="{{ asset('images/logo.png') }}">
+                        <img src="{{ asset('images/logo.svg') }}" style="height: 128px; ">
                     </figure>
                     @section('content')
                         Content not loaded

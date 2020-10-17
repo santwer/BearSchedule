@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <link rel="icon" href="{{ asset('images/logo64.png') }}">
+    <link rel="icon" href="{{ asset('images/logo64.png') }}?v2">
     <title>{{ isset($pageTitle) ? $pageTitle .' - ' : '' }}{{ env('APP_NAME', 'Education') }}</title>
     <link rel="stylesheet" type="text/css" href="{{ mix('css/bulma.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
@@ -17,7 +17,7 @@
     <div class="heading-bar">{{__('Welcome')}} {{ Auth::user()->name }}</div>
     <div class="hero-body">
         <div class="container">
-            <img src="{{ asset('images/logo64.png') }}" class="bear-logo">
+            <img src="{{ asset('images/logo.svg') }}" class="bear-logo">
             <h1 class="title">
                 {{ env('APP_NAME', 'Projects') }}
             </h1>
