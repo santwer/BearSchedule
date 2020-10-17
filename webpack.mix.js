@@ -18,3 +18,7 @@ mix.js('resources/js/app.js', 'public/js')
     .sass('resources/sass/bulma.scss', 'public/css')
     .less('resources/less/app.less', 'public/css')
     .less('resources/less/share.less', 'public/css');
+
+if (mix.inProduction()) {
+    mix.version();
+}

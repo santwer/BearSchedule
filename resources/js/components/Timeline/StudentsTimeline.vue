@@ -329,10 +329,11 @@
 
                 var oldIndex = this.groups.findIndex(p => p.id === this.groupMoveable);
                 var newIndex = this.groups.findIndex(p => p.id === overgrp);
-
-                var b = this.groups[oldIndex].order;
-                this.groups[oldIndex].order = this.groups[newIndex].order;
-                this.groups[newIndex].order = b;
+                if(typeof this.groups[oldIndex] !== "undefined" && typeof this.groups[newIndex] !== "undefined") {
+                    var b = this.groups[oldIndex].order;
+                    this.groups[oldIndex].order = this.groups[newIndex].order;
+                    this.groups[newIndex].order = b;
+                }
             }
         },
         watch: {
