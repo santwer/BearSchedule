@@ -1,0 +1,15 @@
+{
+  "background_color": "#1870c7",
+  "description": "Simple and clear project management tool. With which it is possible to display one or more projects graphically. ",
+  "display": "fullscreen",
+  "icons": [
+    {
+      "src": "images/logo64.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "name": "BearSchedule",
+  "short_name": "BearSchedule",
+  "start_url": "/"
+}
