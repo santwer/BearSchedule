@@ -3,11 +3,12 @@
         <div v-if="dummeLoop" ref="fullline" id="currentContentTime">
             <div class="buttons">
                 <timeline-item-model ref="itemmodel" :project="project" v-if="canAddItems()"></timeline-item-model>
-                <timeline-group-model ref="groupmodel" :project="project"  v-if="canAddItems()"></timeline-group-model>
+                <timeline-group-model ref="groupmodel" :project="project" v-if="canAddItems()"></timeline-group-model>
+                <group-filter></group-filter>
 
 
-                    <b-dropdown aria-role="list" v-model="selectedOption" class="is-float-right">
-                    <button class="button is-small  is-float-right" slot="trigger" slot-scope="{ activeMenu }">
+                <b-dropdown aria-role="list" v-model="selectedOption">
+                    <button class="button is-small " slot="trigger" slot-scope="{ activeMenu }">
                         <span>Display</span>
                         <b-icon :icon="activeMenu ? 'menu-up' : 'menu-down'"></b-icon>
                     </button>
@@ -57,12 +58,15 @@
     import TimelineItemModel from "./TimelineItemModel";
     import TimelineGroupModel from "./TimelineGroupModel";
     import TimelineItemShowModel from "./TimelineItemShowModel";
+    import GroupFilter from "./GroupFilter";
+
     const Handlebars = require("handlebars");
 
     export default {
         name: "StudentsTimeline",
         props: ['project', 'role', 'datapath'],
         components: {
+            GroupFilter,
             TimelineGroupModel,
             TimelineItemModel,
             Timeline,
@@ -92,7 +96,7 @@
                 return this.role === 'ADMIN' || this.role === 'EDITOR';
             },
             registerHandlebarHelper: function () {
-                if(!this.handlebarHelperRegistered) {
+                if (!this.handlebarHelperRegistered) {
                     Handlebars.registerHelper('ifEquals', function (arg1, arg2, options) {
                         return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
                     });
@@ -113,15 +117,15 @@
                         that.items = data.items;
                     }
                     if (typeof data.options !== "undefined") {
-                        if(typeof data.options.template !== "undefined") {
+                        if (typeof data.options.template !== "undefined") {
                             data.options.template = Handlebars.compile(data.options.template);
                         }
-                        if(typeof data.options.groupTemplate !== "undefined") {
+                        if (typeof data.options.groupTemplate !== "undefined") {
                             data.options.groupTemplate = Handlebars.compile(data.options.groupTemplate);
                         }
-                        if(typeof data.options.displayscale !== "undefined") {
+                        if (typeof data.options.displayscale !== "undefined") {
                             var dates = that.setZoomRange(data.options.displayscale);
-                            if(typeof dates[1] !== "undefined") {
+                            if (typeof dates[1] !== "undefined") {
                                 data.options.start = dates[0];
                                 data.options.end = dates[1];
                             }
@@ -131,7 +135,7 @@
                         that.options['snap'] = function (date, scale, step) {
                             return new Date(date.toDateString());
                         };
-                       that.options['groupOrder'] = function (a, b) {
+                        that.options['groupOrder'] = function (a, b) {
                             return a.order - b.order;
                         };
                         that.options['order'] = function (a, b) {
@@ -141,26 +145,24 @@
                     }
 
                     that.dummeLoop = true;
-                    that.MsgIsActive = that.items.length  === 0;
+                    that.MsgIsActive = that.items.length === 0;
                     setTimeout(() => loadingComponent.close(), 1000);
                 }, 'json')
             },
             dpClick: function (e) {
-                if(this.currentItem !== null) {
+                if (this.currentItem !== null) {
                     this.itemDpClick(this.currentItem);
-                } else if(e.group !== null && e.item === null && e.x < 0) {
+                } else if (e.group !== null && e.item === null && e.x < 0) {
                     this.groupDpClick(e.group);
-                }
-                else if(e.group !== null && e.what === 'background' && typeof e.target !== "undefined") {
+                } else if (e.group !== null && e.what === 'background' && typeof e.target !== "undefined") {
                     console.log('dp bg', e);
-                }
-                else {
+                } else {
                     console.log('dp', e);
                 }
             },
             itemDpClick: function (itemId) {
                 var item = this.findObjectInArrayByProperty(this.items, 'id', itemId);
-                if(typeof this.$refs.itemmodel === "undefined") {
+                if (typeof this.$refs.itemmodel === "undefined") {
                     this.openItemShowModal(item)
                 } else {
                     this.$refs.itemmodel.openModelItem(item);
@@ -170,7 +172,7 @@
                 }
             },
             groupDpClick: function (groupId) {
-                if(typeof this.$refs.groupmodel !== "undefined") {
+                if (typeof this.$refs.groupmodel !== "undefined") {
                     var item = this.findObjectInArrayByProperty(this.groups, 'id', groupId);
                     this.$refs.groupmodel.openModelItem(item);
                 }
@@ -188,10 +190,10 @@
                     trapFocus: true
                 })
             },
-            newItemInTimeLine: function(data) {
+            newItemInTimeLine: function (data) {
                 this.items.push(data);
             },
-            newGroupInTimeLine: function(data) {
+            newGroupInTimeLine: function (data) {
                 this.groups.push(data);
             },
             deleteItemInTimeLine: function (id) {
@@ -210,22 +212,24 @@
             },
             itemOver: function (e) {
                 this.currentItem = null;
-                if(typeof e.item !== "undefined") {
+                if (typeof e.item !== "undefined") {
                     this.currentItem = e.item;
                 }
             },
             itemOut: function (e) {
                 this.currentItem = null;
             },
-            findObjectInArrayByProperty: function(array, propertyName, propertyValue) {
-                return array.find((o) => { return o[propertyName] === propertyValue });
+            findObjectInArrayByProperty: function (array, propertyName, propertyValue) {
+                return array.find((o) => {
+                    return o[propertyName] === propertyValue
+                });
             },
             getCurrentWeek: function (curr) {
-               let week = [];
+                let week = [];
 
                 for (let i = 1; i <= 7; i++) {
                     let first = curr.getDate() - curr.getDay() + i;
-                    if(i === 1 || i === 7) {
+                    if (i === 1 || i === 7) {
                         let day = new Date(curr.setDate(first)).toISOString().slice(0, 10);
                         week.push(day);
                     }
@@ -236,11 +240,11 @@
              * @param curr Date
              */
             getCurrentMonth: function (curr) {
-               var month = curr.getMonth();
-               var year = curr.getFullYear();
-               var firstday = new Date(year, month, 1);
-               var lastday = new Date(year, month + 1, 0);
-               return [firstday, lastday];
+                var month = curr.getMonth();
+                var year = curr.getFullYear();
+                var firstday = new Date(year, month, 1);
+                var lastday = new Date(year, month + 1, 0);
+                return [firstday, lastday];
             },
             getCurrentYear: function (curr) {
                 var year = curr.getFullYear();
@@ -248,12 +252,12 @@
                 var lastday = new Date(year + 1, 12, 0);
                 return [firstday, lastday];
             },
-             getCurrentDay: function (curr) {
+            getCurrentDay: function (curr) {
                 var year = curr.getFullYear();
                 var month = curr.getMonth();
                 var day = curr.getDate();
-                var firstday = new Date(year, month, day,0,0);
-                var lastday = new Date(year, month, day,23,59);
+                var firstday = new Date(year, month, day, 0, 0);
+                var lastday = new Date(year, month, day, 23, 59);
                 return [firstday, lastday];
             },
             rangeChange: function () {
@@ -271,7 +275,7 @@
                     };
                 }
             },
-            setZoomRange: function(value) {
+            setZoomRange: function (value) {
                 const today = new Date();
                 var dates = [];
                 switch (value) {
@@ -310,7 +314,7 @@
                 })
             },
             mouseUp: function (e) {
-                if(this.groupMoveable !== null) {
+                if (this.groupMoveable !== null) {
                     this.groupMoveable = null;
                     this.updateGroupOrder();
                 }
@@ -318,12 +322,12 @@
             mouseDown: function (e) {
                 var $target = $(e.event.target);
                 var group = e.group;
-                if($target.hasClass('timeline-dots')) {
+                if ($target.hasClass('timeline-dots')) {
                     this.groupMoveable = group;
                 }
             },
             mouseMove: function (e) {
-                if(this.groupMoveable !== null && e.group !== this.groupMoveable && this.canAddItems()) {
+                if (this.groupMoveable !== null && e.group !== this.groupMoveable && this.canAddItems()) {
                     this.setGroupOrder(e.group);
                 }
             },
@@ -333,7 +337,7 @@
 
                 var oldIndex = this.groups.findIndex(p => p.id === this.groupMoveable);
                 var newIndex = this.groups.findIndex(p => p.id === overgrp);
-                if(typeof this.groups[oldIndex] !== "undefined" && typeof this.groups[newIndex] !== "undefined") {
+                if (typeof this.groups[oldIndex] !== "undefined" && typeof this.groups[newIndex] !== "undefined") {
                     var b = this.groups[oldIndex].order;
                     this.groups[oldIndex].order = this.groups[newIndex].order;
                     this.groups[newIndex].order = b;
@@ -347,17 +351,17 @@
             },
             selectedZoom: function (value, n) {
                 var dates = this.setZoomRange(value);
-                if(typeof dates[1] !== "undefined")
+                if (typeof dates[1] !== "undefined")
                     this.$refs.timeline.setWindow(dates[0], dates[1]);
             },
             items: function (value, n) {
-                if(this.MsgIsActive && value.length > 0) {
+                if (this.MsgIsActive && value.length > 0) {
                     this.MsgIsActive = false;
                 }
             }
         },
         mounted() {
-            if(typeof this.datapath !== "undefinded") {
+            if (typeof this.datapath !== "undefinded") {
                 this.getPath = this.datapath;
             }
             $.ajaxSetup({
@@ -371,7 +375,7 @@
 </script>
 
 <style scoped lang="less">
-.is-float-right {
-    margin-left: auto;
-}
+    .is-float-right {
+        margin-left: auto;
+    }
 </style>
