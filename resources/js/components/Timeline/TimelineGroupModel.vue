@@ -25,6 +25,7 @@
                     parent: null,
                     project_id: this.project,
                     show_share: true,
+                    visible: 1,
                 };
                 this.$emit('addItem', this.setItem)
                 this.openModal();
