@@ -190,6 +190,8 @@ class TimelineAjaxController extends Controller
             else if(isset($request->get('color')['style'])) {
                 $item->style = $this->logicClass->getStyle($request->get('color')['style']);
             }
+        } else if($request->filled('style')) {
+            $item->style = $request->get('style');
         } else {
             $item->style = $this->logicClass->getStyle(null);
         }
