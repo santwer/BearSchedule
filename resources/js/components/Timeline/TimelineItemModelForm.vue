@@ -15,6 +15,7 @@
                     <div class="column">
                         <b-field label="Group">
                             <b-select placeholder="Select a group" v-model="item.group" required expanded>
+                                <option v-if="item.type === 'background'" :value="null">No Group</option>
                                 <option
                                     v-for="group in groups"
                                     :value="group.id"
@@ -116,14 +117,19 @@
                             </b-taginput>
                         </b-field>
                     </b-tab-item>
+                    <b-tab-item label="Series">
+                        <timeline-item-series :item="item"></timeline-item-series>
+                    </b-tab-item>
                 </b-tabs>
             </section>
             <footer class="modal-card-foot">
                 <button class="button" type="button" @click="$emit('close')">Close</button>
-                <button class="button is-primary" type="button" @click="saveForm">Save</button>
-                <button class="button is-danger delButton" type="button" v-if="item.id != null" @click="deleteEntry">
-                    delete
+                <button class="button is-danger" type="button" v-if="item.id != null" @click="deleteEntry">
+                    Delete
                 </button>
+
+
+                <button class="button is-primary delButton" type="button" @click="saveForm">Save</button>
             </footer>
         </div>
     </form>
@@ -131,10 +137,11 @@
 
 <script>
     import LinkButton from "../tools/LinkButton";
+    import TimelineItemSeries from "./TimelineItemSeries";
 
     export default {
         name: "TimelineItemModelForm",
-        components: {LinkButton},
+        components: {TimelineItemSeries, LinkButton},
         props: ['setItem'],
         data() {
             return {
@@ -353,6 +360,10 @@
             }
             if (typeof this.item.links === "undefined") {
                 this.item.links = [];
+            }
+            if (typeof this.item.series  === "undefined") {
+                this.item.series  = {
+                };
             }
             this.csrf = $('meta[name=csrf-token]').attr('content');
             $.ajaxSetup({

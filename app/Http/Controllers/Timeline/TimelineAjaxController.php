@@ -166,7 +166,7 @@ class TimelineAjaxController extends Controller
         $validatedData = $request->validate([
             'project_id' => 'required|int',
             'title' => 'required|min:3',
-            'group' => 'required',
+            'group' => 'required_unless:type,=,background',
             'start' => 'required|min:3',
         ]);
         if ($request->get('start') === 'Invalid Date'

@@ -24,7 +24,23 @@
                 </b-collapse>
             </div>
             <div class="column">
-
+                <b-collapse
+                    aria-id="contentIdForA11y2"
+                    class="panel"
+                    animation="slide">
+                    <div
+                        slot="trigger"
+                        class="panel-heading"
+                        role="button"
+                        aria-controls="contentIdForA11y2">
+                        <strong>Changelog</strong>
+                    </div>
+                    <div class="panel-block">
+                        <div class="mkdown-extras">
+                            {{ \App\Helper\ChangelogHelper::getHtml()  }}
+                        </div>
+                    </div>
+                </b-collapse>
             </div>
         </div>
     </div>
