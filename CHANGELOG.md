@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Add Changelog to keep track on changes
+- file for PRIVACY POLICY added
 ### Changed
 - removed Group in Item as required unless Item-Type is not Background. To add the possibility to bring items over all groups
 ### Removed

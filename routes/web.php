@@ -60,6 +60,7 @@ Route::group(['prefix' => 'auth/'], function () {
     Route::get('microsoft/callback', [LoginMSController::class, 'callback'])->name('auth.microsoft.callback');
 });
 
-Route::view('/disclaimer', 'auth.disclaimer')->name('disclaimer');
+Route::get('/disclaimer', [\App\Http\Controllers\Login\LoginController::class, 'disclaimer'])->name('disclaimer');
+Route::get('/privacy', [\App\Http\Controllers\Login\LoginController::class, 'privacy'])->name('privacy');
 
 Auth::routes();

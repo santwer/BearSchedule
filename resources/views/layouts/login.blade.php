@@ -34,6 +34,9 @@
                     @if(file_exists(storage_path('app/disclaimer.txt')))
                         &nbsp;·&nbsp;<a href="{{ route('disclaimer') }}">Disclaimer</a>
                     @endif
+                    @if(file_exists(storage_path('app/privacy.txt')))
+                        &nbsp;·&nbsp;<a href="{{ route('privacy') }}">Privacy Policy</a>
+                    @endif
                 </p>
             </div>
         </div>
