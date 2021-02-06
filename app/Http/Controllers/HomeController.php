@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helper\UserHelper;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Services\Dashboard\GraphData;
 use App\Http\Services\Settings\Account;
 use App\Models\Project;
 use App\Models\User;
@@ -24,7 +25,10 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('login.index');
+        $acivity = GraphData::getProjectActivities();
+        $allAcivity = GraphData::getProjectActivities(false);
+
+        return view('login.index', compact('acivity', 'allAcivity'));
     }
 
     public function settings()
