@@ -1,7 +1,7 @@
 @extends('layouts.main')
 
 @section('content')
-    <b-tabs position="is-right" class="block" v-model="activeTabProject"
+    <b-tabs position="is-right" class="block own-block" v-model="activeTabProject"
             data-tab="{{ isset($activeTab) ? $activeTab : 'timeline' }}" ref="projecttab">
         <b-tab-item label="Timeline" value="timeline">
 

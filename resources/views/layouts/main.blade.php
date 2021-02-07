@@ -27,20 +27,6 @@
                         {{ __('Project schedule') }}
                     </h2>
                 </div>
-                <div class="column is-hidden-mobile">
-                    <b-tooltip label="New Project">
-                        <a class="button is-primary is-light top-big-btn" href="{{ route('project.create') }}">
-                            <b-icon
-                                icon="chart-timeline">
-                            </b-icon>
-                            <b-icon
-                                class="addon-button"
-                                size="is-small"
-                                icon="plus-thick">
-                            </b-icon>
-                        </a>
-                    </b-tooltip>
-                </div>
             </div>
 
         </div>

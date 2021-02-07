@@ -85,11 +85,13 @@
 }
 .show-menu-btn {
     position: absolute;
+    margin-left: -35px;
+    margin-top: -12px;
 }
 .logout-area {
     position: absolute;
-    top: 60px;
-    right: 10px;
+    top: 25px;
+    right: 0px;
 }
 .bear-logo {
     float: left; margin-right: 20px;
@@ -99,7 +101,7 @@
     opacity: 0.5;
 }
 .main-menu .bs-footer {
-    position: absolute;
+    position: fixed;
     bottom: 10px;
 }
 /*
@@ -124,6 +126,27 @@ dark 4a0072
         list-style: square;
         li {
             margin-left: 15px;
+        }
+    }
+}
+@media screen and (min-width: 800px) {
+    .own-block nav.tabs {
+        position: absolute;
+        margin-top: -50px;
+        right: 0;
+
+        li a span {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        li.is-active a {
+            border-bottom-width: 3px;
+            background-color: #edf5fd;
+            border-radius: 4px 4px 0 0;
+
+            span {
+                color: #1873cd;
+            }
         }
     }
 }
