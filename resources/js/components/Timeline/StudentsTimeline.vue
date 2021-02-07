@@ -146,6 +146,7 @@
             },
             socketConnectionIcon() {
                 if(typeof window.Echo === "undefined")
+                    window.UseWebSocketKouky = false;
                     return 'wifi-off'
                 if(!window.UseWebSocketKouky)
                     return 'wifi-off';
