@@ -4,6 +4,8 @@
 namespace App\Helper;
 
 
+use Illuminate\Database\Eloquent\Model;
+
 class TimelineHelper
 {
     static public function getContrastColor($hexColor)
@@ -66,5 +68,29 @@ class TimelineHelper
         }
 
         return $return;
+    }
+
+    public static function removeNullAttr($entry)
+    {
+        if($entry instanceof Model) {
+            foreach ($entry->getAttributes() as $key => $v) {
+                if ($v === null) {
+                    unset($entry->{$key});
+                }
+            }
+        } else if(is_array($entry)) {
+            foreach($entry as $key => $v) {
+                if($v === null) {
+                    unset($entry[$key]);
+                }
+            }
+        }
+
+        return $entry;
+    }
+
+    public static function useWebsocket() : bool
+    {
+        return env('USE_WEBSOCKET', false);
     }
 }

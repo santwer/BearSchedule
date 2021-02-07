@@ -69,4 +69,9 @@ class User extends Authenticatable
             })->selectRaw("id, name, email, CONCAT(name, ' (', email, ')') as value")
             ->get();
     }
+
+    public function hasProject($id)
+    {
+        return $this->projects()->where('project_id', $id)->first() !== null;
+    }
 }

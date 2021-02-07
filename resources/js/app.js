@@ -1,6 +1,7 @@
 window.$ = require('jquery');
 window.Vue = require('vue');
 window.Buefy = require('buefy');
+window.Pusher = require('pusher-js');
 //Vue.component('timeline', vue2vis.Timeline);
 //vue2vis.Timeline
 
@@ -10,6 +11,28 @@ import {DataSet, Timeline} from 'vue2vis';
 import EditTable from "./components/tools/EditTable";
 import LogTable from "./components/tools/LogTable";
 import Activity from "./components/Graph/Activity";
+import Echo from 'laravel-echo';
+
+if(typeof window.UseWebSocketKouky === "undefined") window.UseWebSocketKouky = false;
+if(typeof window.KoukyWebSocket === "undefined") window.KoukyWebSocket = false;
+if(window.KoukyWebSocket) {
+
+        window.Echo = new Echo({
+            broadcaster: 'pusher',
+            key: process.env.MIX_PUSHER_APP_KEY,
+            cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+            forceTLS: false
+        });
+        window.Echo.connector.pusher.connection.bind('connected', () => {
+            window.UseWebSocketKouky = true;
+        });
+        window.Echo.connector.pusher.connection.bind('disconnected', () => {
+            window.UseWebSocketKouky = false;
+        });
+} else {
+    window.Echo = {};
+}
+
 const Content = new Vue({
     el: '#content',
     components: {
@@ -44,24 +67,17 @@ const Content = new Vue({
         ],
         itemColumns: [
             {
-                field: 'id',
-                label: 'ID',
-                width: '40',
-                numeric: true
-            },
-            {
-                field: 'group',
-                label: 'Group',
-                width: '40',
-                numeric: true
-            },
-            {
                 field: 'title',
                 label: 'Title',
             },
             {
-                field: 'content',
-                label: 'Content',
+                field: 'subtitle',
+                label: 'Subtitle',
+            },
+            {
+                field: 'type',
+                label: 'Type',
+                centered: true
             },
             {
                 field: 'start',
@@ -140,5 +156,8 @@ const Content = new Vue({
             this.projectId = $shareObj.data('project');
             this.shareswitch = !this.isEmpty(this.sharelink);
         }
+    },
+    created() {
+
     }
 });

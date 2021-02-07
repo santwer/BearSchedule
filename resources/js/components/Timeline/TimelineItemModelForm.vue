@@ -279,23 +279,27 @@
                 }).done(function (data) {
                     var msg = `Saved successfully`;
                     that.$buefy.toast.open(msg);
-                    that.backup.start = that.item.start;
-                    that.backup.end = that.item.end;
-                    that.backup.content = that.item.title;
-                    that.backup.title = that.item.title;
-                    that.backup.description = that.item.description;
-                    that.backup.group = that.item.group;
-                    that.backup.type = that.item.type;
-                    that.backup.links = that.item.links;
-                    that.backup.subtitle = that.item.subtitle;
-                    that.backup.status = that.item.status;
-                    that.$emit('close');
-                    if (typeof that.item.id === "undefined" || that.item.id === null) {
-                        that.backup.id = data.data.id;
-                        that.$parent.$parent.$parent.newItemInTimeLine(that.backup);
+                    if(!window.UseWebSocketKouky) {
+                        that.backup.start = that.item.start;
+                        that.backup.end = that.item.end;
+                        that.backup.content = that.item.title;
+                        that.backup.title = that.item.title;
+                        that.backup.description = that.item.description;
+                        that.backup.group = that.item.group;
+                        that.backup.type = that.item.type;
+                        that.backup.links = that.item.links;
+                        that.backup.subtitle = that.item.subtitle;
+                        that.backup.status = that.item.status;
                     }
-                    that.backup.links = data.data.links;
-                    that.backup.style = data.data.style;
+                    that.$emit('close');
+                    if(!window.UseWebSocketKouky) {
+                        if (typeof that.item.id === "undefined" || that.item.id === null) {
+                            that.backup.id = data.data.id;
+                            that.$parent.$parent.$parent.newItemInTimeLine(that.backup);
+                        }
+                        that.backup.links = data.data.links;
+                        that.backup.style = data.data.style;
+                    }
                 }).fail(function (data) {
                     var msg = (typeof data.responseJSON.message !== "undefined") ? data.responseJSON.message : `Save didn't work. Come back later.`;
                     that.$buefy.toast.open({
@@ -319,7 +323,9 @@
                         }).done(function (data) {
                             var msg = `Delete successfully`;
                             that.$buefy.toast.open(msg);
-                            that.$parent.$parent.$parent.deleteItemInTimeLine(that.backup.id);
+                            if(!window.UseWebSocketKouky) {
+                                that.$parent.$parent.$parent.deleteItemInTimeLine(that.backup.id);
+                            }
                             that.$emit('close');
                         }).fail(function (data) {
                             var msg = (typeof data.responseJSON.message !== "undefined") ? data.responseJSON.message : `Delete didn't work. Come back later.`;

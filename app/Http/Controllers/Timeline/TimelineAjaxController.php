@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Timeline;
 
 use App\DataHelper\ProjectLog\Actions;
 use App\DataHelper\ProjectLog\Types;
+use App\Events\Project\Data;
 use App\Helper\Handlebars;
 use App\Helper\ModelChangesHelper;
 use App\Helper\TimelineHelper;
@@ -38,6 +39,9 @@ class TimelineAjaxController extends Controller
         if (!$grp->delete()) {
             return response()->ajax(null, 'Delete not possible', 400);
         }
+        if(TimelineHelper::useWebsocket()) {
+            event(new Data($request->get('project_id'), 'GROUP-DELETE', $request->get('id')));
+        }
         return response()->ajax(null, 'Delete successful', 200);
     }
 
@@ -48,9 +52,11 @@ class TimelineAjaxController extends Controller
         }
         $item = Item::find($request->get('id'));
         ProjectLog::entry(Actions::DELETE, Types::ITEM, $item->toJson(), '', auth()->user()->id, $item->project_id, null, $request->get('id'));
-
         if (!$item->delete()) {
             return response()->ajax(null, 'Delete not possible', 400);
+        }
+        if(TimelineHelper::useWebsocket()) {
+            event(new Data($request->get('project_id'), 'ITEM-DELETE', $request->get('id')));
         }
         return response()->ajax(null, 'Delete successful', 200);
     }
@@ -136,6 +142,9 @@ class TimelineAjaxController extends Controller
             if($hpValues !== false) {
                 ProjectLog::entry($logAction, Types::GROUP, $hpValues[0], $hpValues[1], auth()->user()->id, $group->project_id,null,  $group->id);
             }
+            if(TimelineHelper::useWebsocket()) {
+                event(new Data($request->get('project_id'), 'GROUP', $this->logicClass->getGroups($request->get('project_id'))->where('id', $group->id)->first()));
+            }
             return response()->ajax($group, 'Saved successfully', 200);
         }
         return response()->ajax(null, 'Error can not save.', 400);
@@ -205,6 +214,9 @@ class TimelineAjaxController extends Controller
                 $this->logicClass->saveLinks($request->get('links'), $item->id);
             }
             $responseItem = Item::with('links')->find($item->id);
+            if(TimelineHelper::useWebsocket()) {
+                event(new Data($request->get('project_id'), 'ITEM', $responseItem));
+            }
             return response()->ajax($responseItem, 'Saved successfully', 200);
         }
         return response()->ajax(null, 'Error can not save.', 400);

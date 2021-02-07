@@ -52,7 +52,9 @@ Route::group(['prefix' => 'share/'], function () {
 
 });
 
-
+Route::get('event', function () {
+   event(new \App\Events\Project\Data(1, 'test'));
+});
 
 //Auth Routes
 Route::group(['prefix' => 'auth/'], function () {

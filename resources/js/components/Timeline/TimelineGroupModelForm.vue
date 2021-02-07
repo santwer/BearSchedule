@@ -95,16 +95,19 @@
                 }).done(function (data) {
                     var msg = `Saved successfully`;
                     that.$buefy.toast.open(msg);
-                    that.backup.content = that.item.content;
-                    that.backup.title = that.item.content;
-                    that.backup.parent = that.item.parent;
-                    that.backup.show_share = that.item.show_share;
-                    that.backup.order =that.item.order;
-                    //
+                    if(!window.UseWebSocketKouky) {
+                        that.backup.content = that.item.content;
+                        that.backup.title = that.item.content;
+                        that.backup.parent = that.item.parent;
+                        that.backup.show_share = that.item.show_share;
+                        that.backup.order = that.item.order;
+                    }
                     that.$emit('close');
-                    if (typeof that.item.id === "undefined" || that.item.id === null) {
-                        that.backup.id = data.data.id;
-                        that.$parent.$parent.$parent.newGroupInTimeLine(that.backup);
+                    if(!window.UseWebSocketKouky) {
+                        if (typeof that.item.id === "undefined" || that.item.id === null) {
+                            that.backup.id = data.data.id;
+                            that.$parent.$parent.$parent.newGroupInTimeLine(that.backup);
+                        }
                     }
                 }).fail(function (data) {
                     var msg = (typeof data.responseJSON.message !== "undefined") ? data.responseJSON.message : `Save didn't work. Come back later.`;
@@ -121,7 +124,6 @@
                 this.$buefy.dialog.confirm({
                         message: 'You want to Delete this Group?',
                         onConfirm: function () {
-
                             $.ajax({
                                 method: "DELETE",
                                 url: "/ajax/timeline/group",
@@ -130,7 +132,9 @@
                             }).done(function (data) {
                                 var msg = `Delete successfully`;
                                 that.$buefy.toast.open(msg);
-                                that.$parent.$parent.$parent.deleteGroupInTimeLine(that.backup.id);
+                                if(!window.UseWebSocketKouky) {
+                                    that.$parent.$parent.$parent.deleteGroupInTimeLine(that.backup.id);
+                                }
                                 that.$emit('close');
                             }).fail(function (data) {
                                 var msg = (typeof data.responseJSON.message !== "undefined") ? data.responseJSON.message : `Delete didn't work. Come back later.`;

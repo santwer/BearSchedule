@@ -16,3 +16,8 @@ use Illuminate\Support\Facades\Broadcast;
 Broadcast::channel('App.User.{id}', function ($user, $id) {
     return (int) $user->id === (int) $id;
 });
+//test-channel
+
+Broadcast::channel('project.{id}', function ($user, $id) {
+    return $user->hasProject($id);
+});

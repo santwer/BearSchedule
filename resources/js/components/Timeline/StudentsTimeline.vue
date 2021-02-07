@@ -4,6 +4,14 @@
             <div class="buttons">
                 <timeline-item-model ref="itemmodel" :project="project" v-if="canAddItems()"></timeline-item-model>
                 <timeline-group-model ref="groupmodel" :project="project" v-if="canAddItems()"></timeline-group-model>
+
+                <b-tooltip label="Connection status" v-if="isSocketConneted()">
+                    <b-icon v-if="isSocketConneted()"
+                        :icon="socketConnectionIcon()"
+                        size="is-small" style="padding: 0 0 10px;">
+                    </b-icon>
+                </b-tooltip>
+
                 <group-filter></group-filter>
 
 
@@ -89,6 +97,7 @@
                 currentItem: null,
                 handlebarHelperRegistered: false,
                 groupMoveable: null,
+                hasRecentUpdate: false,
             }
         },
         methods: {
@@ -101,6 +110,75 @@
                         return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
                     });
                     this.handlebarHelperRegistered = true;
+                }
+            },
+            updateItem(data) {
+                var item = this.findObjectInArrayByProperty(this.items, 'id', data.id);
+                if(typeof item !== "undefined") {
+                    $.each(data, function (val, i) {
+                        if(typeof item[val] !== "undefined") {
+                            item[val] = i;
+                        }
+                    })
+                    item = data;
+                } else {
+                    this.newItemInTimeLine(data);
+                }
+            },
+            updateGroup(data) {
+                var group = this.findObjectInArrayByProperty(this.groups, 'id', data.id);
+                if(typeof group !== "undefined") {
+                    $.each(data, function (val, i) {
+                        if(typeof group[val] !== "undefined") {
+                            group[val] = i;
+                        }
+                    })
+                    group = data;
+                } else {
+                    this.newGroupInTimeLine(data);
+                }
+            },
+            isSocketConneted() {
+                if(typeof window.KoukyWebSocket === "undefined") {
+                    return true;
+                }
+                return true;
+            },
+            socketConnectionIcon() {
+                if(typeof window.Echo === "undefined")
+                    return 'wifi-off'
+                if(!window.UseWebSocketKouky)
+                    return 'wifi-off';
+                if(this.hasRecentUpdate) {
+                    return 'wifi-refresh'
+                }
+                return 'wifi';
+            },
+            listingUpdates() {
+                var that = this;
+                if(window.UseWebSocketKouky) {
+                    window.Echo.private('project.' + this.project)
+                        .listen('Project\\Data', (e) => {
+                            if (typeof e.type === 'undefined') {
+                                return;
+                            }
+                            that.hasRecentUpdate = true;
+                            setTimeout(() => that.hasRecentUpdate =  false, 1000);
+                            switch (e.type) {
+                                case 'ITEM':
+                                    that.updateItem(e.data);
+                                    break;
+                                case 'GROUP':
+                                    that.updateGroup(e.data);
+                                    break;
+                                case 'GROUP-DELETE':
+                                    that.deleteGroupInTimeLine(parseInt(e.data));
+                                    break;
+                                case 'ITEM-DELETE':
+                                    that.deleteItemInTimeLine(parseInt(e.data));
+                                    break;
+                            }
+                        });
                 }
             },
             getData: function () {
@@ -146,6 +224,10 @@
 
                     that.dummeLoop = true;
                     that.MsgIsActive = that.items.length === 0;
+
+                        if (typeof that.role !== "undefined") {
+                                that.listingUpdates();
+                        }
                     setTimeout(() => loadingComponent.close(), 1000);
                 }, 'json')
             },
@@ -198,6 +280,7 @@
             },
             deleteItemInTimeLine: function (id) {
                 var item = this.findObjectInArrayByProperty(this.items, 'id', id);
+                console.log(item)
                 const index = this.items.indexOf(item);
                 if (index > -1) {
                     this.items.splice(index, 1);

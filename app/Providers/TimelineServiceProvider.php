@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Helper\TimelineHelper;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Routing\ResponseFactory;
 use Illuminate\Support\ServiceProvider;
@@ -35,20 +36,7 @@ class TimelineServiceProvider extends ServiceProvider
             foreach($value as $i => $item) {
                 if($item instanceof Collection) {
                     $value[$i] = $item->map(function ($entry) {
-                        if($entry instanceof Model) {
-                            foreach ($entry->getAttributes() as $key => $v) {
-                                if ($v === null) {
-                                    unset($entry->{$key});
-                                }
-                            }
-                        } else {
-                            foreach($entry as $key => $v) {
-                                if($v === null) {
-                                    unset($entry->{$key});
-                                }
-                            }
-                        }
-                        return $entry;
+                        return TimelineHelper::removeNullAttr($entry);
                     });
 
                 } elseif(is_array($item)) {

@@ -15,7 +15,8 @@
         "laravel/framework": "^8.0",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
-        "microsoft/microsoft-graph": "^1.19"
+        "microsoft/microsoft-graph": "^1.19",
+        "pusher/pusher-php-server": "~4.0"
     },
     "require-dev": {
         "facade/ignition": "^2.3.6",

@@ -58,6 +58,9 @@
         </div>
     </div>
 </section>
+<script>
+    window.KoukyWebSocket = {{ \App\Helper\TimelineHelper::useWebsocket() ? 'true' : 'false' }};
+</script>
 <script async type="module" src="{{ mix('js/app.js') }}"></script>
 </body>
 
