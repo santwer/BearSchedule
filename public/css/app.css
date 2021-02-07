@@ -24204,6 +24204,10 @@ p.subtitle {
 .deleted-row {
   opacity: 0.5;
 }
+.main-menu .bs-footer {
+  position: absolute;
+  bottom: 10px;
+}
 /*
 7b1fa2 pimary
 ae52d4 light

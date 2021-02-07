@@ -13,5 +13,22 @@
             tag="a" href="/project/{{$project->id}}"></b-menu-item>
         @endforeach
     </b-menu-list>
+    <div class="bs-footer">
+        <p class="has-text-grey">
+        &copy; {{ env('APP_NAME', 'BearSchedule') }}, {{ \Illuminate\Support\Facades\Date::now()->year }}
+        </p>
+        <p class="has-text-grey">
+            @if(file_exists(storage_path('app/disclaimer.txt')))
+                <a href="{{ route('disclaimer') }}" target="_blank">Disclaimer</a>
+            @endif
+            @if(file_exists(storage_path('app/privacy.txt')))
+                &nbsp;·&nbsp;<a href="{{ route('privacy') }}" target="_blank">Privacy Policy</a>
+            @endif
+            @if(env('SHOW_GITHUB', false))
+                &nbsp;·&nbsp;<a href="https://github.com/santwer/BearSchedule"
+                     target="_blank">Github</a>
+            @endif
+        </p>
+    </div>
 </div>
 

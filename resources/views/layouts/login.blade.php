@@ -41,14 +41,16 @@
             </div>
         </div>
     </div>
-    <div class="github-present">
-        <b-button icon-left="github"
-                  tag="a"
-                  href="https://github.com/santwer/BearSchedule"
-                  target="_blank" >
-            View on GitHub
-        </b-button>
-    </div>
+    @if(env('SHOW_GITHUB', false))
+        <div class="github-present">
+            <b-button icon-left="github"
+                      tag="a"
+                      href="https://github.com/santwer/BearSchedule"
+                      target="_blank" >
+                View on GitHub
+            </b-button>
+        </div>
+    @endif
 </section>
 
 <script async type="text/javascript" src="{{ mix('js/login.js') }}"></script>
