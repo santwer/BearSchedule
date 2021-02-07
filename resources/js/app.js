@@ -21,7 +21,7 @@ if(window.KoukyWebSocket) {
             broadcaster: 'pusher',
             key: process.env.MIX_PUSHER_APP_KEY,
             cluster: process.env.MIX_PUSHER_APP_CLUSTER,
-            forceTLS: false
+            forceTLS: true
         });
         window.Echo.connector.pusher.connection.bind('connected', () => {
             window.UseWebSocketKouky = true;
