@@ -25,7 +25,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/settings', [\App\Http\Controllers\HomeController::class, 'settings'])->name('user.settings');
     Route::post('/settings', [\App\Http\Controllers\HomeController::class, 'saveSettings'])->name('user.settings.save');
     Route::post('/settings/delete', [\App\Http\Controllers\HomeController::class, 'deleteAccount'])->name('user.settings.delete');
-    Route::get('project/create', [ProjectController::class, 'create']);
+    Route::get('project/create', [ProjectController::class, 'create'])->name('project.create');
     Route::get('project/{project}', [ProjectController::class, 'index'])->name('project.open');
     Route::post('project/{project}', [ProjectController::class, 'update'])->name('project.update');
     Route::post('project/{project}/delete', [ProjectController::class, 'destroy'])->name('project.delete');
@@ -50,10 +50,6 @@ Route::group(['prefix' => 'share/'], function () {
     Route::get('{unique}/share.js', [ShareController::class, 'getShareJs']);
     Route::get('{unique}/share.css', [ShareController::class, 'getShareCss']);
 
-});
-
-Route::get('event', function () {
-   event(new \App\Events\Project\Data(1, 'test'));
 });
 
 //Auth Routes

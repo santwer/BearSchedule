@@ -15,15 +15,34 @@
 <body>
 <section class="hero mainBgColor" id="header">
     <div class="heading-bar">{{__('Welcome')}} {{ Auth::user()->name }}</div>
-    <div class="hero-body">
+    <div class="hero-body bs-hero">
         <div class="container">
-            <img src="{{ asset('images/logo.svg') }}" class="bear-logo">
-            <h1 class="title">
-                {{ env('APP_NAME', 'Projects') }}
-            </h1>
-            <h2 class="subtitle">
-                {{ __('Project schedule') }}
-            </h2>
+            <div class="columns" >
+                <div class="column appinfo">
+                    <img src="{{ asset('images/logo.svg') }}" class="bear-logo">
+                    <h1 class="title">
+                        {{ env('APP_NAME', 'Projects') }}
+                    </h1>
+                    <h2 class="subtitle">
+                        {{ __('Project schedule') }}
+                    </h2>
+                </div>
+                <div class="column is-hidden-mobile">
+                    <b-tooltip label="New Project">
+                        <a class="button is-primary is-light top-big-btn" href="{{ route('project.create') }}">
+                            <b-icon
+                                icon="chart-timeline">
+                            </b-icon>
+                            <b-icon
+                                class="addon-button"
+                                size="is-small"
+                                icon="plus-thick">
+                            </b-icon>
+                        </a>
+                    </b-tooltip>
+                </div>
+            </div>
+
         </div>
 
     </div>

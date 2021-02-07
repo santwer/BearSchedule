@@ -161,3 +161,8 @@ const Content = new Vue({
 
     }
 });
+
+
+const Header = new Vue({
+    el: '#header'
+});
