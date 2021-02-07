@@ -117,7 +117,7 @@
                             </b-taginput>
                         </b-field>
                     </b-tab-item>
-                    <b-tab-item label="Series">
+                    <b-tab-item label="Series"  v-if="false">
                         <timeline-item-series :item="item"></timeline-item-series>
                     </b-tab-item>
                 </b-tabs>
