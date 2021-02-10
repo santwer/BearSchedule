@@ -18,4 +18,5 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Series
 ### Changed
+- [Fixed] fix show items in share with group = null
 ### Removed
