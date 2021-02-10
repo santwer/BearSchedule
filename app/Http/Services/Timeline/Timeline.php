@@ -27,8 +27,10 @@ class Timeline extends BaseService
     {
             $items = Item::where('project_id', $projectId)->orderBy('start')->orderBy('id');
         if($share) {
-            $items = $items->with(['links', 'goups'])->whereHas('goups', function ($goups) {
-                $goups->where('show_share', 1);
+            $items = $items->with(['links', 'goups'])->where(function ($where) {
+                $where->whereHas('goups', function ($goups) {
+                    $goups->where('show_share', 1);
+                })->orWhereNull('group');
             })->get();
         } else {
             $items = $items->with('links')->get();
