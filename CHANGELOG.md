@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Changed
 - [Fixed] fix show items in share with group = null
 - [Fixed] remove Parent-Group on Group mask
+- [Fixed] check for enddate < startdate
 ### Removed
 
 

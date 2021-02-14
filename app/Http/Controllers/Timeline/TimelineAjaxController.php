@@ -178,9 +178,16 @@ class TimelineAjaxController extends Controller
             'group' => 'required_unless:type,=,background',
             'start' => 'required|min:3',
         ]);
-        if ($request->get('start') === 'Invalid Date'
-        ) {
+        if ($request->get('start') === 'Invalid Date') {
             return response()->ajax(null, 'Start not set.', 422);
+        }
+        if($request->has('end') && $request->get('end') !== null && in_array($request->get('type'), ['range', 'background'])) {
+            $end = $this->convertToDateTime($request->get('end'));
+            $start = $this->convertToDateTime($request->get('start'));
+
+            if (!$end->gte($start)) {
+                return response()->ajax(null, 'Starts needs to be before End Date', 422);
+            }
         }
 
         if (!$request->has('id') || empty($request->get('id'))) {
