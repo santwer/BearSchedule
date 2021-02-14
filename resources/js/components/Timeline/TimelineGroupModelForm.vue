@@ -23,6 +23,7 @@
                 </b-field>
                 <b-field label="Group">
                     <b-select placeholder="Select a group" v-model="item.parent" expanded>
+                        <option :value="null">No Group</option>
                         <option
                             v-for="group in groups"
                             :value="group.id"

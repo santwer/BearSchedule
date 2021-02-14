@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+### Added
+- Series
+### Changed
+- [Fixed] fix show items in share with group = null
+- [Fixed] remove Parent-Group on Group mask
+### Removed
+
+
 ## v1.2
 ### Added
 - Add Changelog to keep track on changes
@@ -14,9 +23,4 @@ All notable changes to this project will be documented in this file.
 - Helper relocate remove NULL for visjs
 - General Updates / Relations
 
-## [Unreleased]
-### Added
-- Series
-### Changed
-- [Fixed] fix show items in share with group = null
-### Removed
+
