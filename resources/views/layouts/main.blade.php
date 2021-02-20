@@ -50,12 +50,6 @@
             <x-main-menu projectid="{{isset($project) ? $project : 0 }}"></x-main-menu>
 
             <div class="column timelineContent">
-                <div class="show-menu-btn">
-                    <b-button size="is-small" @click="showMenu = !showMenu" title="Collapse Menu"
-                              icon-left="arrow-expand-left">
-
-                    </b-button>
-                </div>
                 @section('content')
                     Content not loaded
                 @show

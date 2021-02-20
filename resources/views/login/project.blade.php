@@ -3,7 +3,7 @@
 @section('content')
     <b-tabs position="is-right" class="block own-block" v-model="activeTabProject"
             data-tab="{{ isset($activeTab) ? $activeTab : 'timeline' }}" ref="projecttab">
-        <b-tab-item label="Timeline" value="timeline">
+        <b-tab-item label="Timeline" value="timeline" class="tab-timeline">
 
             <students-timeline project="{{$project}}" role="{{ $role }}" datapath="/ajax/timeline/getdata"  ref="sttimeline"></students-timeline>
 

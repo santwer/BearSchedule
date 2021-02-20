@@ -1,6 +1,6 @@
 <template>
     <section>
-        <b-button size="is-small" icon-left="plus-thick" @click="openModalNew">Add Group</b-button>
+        <b-button icon-left="plus-thick" @click="openModalNew" class="is-inverted">Add Group</b-button>
     </section>
 </template>
 

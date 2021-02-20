@@ -2,7 +2,8 @@
     <div class="is-float-right">
         <b-dropdown append-to-body aria-role="menu" position="is-bottom-left" trap-focus>
 
-            <button class="button is-small" slot="trigger">
+            <button class="button" slot="trigger">
+                <b-icon icon="filter" size="is-small" ></b-icon>
                 <span>Groups</span>
                 <b-icon :icon="activeMenu ? 'menu-up' : 'menu-down'"></b-icon>
             </button>

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="dummeLoop" ref="fullline" id="currentContentTime">
-            <div class="buttons">
+            <div class="buttons topbtns">
                 <timeline-item-model ref="itemmodel" :project="project" v-if="canAddItems()"></timeline-item-model>
                 <timeline-group-model ref="groupmodel" :project="project" v-if="canAddItems()"></timeline-group-model>
 
@@ -16,7 +16,8 @@
 
 
                 <b-dropdown aria-role="list" v-model="selectedOption">
-                    <button class="button is-small " slot="trigger" slot-scope="{ activeMenu }">
+                    <button class="button" slot="trigger" slot-scope="{ activeMenu }">
+                        <b-icon icon="label-multiple-outline" size="is-small" ></b-icon>
                         <span>Display</span>
                         <b-icon :icon="activeMenu ? 'menu-up' : 'menu-down'"></b-icon>
                     </button>
@@ -30,7 +31,8 @@
                 </b-dropdown>
 
                 <b-dropdown aria-role="list" v-model="selectedZoom">
-                    <button class="button is-small is-float-right" slot="trigger" slot-scope="{ activeZoom }">
+                    <button class="button is-float-right" slot="trigger" slot-scope="{ activeZoom }">
+                        <b-icon icon="magnify-scan" size="is-small" ></b-icon>
                         <span>Zoom</span>
                         <b-icon :icon="activeZoom ? 'menu-up' : 'menu-down'"></b-icon>
                     </button>
