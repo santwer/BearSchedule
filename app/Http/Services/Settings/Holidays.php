@@ -18,6 +18,7 @@ class Holidays
             $response->json(),
             [\App\Deserialize\Holiday::class]
         );
-        dd($equil);
+        $first = $equil->first();
+        dd($first->save());
     }
 }
