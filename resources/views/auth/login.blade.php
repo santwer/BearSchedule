@@ -2,7 +2,7 @@
 @section('title', __('general.login'))
 @section('subtitle', __('auth.login_start_message'))
 @section('content')
-<form method="POST" action="{{ route('login') }}">
+<form method="POST" action="{{ locale_route('login') }}">
     @csrf
     <div class="field">
         <div class="control">
@@ -40,10 +40,10 @@
         </label>
     </div>
     <div class="field">
-        <button class="button is-block is-primary is-large is-fullwidth" type="submit">Login</button>
+        <button class="button is-block is-primary is-large is-fullwidth" type="submit">@lang('general.login')</button>
     </div>
     <div class="field">
-        <b-button tag="a" size="is-medium" icon-left="microsoft-windows" href="{{ route('auth.microsoft') }}">
+        <b-button tag="a" size="is-medium" icon-left="microsoft-windows" href="{{ locale_route('auth.microsoft') }}">
             @lang('auth.login_with_microsoft')
         </b-button>
     </div>

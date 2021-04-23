@@ -95,6 +95,10 @@ return [
 
     'fallback_locale' => 'en',
 
+
+    'locales' => ['de', 'en'],
+
+
     /*
     |--------------------------------------------------------------------------
     | Faker Locale
@@ -180,6 +184,7 @@ return [
          */
         \App\Providers\TimelineServiceProvider::class,
         \App\Providers\AjaxResponseServiceProvider::class,
+        \App\Providers\HelperServiceProvider::class,
 
     ],
 

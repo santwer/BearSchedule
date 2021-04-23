@@ -1,0 +1,40 @@
+<?php
+return [
+    'timeline' => 'Zeitstrahl',
+    'items' => 'Elemente',
+    'groups' => 'Gruppen',
+    'share' => 'Teilen',
+    'weblink' => 'Link',
+    'logs' => 'Logs',
+    'settings' => 'Einstellungen',
+    'url' => 'URL',
+    'project_name' => 'Projekt Name',
+    'item_design' => 'Element Design',
+    'select_itemtype' => 'Select Elementtyp',
+    'itemtype' =>  [
+        'default' => 'Standard',
+        'with_subtitle' => 'mit zweit-Titel',
+        'jira_with_subtitle' => 'Jira Element mit zweit-Titel',
+    ],
+    'item_orientation' => 'Element Orientierung ',
+    'axis_orientation' => 'Achsen Orientierung ',
+    'axis_ori' => [
+        'bottom' => 'unten',
+        'top' => 'oben',
+        'both' => 'beide',
+        'none' => 'keine',
+    ],
+    'initial_zoom' => 'Anfänglicher Zoom',
+    'zoom_timeline' => [
+        'auto' => 'Auto',
+        'year' => 'Jahr',
+        'month' => 'Monat',
+        'week' => 'Woche',
+        'day' => 'Tag',
+    ],
+    'jira' => [
+        'jira_host' => 'Jira Host',
+        'jira_user' => 'Jira Benutzername',
+        'apitoken'  => 'ApiToken',
+    ],
+];

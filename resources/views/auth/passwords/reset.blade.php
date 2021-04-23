@@ -2,7 +2,7 @@
 @section('title', __('Reset Password'))
 @section('subtitle', 'Please fill to proceed.')
 @section('content')
-                    <form method="POST" action="{{ route('password.update') }}">
+                    <form method="POST" action="{{ locale_route('password.update') }}">
                         @csrf
 
                         <input type="hidden" name="token" value="{{ $token }}">

@@ -56,7 +56,7 @@ class HomeController extends Controller
             $validatedData,
             $changePassword);
 
-        return redirect()->route('user.settings');
+        return redirect(locale_route('user.settings'));
 
     }
 

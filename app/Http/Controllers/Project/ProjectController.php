@@ -21,7 +21,7 @@ class ProjectController extends Controller
 {
     private $viewVariables = [];
 
-    public function index(Request $request, int $project)
+    public function index(string $locale, Request $request, int $project)
     {
         $settings = Project::with('users')->whereHas('users', function (Builder $users) {
             $users->where('users.id', auth()->user()->id);
@@ -57,11 +57,11 @@ class ProjectController extends Controller
         $vars = ['project' => $project->id, 'activeTab' => 'settings'];
 
         ProjectLog::entry(Actions::ADD, Types::SETTINGS, '', '{"Project": "Created"}', auth()->user()->id, $project->id);
-        return redirect()->route('project.open', $vars);
+        return redirect(locale_route('project.open', $vars));
 
     }
 
-    public function update(Request $request, int $project)
+    public function update(string $locale, Request $request, int $project)
     {
         if ($this->getRoleInProject($project) !== 'ADMIN') {
             return $this->index($request, $project);
@@ -92,7 +92,7 @@ class ProjectController extends Controller
         }
         $vars = ['project' => $project, 'activeTab' => 'settings'];
 
-        return redirect()->route('project.open', $vars);
+        return redirect(locale_route('project.open', $vars));
     }
 
 
@@ -144,13 +144,13 @@ class ProjectController extends Controller
         return $userRole->pivot->role;
     }
 
-    public function destroy(Request $request, int $project)
+    public function destroy(string $locale, Request $request, int $project)
     {
         if ($this->getRoleInProject($project) !== 'ADMIN') {
             return redirect()->back();
         }
         $project = Project::find($project)->delete();
-        return redirect()->route('home');
+        return redirect(locale_route('home'));
     }
 
 }

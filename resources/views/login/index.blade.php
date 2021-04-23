@@ -13,13 +13,13 @@
                         class="panel-heading"
                         role="button"
                         aria-controls="contentIdForA11y2">
-                        <strong>News</strong>
+                        <strong>@lang('general.dashboard.news')</strong>
                     </div>
                     <div class="panel-block">
-                        It's a dashboard. It will help us to have an overview of all projects.
-                        GitHub entries are welcome for suggestions on how we can achieve this. We look forward to any suggestions.
+                        @lang('general.dashboard.overview_info')
+                        @lang('general.dashboard.github_support')
                         <br><br>
-                        Core functions are currently still being developed.
+                        @lang('general.dashboard.in_dev')
                     </div>
                 </b-collapse>
             </div>
@@ -33,7 +33,7 @@
                         class="panel-heading"
                         role="button"
                         aria-controls="contentIdForA11y2">
-                        <strong>Changelog</strong>
+                        <strong>@lang('general.dashboard.changelog')</strong>
                     </div>
                     <div class="panel-block">
                         <div class="mkdown-extras">
@@ -54,11 +54,11 @@
                     class="panel-heading"
                     role="button"
                     aria-controls="contentIdForA11y2">
-                    <strong>Activity</strong>
+                    <strong>@lang('general.dashboard.activity')</strong>
                 </div>
                 <div class="panel-block">
                     <div class="mkdown-extras">
-                        <activity :data="{{ $acivity }}" label="Own Projects"></activity>
+                        <activity :data="{{ $acivity }}" label="@lang('general.dashboard.own_projects')"></activity>
                     </div>
                 </div>
             </b-collapse>
@@ -73,11 +73,11 @@
                     class="panel-heading"
                     role="button"
                     aria-controls="contentIdForA11y2">
-                    <strong>General Activity</strong>
+                    <strong>@lang('general.dashboard.general_activity')</strong>
                 </div>
                 <div class="panel-block">
                     <div class="mkdown-extras">
-                        <activity :data="{{ $allAcivity }}" label="all Projects"></activity>
+                        <activity :data="{{ $allAcivity }}" label="@lang('general.dashboard.all_projects')"></activity>
                     </div>
                 </div>
             </b-collapse>

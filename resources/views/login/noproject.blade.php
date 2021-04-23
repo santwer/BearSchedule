@@ -3,8 +3,8 @@
 @section('content')
 
 
-    <b-message title="No Authorization" aria-close-label="Close message">
-        The project you want to display, is not in your authorization.
+    <b-message title="@lang('general.no_project.no_authorization')" aria-close-label="Close message">
+        @lang('general.no_project.no_authorization_text')
     </b-message>
 
 @endsection

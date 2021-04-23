@@ -3,7 +3,7 @@
 @section('subtitle', 'Please fill to proceed.')
 @section('content')
 
-                    <form method="POST" action="{{ route('register') }}">
+                    <form method="POST" action="{{ locale_route('register') }}">
                         @csrf
 
 

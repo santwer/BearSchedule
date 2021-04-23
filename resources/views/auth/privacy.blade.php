@@ -1,6 +1,6 @@
 @extends('layouts.login')
-@section('title', 'Privacy Policy')
-@section('subtitle', 'Privacy Policy')
+@section('title', __('general.privacy_policy'))
+@section('subtitle', __('general.privacy_policy'))
 @section('heroboxclass', 'is-10 is-offset-1')
 @section('content')
     <div style="text-align: left">

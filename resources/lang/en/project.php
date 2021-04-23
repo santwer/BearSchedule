@@ -1,0 +1,40 @@
+<?php
+return [
+    'timeline' => 'Timeline',
+    'items' => 'Items',
+    'groups' => 'Groups',
+    'share' => 'Share',
+    'weblink' => 'Link',
+    'logs' => 'Logs',
+    'settings' => 'Settings',
+    'url' => 'URL',
+    'project_name' => 'Project Name',
+    'item_design' => 'Item Design',
+    'select_itemtype' => 'Select Itemtype',
+    'itemtype' =>  [
+        'default' => 'Default',
+        'with_subtitle' => 'with Subtitle',
+        'jira_with_subtitle' => 'Jira Item Process with Subtitle',
+    ],
+    'item_orientation' => 'Item orientation',
+    'axis_orientation' => 'Axis orientation',
+    'axis_ori' => [
+        'bottom' => 'bottom',
+        'top' => 'top',
+        'both' => 'both',
+        'none' => 'none',
+    ],
+    'initial_zoom' => 'Initial Zoom',
+    'zoom_timeline' => [
+        'auto' => 'Auto',
+        'year' => 'Year',
+        'month' => 'Month',
+        'week' => 'Week',
+        'day' => 'Day',
+    ],
+    'jira' => [
+        'jira_host' => 'Jira Host',
+        'jira_user' => 'Jira Username',
+        'apitoken'  => 'ApiToken',
+    ],
+];

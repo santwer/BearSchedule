@@ -13,6 +13,7 @@ return [
     |
     */
     'sign_up' => 'Sign Up',
+    'password_new' => 'New Password',
     'password_forgot' => 'Forgot Password',
     'password_forgot_question' => 'Forgot Your Password?',
     'password_confirm' => 'Confirm password',

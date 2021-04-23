@@ -77,7 +77,7 @@ class LoginMSController extends Controller
         return new GenericProvider([
             'clientId'                => config('auth.microsoft.client_id'),
             'clientSecret'            => config('auth.microsoft.client_secret'),
-            'redirectUri'             => route(config('auth.microsoft.redirect_route')),
+            'redirectUri'             => locale_route(config('auth.microsoft.redirect_route')),
             'urlAuthorize'            => config('auth.microsoft.url_authorize'),
             'urlAccessToken'          => config('auth.microsoft.url_access_token'),
             'urlResourceOwnerDetails' => config('auth.microsoft.url_resource_owner_details'),

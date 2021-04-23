@@ -14,7 +14,7 @@
 
 <body>
 <section class="hero mainBgColor" id="header">
-    <div class="heading-bar">{{__('Welcome')}} {{ Auth::user()->name }}</div>
+    <div class="heading-bar">{{__('general.welcome', ['name' => Auth::user()->name])}}</div>
     <div class="hero-body bs-hero">
         <div class="container">
             <div class="columns" >
@@ -33,11 +33,11 @@
 
     </div>
     <div class="logout-area">
-        <a href="{{ route('logout') }}"
+        <a href="{{ locale_route('logout') }}"
            onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <button class="button is-primary ">{{ __('Logout') }}</button>
+            <button class="button is-primary ">{{ __('general.logout') }}</button>
         </a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+        <form id="logout-form" action="{{ locale_route('logout') }}" method="POST" class="d-none">
             @csrf
         </form>
     </div>
@@ -51,7 +51,7 @@
 
             <div class="column timelineContent">
                 @section('content')
-                    Content not loaded
+                    @lang('general.content_not_loaded')
                 @show
             </div>
         </div>

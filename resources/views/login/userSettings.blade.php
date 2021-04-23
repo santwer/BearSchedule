@@ -1,14 +1,14 @@
 @extends('layouts.main')
 @section('content')
-    <form method="POST" action="{{ route('user.settings.save') }}">
+    <form method="POST" action="{{ locale_route('user.settings.save') }}">
         @csrf
         <div style="margin: 30px;">
             <div class="columns">
 
                 <div class="column">
-                    <h2 class="subtitle">Account</h2>
+                    <h2 class="subtitle">@lang('settings.account')</h2>
                     @if ($errors->any())
-                        <b-message title="Error" type="is-danger" aria-close-label="Close message">
+                        <b-message title="@lang('settings.error')" type="is-danger" aria-close-label="Close message">
                             <ul>
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
@@ -17,19 +17,18 @@
                         </b-message>
                     @endif
                     @if($isDisabled)
-                        <b-message title="Microsoft Account" type="is-info" aria-close-label="Close message">
-                            Some of your Informations are not ediable, because they got synchronized with the Microsoft
-                            Cloud Service.
+                        <b-message title="@lang('settings.microsoft_account')" type="is-info" aria-close-label="Close message">
+                            @lang('settings.microsoft_account_service_info')
                         </b-message>
                     @endif
-                    <b-field label="Name">
+                    <b-field label="@lang('settings.name')">
                         <b-input value="{{ $user->name }}"  name="name"
                                  @error('name')
                                  type="is-danger"
                                  message="{{ $message }}" @enderror
                                  @if($isDisabled) disabled @endif></b-input>
                     </b-field>
-                    <b-field label="E-Mail">
+                    <b-field label="@lang('general.email_address')">
                         <b-input type="email"
                                  name="email"
                                  maxlength="30"
@@ -40,10 +39,10 @@
                     </b-field>
 
                     @if(!$isDisabled)
-                        <b-field label="New Password" @error('password')
+                        <b-field label="@lang('auth.password_new')" @error('password')
                         type="is-danger"
                                  message="{{ $message }}" @enderror>
-                            <b-input placeholder="{{ __('New Password') }}"
+                            <b-input placeholder="{{ __('auth.password_new') }}"
                                      type="password"
                                      name="password"
                                      icon="key">
@@ -52,7 +51,7 @@
                         <b-field @error('password_confirmation')
                                  type="is-danger"
                                  message="{{ $message }}" @enderror>
-                            <b-input placeholder="{{ __('New Password') }}"
+                            <b-input placeholder="{{ __('auth.password_confirm') }}"
                                      type="password"
                                      name="password_confirmation"
                                      icon="key">
@@ -62,19 +61,19 @@
                 </div>
 
                 <div class="column">
-                    <b-field label="Account Create Date">
+                    <b-field label="@lang('settings.account_create_date')">
                         <b-input value="{{ $user->created_at }}" disabled></b-input>
                     </b-field>
 
 
-                    <b-button type="is-danger" @click="deleteAccount" outlined>Delete Account</b-button>
+                    <b-button type="is-danger" @click="deleteAccount" outlined>@lang('settings.delete_account')</b-button>
 
                 </div>
             </div>
         </div>
-        <b-button native-type="submit" type="is-primary"  @if($isDisabled) disabled @endif>Save</b-button>
+        <b-button native-type="submit" type="is-primary"  @if($isDisabled) disabled @endif>@lang('general.save')</b-button>
     </form>
-    <form method="post" id="delete_account" action="{{ route('user.settings.delete') }}">
+    <form method="post" id="delete_account" action="{{ locale_route('user.settings.delete') }}">
         @csrf
     </form>
 @endsection

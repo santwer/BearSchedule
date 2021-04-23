@@ -8,7 +8,7 @@
                             {{ session('status') }}
                         </b-message>
                     @else
-                    <form method="POST" action="{{ route('password.email') }}">
+                    <form method="POST" action="{{ locale_route('password.email') }}">
                         @csrf
                                 <b-field @error('email') label="Error"
                                          type="is-danger"

@@ -1,6 +1,6 @@
 @extends('layouts.login')
-@section('title', 'Disclaimer')
-@section('subtitle', 'Disclaimer')
+@section('title', __('general.disclaimer'))
+@section('subtitle', __('general.disclaimer'))
 @section('heroboxclass', 'is-10 is-offset-1')
 @section('content')
     <div style="text-align: left">

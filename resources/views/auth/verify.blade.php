@@ -16,7 +16,7 @@
 
                     {{ __('auth.verify_email_check_text') }}
                     {{ __('auth.if_you_did_not_receive_the_email') }},
-                    <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
+                    <form class="d-inline" method="POST" action="{{ locale_route('verification.resend') }}">
                         @csrf
                         <button type="submit" class="btn btn-link p-0 m-0 align-baseline">{{ __('auth.click_here_to_request_another') }}</button>.
                     </form>
