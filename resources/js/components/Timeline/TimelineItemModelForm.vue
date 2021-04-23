@@ -291,10 +291,11 @@
                 }
                 var that = this;
                 var sendItem = Object.assign({}, that.item);
-
-                sendItem.jira = sendItem.jira.map(function (item) {
-                    return item.key;
-                });
+                if(sendItem.jira) {
+                    sendItem.jira = sendItem.jira.map(function (item) {
+                        return item.key;
+                    });
+                }
 
                 $.ajax({
                     method: "PUT",
