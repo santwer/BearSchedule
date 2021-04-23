@@ -33,7 +33,7 @@
                     status: null,
                     color: {},
                 };
-                if(enableJira)
+                if(typeof enableJira !== "undefined" && enableJira)
                     this.setItem.jira = [];
 
                 this.$emit('addItem', this.setItem)
