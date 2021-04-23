@@ -125,5 +125,6 @@ Route::group([
     ]);
 
 });
+Route::any('/', [\App\Http\Controllers\LocaleController::class, 'redirectMain']);
 Route::fallback([\App\Http\Controllers\LocaleController::class, 'redirect']);
 
