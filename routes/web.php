@@ -45,7 +45,7 @@ Route::group(['prefix' => 'share/'], function () {
     Route::get('{unique}/share.css', [ShareController::class, 'getShareCss']);
 
 });
-
+Route::any('/', [\App\Http\Controllers\LocaleController::class, 'redirectMain']);
 Route::group([
     'prefix' => '{locale?}',
     'where' => ['locale' => '[a-zA-Z]{2}'],
@@ -125,6 +125,5 @@ Route::group([
     ]);
 
 });
-Route::any('/', [\App\Http\Controllers\LocaleController::class, 'redirectMain']);
 Route::fallback([\App\Http\Controllers\LocaleController::class, 'redirect']);
 
