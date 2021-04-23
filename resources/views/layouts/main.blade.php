@@ -61,6 +61,9 @@
     window.KoukyWebSocket = {{ \App\Helper\TimelineHelper::useWebsocket() ? 'true' : 'false' }};
 </script>
 <script async type="module" src="{{ mix('js/app.js') }}"></script>
+<script>
+    const enableJira = {{ \App\Helper\JiraHelper::isEnabled() }};
+</script>
 </body>
 
 </html>

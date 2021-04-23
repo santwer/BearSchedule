@@ -3,6 +3,7 @@
 namespace App\Models\Timeline;
 
 use App\Models\ProjectLog;
+use App\Models\Timeline\Item\Issue;
 use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
@@ -26,5 +27,9 @@ class Item extends Model
     public function log()
     {
         return $this->hasMany(ProjectLog::class, 'group_id', 'id');
+    }
+
+    public function issues() {
+        return $this->hasMany(Issue::class, 'item_id', 'id');
     }
 }
