@@ -8,7 +8,7 @@ use Carbon\Carbon;
 
 class Holiday extends Deserialize
 {
-    protected $model = \App\Models\temp\Holiday::class;
+    protected $model = \App\Models\Holidays\Holiday::class;
 
 
     public string $name;

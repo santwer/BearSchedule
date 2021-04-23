@@ -4,8 +4,44 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a28a1067b54f8be98e6473ad32cef5a8",
+    "content-hash": "c033a8da45099e671d4edee195478fdc",
     "packages": [
+        {
+            "name": "antwersv/json-deserializer",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "packages/antwersv/json-deserializer",
+                "reference": "366a84ebcdf7ad3982dd7e3c6884d06fc1bd5215"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "antwersv\\jsonDeserializer\\JsonDeserializeServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "antwersv\\jsonDeserializer\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sven",
+                    "email": "kennx@hotmail.de"
+                }
+            ],
+            "description": "Laravel package for deserialize Json to stdClass",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
         {
             "name": "asm89/stack-cors",
             "version": "v2.0.3",
@@ -7678,7 +7714,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "antwersv/json-deserializer": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

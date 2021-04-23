@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\temp;
+namespace App\Models\Holidays;
 
 use App\Http\Services\JsonDeserializer\ModelCasts;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

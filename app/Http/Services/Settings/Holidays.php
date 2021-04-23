@@ -5,7 +5,7 @@ namespace App\Http\Services\Settings;
 
 
 use antwersv\jsonDeserializer\JsonDeserializer;
-use App\Models\temp\Holiday;
+use App\Models\Holidays\Holiday;
 use Illuminate\Support\Facades\Http;
 
 class Holidays
@@ -18,7 +18,6 @@ class Holidays
             $response->json(),
             [\App\Deserialize\Holiday::class]
         );
-        $first = $equil->first();
-        dd($first->save());
+        $equil->save();
     }
 }
