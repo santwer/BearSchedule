@@ -14,6 +14,7 @@ class Options extends BaseService
     protected $options = [];
     protected $isTimeline = true;
     protected $role = null;
+    protected $ignoreOptions = ['jira_host', 'jira_user', 'jira_password'];
 
     public function __construct(?int $project_id, bool $isTimeline = true)
     {
@@ -28,32 +29,50 @@ class Options extends BaseService
             'groupTemplate' => $this->getGroupTemplate(),
             'groupOrder' => $this->getGroupOrder($project_id)
         ];
-        foreach($projectOptions as $option) {
-            if(method_exists($this, $option->option)) {
+        foreach ($projectOptions as $option) {
+            if (in_array($option->option, $this->ignoreOptions) && $isTimeline) {
+                continue;
+            }
+            if (method_exists($this, $option->option)) {
                 $this->options[$option->option] = call_user_func([$this, $option->option], $option->value);
             } else {
                 $this->options[$option->option] = $option->value;
             }
         }
-        if(!isset($this->options['template'])) {
+        if (! isset($this->options['template'])) {
             $this->options['template'] = Handlebars::get('timeline.item.standard');
         }
     }
 
-    public function get():array
+    public function get($option = null): array
     {
-        return ArrayHelper::dotArrayToMutli($this->options);
+        if ($option === null) {
+            return ArrayHelper::dotArrayToMutli($this->options);
+        }
+        if(is_array($option)) {
+            $filtered = array_filter(
+                $this->options,
+                function ($key) use ($option) {
+                    return in_array($key, $option);
+                },
+                ARRAY_FILTER_USE_KEY
+            );
+            return ArrayHelper::dotArrayToMutli($filtered);
+        }
+        return isset($this->options[$option]) ? [$this->options[$option]] : [];
     }
 
 
-    private function template(?string $value):?string {
-        if(($value = Handlebars::get($value)) !== null) {
+    private function template(?string $value): ?string
+    {
+        if (($value = Handlebars::get($value)) !== null) {
             return $value;
         }
         return null;
     }
 
-    private function getEdiable(int $projectId) {
+    private function getEdiable(int $projectId)
+    {
         return [
             'add' => false,
             'remove' => false,
@@ -63,16 +82,19 @@ class Options extends BaseService
         ];
     }
 
-    private function getGroupOrder(int $projectId) {
+    private function getGroupOrder(int $projectId)
+    {
         //groupOrder
         $group = Group::where('project_id', $projectId)->first();
-        if($group === null) return 'id';
+        if ($group === null) {
+            return 'id';
+        }
         return 'order';
     }
 
     private function getGroupTemplate()
     {
-        if($this->role === 'ADMIN' || $this->role === 'EDITOR') {
+        if ($this->role === 'ADMIN' || $this->role === 'EDITOR') {
             return Handlebars::get('timeline.group.default');
         }
 
@@ -86,10 +108,16 @@ class Options extends BaseService
 
     private function getRoleInProject(int $projectId)
     {
-        if(auth()->user() === null) return null;
+        if (auth()->user() === null) {
+            return null;
+        }
         $userRole = auth()->user()->projects()->find($projectId);
-        if($userRole === null) return null;
-        if ($userRole->pivot === null) return null;
+        if ($userRole === null) {
+            return null;
+        }
+        if ($userRole->pivot === null) {
+            return null;
+        }
         return $userRole->pivot->role;
     }
 }

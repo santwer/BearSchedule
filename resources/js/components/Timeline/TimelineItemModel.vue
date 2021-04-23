@@ -33,6 +33,9 @@
                     status: null,
                     color: {},
                 };
+                if(enableJira)
+                    this.setItem.jira = [];
+
                 this.$emit('addItem', this.setItem)
                 this.openModal();
             },

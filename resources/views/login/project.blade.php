@@ -49,6 +49,9 @@
                             expanded>
                                 <option value="null">Default</option>
                                 <option value="timeline.item.default">with Subtitle</option>
+                                @if(\App\Helper\JiraHelper::isEnabled())
+                                <option value="timeline.item.jira">Jira Item Process with Subtitle</option>
+                                @endif
                             </b-select>
                         </b-field>
                         <b-field
@@ -85,7 +88,20 @@
                             </b-select>
                         </b-field>
 
-
+                    @if(\App\Helper\JiraHelper::isEnabled() && $role === 'ADMIN')
+                            <b-field label="Jira Host">
+                                <b-input name="option[jira_host]" placeholder="https://your-jira.host.com"
+                                         value="{{ old('option.jira_host', $settings->option('jira_host', 'value')) }}"></b-input>
+                            </b-field>
+                            <b-field label="Jira Username">
+                                <b-input name="option[jira_user]" placeholder="jira-username"
+                                         value="{{ old('option.jira_user', $settings->option('jira_user', 'value')) }}"></b-input>
+                            </b-field>
+                            <b-field label="ApiToken">
+                                <b-input name="option[jira_password]" placeholder="jira-password" type="password"
+                                         value="{{ old('option.jira_password', $settings->option('jira_password', 'value')) }}"></b-input>
+                            </b-field>
+                    @endif
 
                     </div>
                     <div class="column">
