@@ -24,18 +24,18 @@
                         <img src="{{ asset('images/logo.svg') }}" style="height: 128px; ">
                     </figure>
                     @section('content')
-                        Content not loaded
+                        @lang('general.content_not_loaded')
                     @show
                 </div>
                 <p class="has-text-grey">
-                    <a href="{{ route('login') }}">Login</a> &nbsp;·&nbsp;
-                    <a href="{{ route('register') }}">Sign Up</a> &nbsp;·&nbsp;
-                    <a href="{{ route('password.request') }}">Forgot Password</a>
+                    <a href="{{ route('login') }}">@lang('general.login')</a> &nbsp;·&nbsp;
+                    <a href="{{ route('register') }}">@lang('auth.sign_up')</a> &nbsp;·&nbsp;
+                    <a href="{{ route('password.request') }}">@lang('auth.password_forgot')</a>
                     @if(file_exists(storage_path('app/disclaimer.txt')))
-                        &nbsp;·&nbsp;<a href="{{ route('disclaimer') }}">Disclaimer</a>
+                        &nbsp;·&nbsp;<a href="{{ route('disclaimer') }}">@lang('general.disclaimer')</a>
                     @endif
                     @if(file_exists(storage_path('app/privacy.txt')))
-                        &nbsp;·&nbsp;<a href="{{ route('privacy') }}">Privacy Policy</a>
+                        &nbsp;·&nbsp;<a href="{{ route('privacy') }}">@lang('general.privacy_policy')</a>
                     @endif
                 </p>
             </div>
@@ -47,7 +47,7 @@
                       tag="a"
                       href="https://github.com/santwer/BearSchedule"
                       target="_blank" >
-                View on GitHub
+                @lang('general.view_on_github')
             </b-button>
         </div>
     @endif

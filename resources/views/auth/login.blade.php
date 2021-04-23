@@ -1,6 +1,6 @@
 @extends('layouts.login')
-@section('title', 'Login')
-@section('subtitle', 'Please login to proceed.')
+@section('title', __('general.login'))
+@section('subtitle', __('auth.login_start_message'))
 @section('content')
 <form method="POST" action="{{ route('login') }}">
     @csrf
@@ -9,7 +9,7 @@
             <b-field @error('email') label="Error"
                      type="is-danger"
                      message="{{ $message }}" @enderror>
-                <b-input placeholder="{{ __('E-Mail Address') }}"
+                <b-input placeholder="{{ __('general.email_address') }}"
                          type="email"
                          name="email"
                          value="{{ old('email') }}"
@@ -18,13 +18,12 @@
             </b-field>
         </div>
     </div>
-
     <div class="field">
         <div class="control">
             <b-field @error('password') label="Error"
                      type="is-danger"
                      message="{{ $message }}" @enderror>
-                <b-input placeholder="{{ __('Password') }}"
+                <b-input placeholder="{{ __('general.password') }}"
                          type="password"
                          name="password"
                          icon="key">
@@ -35,7 +34,7 @@
     <div class="field">
         <label class="checkbox">
             <b-checkbox name="remember"  :value="{{ old('remember') ? 'true' : 'false' }}">
-                {{ __('Remember Me') }}
+                 @lang('auth.remember_me')
             </b-checkbox>
 
         </label>
@@ -45,7 +44,7 @@
     </div>
     <div class="field">
         <b-button tag="a" size="is-medium" icon-left="microsoft-windows" href="{{ route('auth.microsoft') }}">
-            Login with Microsoft
+            @lang('auth.login_with_microsoft')
         </b-button>
     </div>
 </form>

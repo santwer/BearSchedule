@@ -28,7 +28,7 @@
                                 <b-field @error('email') label="Error"
                                          type="is-danger"
                                          message="{{ $message }}" @enderror>
-                                    <b-input placeholder="{{ __('E-Mail Address') }}"
+                                    <b-input placeholder="{{ __('general.email_address') }}"
                                              type="email"
                                              name="email"
                                              value="{{ old('email') }}"
