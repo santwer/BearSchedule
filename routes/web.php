@@ -38,6 +38,14 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
+Route::group(['prefix' => 'share/'], function () {
+    Route::get('{unique}/', [ShareController::class, 'index']);
+    Route::get('{unique}/ajax/getdata', [ShareController::class, 'getData']);
+    Route::get('{unique}/share.js', [ShareController::class, 'getShareJs']);
+    Route::get('{unique}/share.css', [ShareController::class, 'getShareCss']);
+
+});
+
 Route::group([
     'prefix' => '{locale?}',
     'where' => ['locale' => '[a-zA-Z]{2}'],
@@ -62,13 +70,7 @@ Route::group([
                 [\App\Http\Controllers\Timeline\JiraAjaxController::class, 'redirectIssue']);
         });
     });
-    Route::group(['prefix' => 'share/'], function () {
-        Route::get('{unique}/', [ShareController::class, 'index']);
-        Route::get('{unique}/ajax/getdata', [ShareController::class, 'getData']);
-        Route::get('{unique}/share.js', [ShareController::class, 'getShareJs']);
-        Route::get('{unique}/share.css', [ShareController::class, 'getShareCss']);
 
-    });
 
 //Auth Routes
     Route::group(['prefix' => 'auth/'], function () {
