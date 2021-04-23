@@ -44,7 +44,7 @@
 
             </div>
 
-            <b-message title="No Items" v-if="MsgIsActive" aria-close-label="Close message">
+            <b-message title="No Items" v-if="MsgIsActive" aria-close-label="Close message" style="margin-top: 50px;">
                 Since there a no Items, its not possible to show the timeline, yet. Please add Items and Groups first.
             </b-message>
             <timeline ref="timeline"
