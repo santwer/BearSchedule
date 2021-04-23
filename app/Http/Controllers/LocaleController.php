@@ -15,7 +15,7 @@ class LocaleController extends Controller
     public function redirectMain(Request $request)
     {   $any = $request->route()->uri;
         if(!auth()->check()) {
-            $any = '/login';
+            $any = 'login';
         }
         return $this->redirect($any);
     }
