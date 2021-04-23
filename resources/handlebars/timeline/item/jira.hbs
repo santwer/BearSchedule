@@ -1,0 +1,21 @@
+{{#ifEquals status "CRITICAL"}}
+    <i class="mdi mdi-flash"></i>
+{{/ifEquals}}
+{{#ifEquals status "TEST"}}
+    <i class="mdi mdi-account-convert"></i>
+{{/ifEquals}}
+{{#ifEquals status "DELAYED"}}
+    <i class="mdi mdi-sort-clock-descending-outline"></i>
+{{/ifEquals}}
+{{#ifEquals status "DONE"}}
+    <i class="mdi mdi-check-outline"></i>
+{{/ifEquals}}
+<span>{{ title }}</span><br>
+<span style="font-size: 80%">{{subtitle}}</span>
+{{#if process}}
+    <div class="progress-wrapper">
+            <div class="progress {{ processExtra }}" style="width:{{ process }}%;"></div>
+            <label class="progress-label">{{ processlabel }}</label>
+    </div>
+{{/if}}
+

@@ -41,7 +41,14 @@ Route::middleware(['auth'])->group(function () {
             Route::put('grouporder', [TimelineAjaxController::class, 'setGroupOrder']);
             Route::delete('group', [TimelineAjaxController::class, 'destroyGroup']);
         });
+        Route::group(['prefix' => 'jira/', 'middleware' => 'jira'], function () {
+            Route::get('issue/search', [\App\Http\Controllers\Timeline\JiraAjaxController::class, 'getIssues']);
+        });
         Route::get('autocomplete/{controller}', [AutoCompleteController::class, 'index']);
+    });
+
+    Route::group(['prefix' => 'jira/', 'middleware' => 'jira'], function () {
+        Route::get('issue/{project}/{issue}', [\App\Http\Controllers\Timeline\JiraAjaxController::class, 'redirectIssue']);
     });
 });
 Route::group(['prefix' => 'share/'], function () {

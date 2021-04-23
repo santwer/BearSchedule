@@ -6,6 +6,7 @@ use App\DataHelper\ProjectLog\Actions;
 use App\DataHelper\ProjectLog\Types;
 use App\Events\Project\Data;
 use App\Helper\Handlebars;
+use App\Helper\JiraHelper;
 use App\Helper\ModelChangesHelper;
 use App\Helper\TimelineHelper;
 use App\Http\Controllers\Controller;
@@ -178,6 +179,7 @@ class TimelineAjaxController extends Controller
             'group' => 'required_unless:type,=,background',
             'start' => 'required|min:3',
         ]);
+
         if ($request->get('start') === 'Invalid Date') {
             return response()->ajax(null, 'Start not set.', 422);
         }
@@ -224,6 +226,48 @@ class TimelineAjaxController extends Controller
             if(TimelineHelper::useWebsocket()) {
                 event(new Data($request->get('project_id'), 'ITEM', $responseItem));
             }
+            if($request->has('jira')) {
+                $jiras = $request->get('jira');
+
+                $item->load('issues');
+                $issues = $item->issues;
+                $deleteIds = $item->issues->whereNotIn('key', $jiras)->pluck('id');
+                if($deleteIds->count() > 0) {
+                    Item\Issue::whereIn('id', $deleteIds)->delete();
+                }
+                $jiras = collect($jiras)->map(function($key) use($item) {
+                    $newItem = new Item\Issue();
+                    $newItem->type = 'JIRA';
+                    $newItem->item_id = $item->id;
+                    $newItem->key = $key;
+                    $log = JiraHelper::getWorkLogTime([$newItem->key], $item->project_id);
+                    if($log->estimate !== 0) {
+                        $newItem->estimate = $log->estimate;
+                        $newItem->done = $log->done;
+                        $newItem->process = $log->process;
+                    }
+                    return $newItem;
+                });
+
+
+
+                foreach($jiras->whereNotIn('key', $issues->pluck('key')) as $i => $newItem) {
+
+                    $newItem->save();
+
+                }
+
+                $avg = JiraHelper::getIssuesAvg($jiras);
+                $responseItem->process = $avg->process > 100 ? 100 : $avg->process ;
+                $responseItem->processExtra = $avg->process > 100 ? 'barred' : '' ;
+                $responseItem->processlabel = ($avg->done / 60 / 60).'h / '.($avg->estimate / 60 / 60).'h';
+
+            } elseif(JiraHelper::isEnabled()) {
+                Item\Issue::where('item_id', $item->id)->delete();
+            }
+
+
+
             return response()->ajax($responseItem, 'Saved successfully', 200);
         }
         return response()->ajax(null, 'Error can not save.', 400);

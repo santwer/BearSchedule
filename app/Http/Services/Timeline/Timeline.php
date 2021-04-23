@@ -3,6 +3,7 @@
 namespace App\Http\Services\Timeline;
 
 use App\Helper\Handlebars;
+use App\Helper\JiraHelper;
 use App\Helper\TimelineHelper;
 use App\Http\Services\BaseService;
 use App\Models\ProjectOption;
@@ -35,7 +36,9 @@ class Timeline extends BaseService
         } else {
             $items = $items->with('links')->get();
         }
-
+        if(JiraHelper::isEnabled()) {
+            return JiraHelper::addIssuesToItems($items);
+        }
         return $items;
     }
 

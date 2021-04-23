@@ -40,7 +40,7 @@
                         </b-field>
 
                         <b-field label="Content">
-                            <b-input maxlength="200" type="textarea" v-model="item.description"></b-input>
+                            <b-input type="textarea" v-model="item.description"></b-input>
                         </b-field>
                         <div class="buttons">
                             <b-button size="is-small" icon-left="plus-thick" @click="addLink">Add Link</b-button>
@@ -86,6 +86,7 @@
                                 </option>
                             </b-select>
                         </b-field>
+                        <issue-search ref="issues" v-if="item.jira" :selected="item.jira"></issue-search>
                         <b-field label="Color">
                         <b-dropdown aria-role="list" expanded>
                             <button class="button is-fullwidth" slot="trigger" slot-scope="{ colorPickerActive }" type="button">
@@ -138,10 +139,11 @@
 <script>
     import LinkButton from "../tools/LinkButton";
     import TimelineItemSeries from "./TimelineItemSeries";
+    import IssueSearch from "../Jira/IssueSearch";
 
     export default {
         name: "TimelineItemModelForm",
-        components: {TimelineItemSeries, LinkButton},
+        components: {IssueSearch, TimelineItemSeries, LinkButton},
         props: ['setItem'],
         data() {
             return {
@@ -198,6 +200,9 @@
             }
         },
         methods: {
+            getItem() {
+                return this.item;
+            },
             setColor(colorItem) {
                 this.item.color = colorItem;
             },
@@ -256,7 +261,21 @@
                 })*/
               return [];
             },
+            newIssueSet(issue) {
+                if(!this.item.title && !this.item.subtitle  && !this.item.content ) {
+                    this.item.title = issue.fields.summary;
+                    this.item.description = issue.fields.description;
+                    if(issue.fields.assignee) {
+                        this.item.subtitle = issue.fields.assignee.displayName;
+                    }
+                }
+            },
+            deleteIssue: function (issue) {
+                this.item.jira = this.item.jira.filter(x => x.key !== issue.key)
+            },
             saveForm: function () {
+                //console.log(this.item.jira)
+                //return;
                 this.saveAction();
 
             },
@@ -271,10 +290,16 @@
                     this.$emit('close');
                 }
                 var that = this;
+                var sendItem = Object.assign({}, that.item);
+
+                sendItem.jira = sendItem.jira.map(function (item) {
+                    return item.key;
+                });
+
                 $.ajax({
                     method: "PUT",
                     url: "/ajax/timeline/item",
-                    data: that.item,
+                    data: sendItem,
                     dataType: 'json'
                 }).done(function (data) {
                     var msg = `Saved successfully`;
@@ -290,6 +315,10 @@
                         that.backup.links = that.item.links;
                         that.backup.subtitle = that.item.subtitle;
                         that.backup.status = that.item.status;
+
+                        that.backup.process = data.data.process;
+                        that.backup.processExtra = data.data.processExtra;
+                        that.backup.processlabel = data.data.processlabel;
                     }
                     that.$emit('close');
                     if(!window.UseWebSocketKouky) {
@@ -301,7 +330,7 @@
                         that.backup.style = data.data.style;
                     }
                 }).fail(function (data) {
-                    var msg = (typeof data.responseJSON.message !== "undefined") ? data.responseJSON.message : `Save didn't work. Come back later.`;
+                    var msg = (typeof data.message !== "undefined") ? data.message : `Save didn't work. Come back later.`;
                     that.$buefy.toast.open({
                         duration: 5000,
                         message: msg,
