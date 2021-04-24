@@ -9,14 +9,20 @@ function locale_route($name, $parameters = [], $absolute = true)
     return route($name, $parameters, $absolute);
 }
 
-function user_locale() : string
+function user_locale(): string
 {
     $request = \request();
-    if(($locale = session('locale')) !== null) {
+
+
+    if (in_array($request->segment(1), config('app.locales'))) {
+        return $request->segment(1);
+    }
+
+    if (($locale = session('locale')) !== null) {
         return $locale;
     }
-    foreach($request->getLanguages() as $language) {
-        if(in_array($language, config('app.locales'))) {
+    foreach ($request->getLanguages() as $language) {
+        if (in_array($language, config('app.locales'))) {
             return $language;
         }
     }
@@ -24,8 +30,9 @@ function user_locale() : string
     return config('app.fallback_locale');
 }
 
-function localeDateFormat($time = false) {
-    return __('general.dateformat') . ($time ? ' H:i' : '');
+function localeDateFormat($time = false)
+{
+    return __('general.dateformat').($time ? ' H:i' : '');
 }
 
 function getTranslatationMessages()
