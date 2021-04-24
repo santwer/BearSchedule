@@ -22,12 +22,12 @@
                         <b-icon :icon="activeMenu ? 'menu-up' : 'menu-down'"></b-icon>
                     </button>
 
-                    <b-dropdown-item aria-role="listitem" value="default">{{ trans.get('project.timelines.default') }}</b-dropdown-item>
-                    <b-dropdown-item aria-role="listitem" value="weekday">{{ trans.get('project.timelines.weekday') }}</b-dropdown-item>
-                    <b-dropdown-item aria-role="listitem" value="week">{{ trans.get('project.timelines.week') }}</b-dropdown-item>
-                    <b-dropdown-item aria-role="listitem" value="day">{{ trans.get('project.timelines.day') }}</b-dropdown-item>
-                    <b-dropdown-item aria-role="listitem" value="month">{{ trans.get('project.timelines.month') }}</b-dropdown-item>
-                    <b-dropdown-item aria-role="listitem" value="year">{{ trans.get('project.timelines.year') }}</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="default">{{ trans.get('project.display_options.default') }}</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="weekday">{{ trans.get('project.display_options.weekday') }}</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="week">{{ trans.get('project.display_options.week') }}</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="day">{{ trans.get('project.display_options.day') }}</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="month">{{ trans.get('project.display_options.month') }}</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="year">{{ trans.get('project.display_options.year') }}</b-dropdown-item>
                 </b-dropdown>
 
                 <b-dropdown aria-role="list" v-model="selectedZoom">

@@ -38,7 +38,7 @@
             </article>
         </section>
         <footer class="modal-card-foot">
-            <button class="button" type="button" @click="$emit('close')">Close</button>
+            <button class="button" type="button" @click="$emit('close')">{{ trans.get('general.close') }}</button>
         </footer>
     </div>
 
@@ -54,7 +54,7 @@
            displayDate: function (input) {
                const options = { year: 'numeric', month: 'short', day: 'numeric' };
                var date = new Date(input);
-               return date.toLocaleDateString(undefined, options);
+               return date.toLocaleDateString(Vue.prototype.trans.getLocale(), options);
            },
            getHtmlDesc: function (desc) {
                if(typeof desc === "undefined") return desc;

@@ -4,10 +4,13 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 ### Added
 - Series
+- Jira Support for Project Items
+- Localization with language files 
 ### Changed
 - [Fixed] fix show items in share with group = null
 - [Fixed] remove Parent-Group on Group mask
 - [Fixed] check for enddate < startdate
+- [Fixed] minor bugs in handling
 ### Removed
 
 

@@ -2,8 +2,16 @@ window.$ = require('jquery');
 window.Vue = require('vue');
 window.Buefy = require('buefy');
 
+
+
 import StudentsTimeline from "./components/Timeline/StudentsTimeline";
 import { DataSet, Timeline } from 'vue2vis';
+import Lang from 'lang.js';
+const default_locale = window.default_locale;
+const fallback_locale = window.fallback_locale;
+const messages = window.messages;
+Vue.prototype.trans = new Lang({messages, locale: default_locale, fallback: fallback_locale});
+
 const Content = new Vue({
     el: '#project-timeline',
     components: {

@@ -9,6 +9,12 @@
     <link rel="icon" href="{{ asset('images/logo64.png') }}">
     <title>{{ isset($pageTitle) ? $pageTitle .' - ' : '' }}{{ env('APP_NAME', 'Education') }}</title>
     <link rel="stylesheet" type="text/css" href="{{ '/share/'.$unique.'/share.css' }}">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.1/moment-with-locales.min.js"></script>
+    <script>
+        window.default_locale = "{{ user_locale() }}";
+        window.fallback_locale = "{{ config('app.fallback_locale') }}";
+        window.messages = @json($messages);
+    </script>
 </head>
 
 <body>

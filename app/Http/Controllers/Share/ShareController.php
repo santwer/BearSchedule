@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\TimelineController;
 use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use KgBot\LaravelLocalization\Facades\ExportLocalizations;
 use Ramsey\Uuid\Uuid;
 
 class ShareController extends Controller
@@ -19,8 +20,9 @@ class ShareController extends Controller
         }
 
         $pageTitle = $this->project->name;
+        $messages = ExportLocalizations::export()->toFlat();
 
-        return response()->view('share.index', compact('unique', 'pageTitle'));
+        return response()->view('share.index', compact('unique', 'pageTitle', 'messages'));
     }
 
     public function getShareJs(Request $request, string $unique)
