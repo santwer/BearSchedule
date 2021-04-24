@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Jira Support for Project Items
 - Localization with language files 
 - Load Localization json in local.storage
+- add Language-Select
 ### Changed
 - [Fixed] fix show items in share with group = null
 - [Fixed] remove Parent-Group on Group mask

@@ -1,6 +1,8 @@
 <?php
 return [
     'dateformat' => 'Y-m-d',
+    'language' => 'language',
+    'language_own' => 'English',
     'months' => [
         1 => 'January',
         2 => 'February',

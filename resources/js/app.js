@@ -15,6 +15,7 @@ import {DataSet, Timeline} from 'vue2vis';
 import EditTable from "./components/tools/EditTable";
 import LogTable from "./components/tools/LogTable";
 import Activity from "./components/Graph/Activity";
+import LocalizationSelect from './components/tools/LocalizationSelect'
 import Echo from 'laravel-echo';
 
 if (typeof window.UseWebSocketKouky === "undefined") window.UseWebSocketKouky = false;
@@ -63,7 +64,8 @@ const Content = new Vue({
         ProjectUsers,
         EditTable,
         LogTable,
-        Activity
+        Activity,
+        LocalizationSelect
     },
     data: {
         loadedLang: false,

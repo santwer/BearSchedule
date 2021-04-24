@@ -30,6 +30,14 @@ function user_locale(): string
     return config('app.fallback_locale');
 }
 
+function get_langs() {
+    $locals = [];
+    foreach(config('app.locales') as $local) {
+        $locals[$local] = __('general.language_own', [], $local);
+    }
+    return collect($locals);
+}
+
 function localeDateFormat($time = false)
 {
     return __('general.dateformat').($time ? ' H:i' : '');

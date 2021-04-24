@@ -41,8 +41,12 @@
                         &nbsp;·&nbsp;<a href="{{ locale_route('privacy') }}">@lang('general.privacy_policy')</a>
                     @endif
                 </p>
+
             </div>
         </div>
+    </div>
+    <div class="lang-present">
+        <localization-select :locals="{{ get_langs() }}" init="{{ user_locale() }}" ></localization-select>
     </div>
     @if(env('SHOW_GITHUB', false))
         <div class="github-present">

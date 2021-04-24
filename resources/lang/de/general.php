@@ -1,6 +1,8 @@
 <?php
 return [
   'dateformat' => 'd.m.Y',
+  'language' => 'Sprache',
+  'language_own' => 'Deutsch',
   'months' => [
       1 =>  'Januar',
       2 =>  'Feburar',

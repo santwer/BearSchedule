@@ -26,6 +26,10 @@ class MainMenu extends Component
     public function render()
     {
         $projects = auth()->user()->projects()->get();
-        return view('components.main-menu', compact('projects'));
+        $locals = get_langs();
+
+        return view('components.main-menu', compact('projects', 'locals'));
     }
+
+
 }

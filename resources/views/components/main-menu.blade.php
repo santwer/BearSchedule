@@ -16,6 +16,7 @@
     <div class="bs-footer">
         <p class="has-text-grey">
         &copy; {{ env('APP_NAME', 'BearSchedule') }}, {{ \Illuminate\Support\Facades\Date::now()->year }}
+            <localization-select :locals="{{ $locals }}" init="{{ user_locale() }}" :extra="true"></localization-select>
         </p>
         <p class="has-text-grey">
             @if(file_exists(storage_path('app/disclaimer.txt')))
@@ -29,6 +30,6 @@
                      target="_blank">Github</a>
             @endif
         </p>
+
     </div>
 </div>
-
