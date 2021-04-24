@@ -10,7 +10,7 @@
     <title>{{ isset($pageTitle) ? $pageTitle .' - ' : '' }}{{ env('APP_NAME', 'Education') }}</title>
     <link rel="stylesheet" type="text/css" href="{{ mix('css/bulma.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.1/moment-with-locales.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.1/moment-with-locales.min.js"></script>
     <script>
         const enableJira = {{ \App\Helper\JiraHelper::isEnabled() }};
         window.default_locale = "{{ config('app.locale') }}";
