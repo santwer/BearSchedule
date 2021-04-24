@@ -24,7 +24,7 @@
                         {{ env('APP_NAME', 'Projects') }}
                     </h1>
                     <h2 class="subtitle">
-                        {{ __('Project schedule') }}
+                        @lang('general.project_schedule')
                     </h2>
                 </div>
             </div>

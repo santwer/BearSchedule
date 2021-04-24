@@ -1,10 +1,10 @@
 <?php
 return [
-    'account' => 'Account',
-    'error' => 'Error',
+    'account' => 'Konto',
+    'error' => 'Fehler',
     'name' => 'Name',
-    'account_create_date' => 'Account Create Date',
-    'delete_account' => 'Delete Account',
-    'microsoft_account' => 'Microsoft Account',
-    'microsoft_account_service_info' => 'Some of your Informations are not ediable, because they got synchronized with the Microsoft Cloud Service.'
+    'account_create_date' => 'Erstelldatum Konto',
+    'delete_account' => 'Konto löschen',
+    'microsoft_account' => 'Microsoft Konto',
+    'microsoft_account_service_info' => 'Einige Informationen nicht zu bearbeiten, da sie mit dem Microsoft Cloud Service abgeglichen werden.'
 ];

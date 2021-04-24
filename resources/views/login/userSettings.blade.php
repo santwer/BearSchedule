@@ -62,7 +62,7 @@
 
                 <div class="column">
                     <b-field label="@lang('settings.account_create_date')">
-                        <b-input value="{{ $user->created_at }}" disabled></b-input>
+                        <b-input value="{{ $user->created_at->format(localeDateFormat(true)) }}" disabled></b-input>
                     </b-field>
 
 

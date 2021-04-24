@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Carbon\Carbon;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -29,6 +30,8 @@ class LocalizationMiddleware
 
             session(['locale' => $segment]);
             app()->setLocale($segment);
+            setlocale(LC_TIME, $segment);
+
         }
         return $next($request);
     }

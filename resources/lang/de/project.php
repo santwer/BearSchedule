@@ -1,6 +1,6 @@
 <?php
 return [
-    'timeline' => 'Zeitstrahl',
+    'timeline' => 'Timeline',
     'items' => 'Elemente',
     'groups' => 'Gruppen',
     'share' => 'Teilen',

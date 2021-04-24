@@ -21,3 +21,7 @@ function user_locale() : string
 
     return config('app.fallback_locale');
 }
+
+function localeDateFormat($time = false) {
+    return __('general.dateformat') . ($time ? ' H:i' : '');
+}

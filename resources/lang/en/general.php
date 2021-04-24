@@ -1,5 +1,6 @@
 <?php
 return [
+  'dateformat' => 'Y-m-d',
   'months' => [
       1 =>  'January',
       2 =>  'February',
