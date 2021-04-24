@@ -45,6 +45,7 @@
                             <b-input placeholder="{{ __('auth.password_new') }}"
                                      type="password"
                                      name="password"
+                                     autocomplete="new-password"
                                      icon="key">
                             </b-input>
                         </b-field>
@@ -54,6 +55,7 @@
                             <b-input placeholder="{{ __('auth.password_confirm') }}"
                                      type="password"
                                      name="password_confirmation"
+                                     autocomplete="new-password"
                                      icon="key">
                             </b-input>
                         </b-field>

@@ -94,11 +94,11 @@
                                          value="{{ old('option.jira_host', $settings->option('jira_host', 'value')) }}"></b-input>
                             </b-field>
                             <b-field label="@lang('project.jira.jira_user')">
-                                <b-input name="option[jira_user]" placeholder="jira-username"
+                                <b-input name="option[jira_user]" placeholder="jira-username" autocomplete="off"
                                          value="{{ old('option.jira_user', $settings->option('jira_user', 'value')) }}"></b-input>
                             </b-field>
                             <b-field label="@lang('project.jira.apitoken')">
-                                <b-input name="option[jira_password]" placeholder="jira-password" type="password"
+                                <b-input name="option[jira_password]" placeholder="jira-password" type="password" autocomplete="new-password"
                                          value="{{ old('option.jira_password', $settings->option('jira_password', 'value')) }}"></b-input>
                             </b-field>
                     @endif
