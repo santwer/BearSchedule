@@ -105,7 +105,7 @@
 
                     </div>
                     <div class="column">
-                        <project-users :users="{{ $settings->users }}"  role="{{ $role }}"></project-users>
+                        <project-users v-if="loadedLang" :users="{{ $settings->users }}"  role="{{ $role }}"></project-users>
                     </div>
                 </div>
                 @if($role == 'ADMIN')

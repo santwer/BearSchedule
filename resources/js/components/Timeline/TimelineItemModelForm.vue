@@ -2,7 +2,7 @@
     <form action="">
         <div class="modal-card" style="width: 900px;">
             <header class="modal-card-head">
-                <p class="modal-card-title">Item</p>
+                <p class="modal-card-title">{{ trans.get('project.item') }}</p>
                 <button
                     type="button"
                     class="delete"
@@ -10,12 +10,12 @@
             </header>
             <section class="modal-card-body">
                 <b-tabs>
-                    <b-tab-item label="Data">
+                    <b-tab-item :label="trans.get('project.timelines.item.data')">
                 <div class="columns">
                     <div class="column">
                         <b-field label="Group">
-                            <b-select placeholder="Select a group" v-model="item.group" required expanded>
-                                <option v-if="item.type === 'background'" :value="null">No Group</option>
+                            <b-select :placeholder="trans.get('project.timelines.item.select_group')" v-model="item.group" required expanded>
+                                <option v-if="item.type === 'background'" :value="null">{{ trans.get('project.timelines.item.no_group') }}</option>
                                 <option
                                     v-for="group in groups"
                                     :value="group.id"
@@ -24,77 +24,77 @@
                                 </option>
                             </b-select>
                         </b-field>
-                        <b-field label="Title">
+                        <b-field :label="trans.get('project.timeline_tables.columns.title')">
                             <b-input
                                 type="text"
                                 v-model="item.title"
-                                placeholder="Title">
+                                :placeholder="trans.get('project.timeline_tables.columns.title')">
                             </b-input>
                         </b-field>
-                        <b-field label="Subtitle">
+                        <b-field :label="trans.get('project.timeline_tables.columns.subtitle')">
                             <b-input
                                 type="text"
                                 v-model="item.subtitle"
-                                placeholder="Subtitle">
+                                :placeholder="trans.get('project.timeline_tables.columns.subtitle')">
                             </b-input>
                         </b-field>
 
-                        <b-field label="Content">
+                        <b-field :label="trans.get('project.timeline_tables.columns.content')">
                             <b-input type="textarea" v-model="item.description"></b-input>
                         </b-field>
                         <div class="buttons">
-                            <b-button size="is-small" icon-left="plus-thick" @click="addLink">Add Link</b-button>
+                            <b-button size="is-small" icon-left="plus-thick" @click="addLink">{{ trans.get('project.timelines.item.add_link')}}</b-button>
                             <div v-for="link in item.links" style="width: 100%;">
                                 <link-button editmode="true" :item="link"></link-button>
                             </div>
                         </div>
                     </div>
                     <div class="is-350">
-                        <b-field label="Start">
+                        <b-field :label="trans.get('project.timeline_tables.columns.start')">
                             <b-datepicker
-                                placeholder="Click to select..."
+                                :placeholder="trans.get('project.timelines.item.click_to_select')"
                                 v-model="item.start"
                                 icon="calendar-today"
                                 trap-focus>
                             </b-datepicker>
                         </b-field>
-                        <b-field label="End" v-if="item.type === 'range' || item.type === 'background'">
+                        <b-field :label="trans.get('project.timeline_tables.columns.end')" v-if="item.type === 'range' || item.type === 'background'">
                             <b-datepicker
-                                placeholder="Click to select..."
+                                :placeholder="trans.get('project.timelines.item.click_to_select')"
                                 v-model="item.end"
                                 icon="calendar-today"
                                 trap-focus>
                             </b-datepicker>
                         </b-field>
-                        <b-field label="Type">
-                            <b-select placeholder="Select a type" v-model="item.type" required expanded>
+                        <b-field :label="trans.get('project.timeline_tables.columns.type')">
+                            <b-select :placeholder="trans.get('project.timelines.item.select_type')" v-model="item.type" required expanded>
                                 <option
                                     v-for="type in types"
                                     :value="type.id"
                                     :key="type.id">
-                                    {{ type.text }}
+                                    {{ trans.get('project.timelines.item.types.' + type.id) }}
                                 </option>
                             </b-select>
                         </b-field>
-                        <b-field label="Status">
-                            <b-select placeholder="Select a Status" v-model="item.status" expanded>
+                        <b-field :label="trans.get('project.timelines.item.status')">
+                            <b-select :placeholder="trans.get('project.timelines.item.select_status')" v-model="item.status" expanded>
                                 <option
                                     v-for="status in stati"
                                     :value="status.id"
                                     :key="status.id">
-                                    {{ status.text }}
+                                    {{ trans.get('project.timelines.item.stati.' + status.id) }}
                                 </option>
                             </b-select>
                         </b-field>
                         <issue-search ref="issues" v-if="item.jira" :selected="item.jira"></issue-search>
-                        <b-field label="Color">
+                        <b-field :label="trans.get('project.timelines.item.color')">
                         <b-dropdown aria-role="list" expanded>
                             <button class="button is-fullwidth" slot="trigger" slot-scope="{ colorPickerActive }" type="button">
                                 <span class="previewColor" :style="getCurrentColorStyle()"></span><span>{{ getCurrentColorName() }}</span>
                                 <b-icon :icon="colorPickerActive ? 'menu-up' : 'menu-down'"></b-icon>
                             </button>
                             <b-dropdown-item v-for="color in colors" aria-role="listitem" @click="setColor(color)">
-                                <span class="previewColor" :style="color.style"></span> {{ color.name }}
+                                <span class="previewColor" :style="color.style"></span> {{ trans.get('project.timelines.item.colors.' + color.id) }}
                             </b-dropdown-item>
                         </b-dropdown>
                         </b-field>
@@ -103,8 +103,8 @@
 
                 </div>
                     </b-tab-item>
-                    <b-tab-item label="Tags" v-if="false">
-                        <b-field label="Enter some tags">
+                    <b-tab-item :label="trans.get('project.timelines.item.tags')" v-if="false">
+                        <b-field :label="trans.get('project.timelines.item.enter_tags')">
                             <b-taginput
                                 v-model="item.tags"
                                 :data="filteredTags"
@@ -113,24 +113,24 @@
                                 open-on-focus
                                 field="user.first_name"
                                 icon="label"
-                                placeholder="Add a tag"
+                                :placeholder="trans.get('project.timelines.item.add_tags')"
                                 @typing="getFilteredTags">
                             </b-taginput>
                         </b-field>
                     </b-tab-item>
-                    <b-tab-item label="Series"  v-if="false">
+                    <b-tab-item :label="trans.get('project.timelines.item.series')"  v-if="false">
                         <timeline-item-series :item="item"></timeline-item-series>
                     </b-tab-item>
                 </b-tabs>
             </section>
             <footer class="modal-card-foot">
-                <button class="button" type="button" @click="$emit('close')">Close</button>
+                <button class="button" type="button" @click="$emit('close')">{{ trans.get('general.close') }}</button>
                 <button class="button is-danger" type="button" v-if="item.id != null" @click="deleteEntry">
-                    Delete
+                    {{ trans.get('general.delete') }}
                 </button>
 
 
-                <button class="button is-primary delButton" type="button" @click="saveForm">Save</button>
+                <button class="button is-primary delButton" type="button" @click="saveForm">{{ trans.get('general.save') }}</button>
             </footer>
         </div>
     </form>
@@ -208,12 +208,12 @@
             },
             getCurrentColorName() {
                 if(typeof this.item.color === "undefined") {
-                    return this.getCurrentColorByStyle().name;
+                    return Vue.prototype.trans.get('project.timelines.item.colors.' + this.getCurrentColorByStyle().id);
                 }
                 if(typeof this.item.color.name === "undefined") {
-                    return 'Default';
+                    return Vue.prototype.trans.get('project.timelines.item.colors.default');
                 }
-                return this.item.color.name;
+                return  Vue.prototype.trans.get('project.timelines.item.colors.' + this.item.color.id);
             },
             getCurrentColorStyle() {
                 if(typeof this.item.color === "undefined") {
@@ -284,7 +284,7 @@
                     console.error('CSRF Meta not set. Update not possible');
                     this.$buefy.toast.open({
                         duration: 5000,
-                        message: `Save didn't work. Come back later.`,
+                        message: Vue.prototype.trans.get('project.timelines.messages.save_fail'),
                         type: 'is-danger'
                     });
                     this.$emit('close');
@@ -303,7 +303,7 @@
                     data: sendItem,
                     dataType: 'json'
                 }).done(function (data) {
-                    var msg = `Saved successfully`;
+                    var msg = Vue.prototype.trans.get('project.timelines.messages.save_success');
                     that.$buefy.toast.open(msg);
                     if(!window.UseWebSocketKouky) {
                         that.backup.start = that.item.start;
@@ -331,7 +331,7 @@
                         that.backup.style = data.data.style;
                     }
                 }).fail(function (data) {
-                    var msg = (typeof data.message !== "undefined") ? data.message : `Save didn't work. Come back later.`;
+                    var msg = (typeof data.message !== "undefined") ? data.message : Vue.prototype.trans.get('project.timelines.messages.save_fail');
                     that.$buefy.toast.open({
                         duration: 5000,
                         message: msg,
@@ -343,7 +343,7 @@
             deleteEntry: function () {
                 var that = this;
                 this.$buefy.dialog.confirm({
-                    message: 'You want to Delete this Item?',
+                    message: Vue.prototype.trans.get('project.timelines.messages.confirm_delete_item'),
                     onConfirm: function () {
                         $.ajax({
                             method: "DELETE",
@@ -351,14 +351,14 @@
                             data: that.item,
                             dataType: 'json'
                         }).done(function (data) {
-                            var msg = `Delete successfully`;
+                            var msg = Vue.prototype.trans.get('project.timelines.messages.delete_success');
                             that.$buefy.toast.open(msg);
                             if(!window.UseWebSocketKouky) {
                                 that.$parent.$parent.$parent.deleteItemInTimeLine(that.backup.id);
                             }
                             that.$emit('close');
                         }).fail(function (data) {
-                            var msg = (typeof data.responseJSON.message !== "undefined") ? data.responseJSON.message : `Delete didn't work. Come back later.`;
+                            var msg = (typeof data.responseJSON.message !== "undefined") ? data.responseJSON.message : Vue.prototype.trans.get('project.timelines.messages.delete_fail');
                             that.$buefy.toast.open({
                                 duration: 5000,
                                 message: msg,

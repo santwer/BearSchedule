@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use KgBot\LaravelLocalization\Facades\ExportLocalizations;
 
 class LocaleController extends Controller
 {
@@ -32,5 +33,22 @@ class LocaleController extends Controller
         if(in_array($request->segment(1), config('app.locales'))) {
             abort(404);
         }
+    }
+
+    public function getLocale()
+    {
+        return ExportLocalizations::export()->toFlat();
+        $array = ExportLocalizations::export()->toArray();
+        $return = [];
+        $return[config('app.fallback_locale')] = $array[config('app.fallback_locale')];
+        if (isset($array[user_locale()]) && config('app.fallback_locale') !== user_locale()) {
+            $return[user_locale()] = $array[user_locale()];
+        }
+        return response()->json($return);
+    }
+
+    private function full()
+    {
+
     }
 }

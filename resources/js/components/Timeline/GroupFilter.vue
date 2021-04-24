@@ -4,7 +4,7 @@
 
             <button class="button" slot="trigger">
                 <b-icon icon="filter" size="is-small" ></b-icon>
-                <span>Groups</span>
+                <span>{{ trans.get('project.groups') }}</span>
                 <b-icon :icon="activeMenu ? 'menu-up' : 'menu-down'"></b-icon>
             </button>
 
@@ -12,7 +12,7 @@
                 aria-role="menu-item"
                 :focusable="false"
                 custom>
-                <h5 class="subtitle is-6">Filter Groups</h5>
+                <h5 class="subtitle is-6">{{ trans.get('project.filter_groups') }}</h5>
                 <div v-for="option in options" class="field-dp">
                     <b-checkbox v-model="option.visible"
                                 true-value="1"

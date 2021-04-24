@@ -1,6 +1,7 @@
 <?php
 return [
     'timeline' => 'Timeline',
+    'item' => 'Item',
     'items' => 'Items',
     'groups' => 'Groups',
     'share' => 'Share',
@@ -24,6 +25,7 @@ return [
         'both' => 'both',
         'none' => 'none',
     ],
+    'zoom' => 'Zoom',
     'initial_zoom' => 'Initial Zoom',
     'zoom_timeline' => [
         'auto' => 'Auto',
@@ -37,4 +39,106 @@ return [
         'jira_user' => 'Jira Username',
         'apitoken'  => 'ApiToken',
     ],
+    'display_options' => [
+        'default' => 'Default',
+        'weekday' => 'weekday',
+        'week' => 'week',
+        'day' => 'day',
+        'month' => 'month',
+        'year' => 'year',
+    ],
+    'timeline_tables'=> [
+        'columns' => [
+            'id' => 'ID',
+            'title' => 'Title',
+            'content' => 'Content',
+            'subtitle' => 'Subtitle',
+            'type' => 'Type',
+            'start' => 'Start',
+            'end' => 'End',
+            'name' => 'Name',
+        ]
+    ],
+    'timelines' => [
+        'display' => 'Display',
+        'no_items' => 'No Items',
+        'no_items_message' => 'Since there a no Items, its not possible to show the timeline, yet. Please add Items and Groups first.',
+        'item' => [
+            'new' => 'Add Item',
+            'data' => 'Data',
+            'no_group' => 'No Group',
+            'select_group' => 'Select a group',
+            'add_link' => 'Add Link',
+            'select_type' => 'Select a type',
+            'status' => 'Status',
+            'select_status' => 'Select a Status',
+            'click_to_select' => 'Click to select...',
+            'color' => 'Color',
+            'tags' => 'Tags',
+            'enter_tags' => 'Enter some tags',
+            'add_tags' => 'Add a tag',
+            'series' => 'Series',
+            'types' => [
+                'box' => 'box',
+                'point' => 'point',
+                'range' => 'range',
+                'background' => 'background',
+            ],
+            'stati' => [
+                'DEFAULT' => 'Normal',
+                'DELAYED' => 'Delayed',
+                'CRITICAL' => 'Critical',
+                'TEST' => 'Test',
+                'DONE' => 'DONE',
+            ],
+            'colors' => [
+                'default' => 'Default',
+                '#d32f2f' => 'Red',
+                '#c2185b' => 'Pink',
+                '#7b1fa2' => 'Purple',
+                '#512da8' => 'Deep Purple',
+                '#303f9f' => 'Indigo',
+                '#1976d2' => 'Blue',
+                '#0288d1' => 'Light Blue',
+                '#0097a7' => 'Cyan',
+                '#00796b' => 'Teal',
+                '#388e3c' => 'Green',
+                '#689f38' => 'Light Green',
+                '#fbc02d' => 'Lime',
+                '#afb42b' => 'Yellow',
+                '#ffa000' => 'Amber',
+                '#f57c00' => 'Orange',
+                '#e64a19' => 'Deep Orang',
+                '#9e9e9e' => 'Grey',
+            ],
+
+        ],
+        'group' => [
+            'add' => 'Add Group',
+            'group' => 'Group',
+            'show_in_share' => 'show in Share',
+        ],
+        'messages' => [
+            'save_fail' => 'Save didn\'t work. Come back later.',
+            'save_success' => 'Saved successfully',
+            'delete_success' => 'Delete successfully',
+            'delete_fail' => 'Delete didn\'t work. Come back later.',
+            'confirm_delete_group' => 'You want to Delete this Group?',
+            'confirm_delete_item' => 'You want to Delete this Item?',
+        ],
+        'connection_status' => 'Connection status',
+    ],
+    'filter_groups' => 'Filter Groups',
+
+    'setting_users' => [
+        'name' => 'Name',
+        'email' => 'Email',
+        'add_user' => 'Add User',
+        'role' => 'Role',
+        'roles_option' => [
+            'ADMIN' => 'Admin',
+            'EDITOR' => 'Editor',
+            'SUBSCRIBER' => 'Subscriber'
+        ]
+    ]
 ];

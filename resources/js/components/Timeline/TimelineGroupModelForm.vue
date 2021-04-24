@@ -2,28 +2,28 @@
     <form action="">
         <div class="modal-card" style="width: 400px;">
             <header class="modal-card-head">
-                <p class="modal-card-title">Group</p>
+                <p class="modal-card-title">{{ trans.get('project.timelines.group.group') }}</p>
                 <button
                     type="button"
                     class="delete"
                     @click="$emit('close')"/>
             </header>
             <section class="modal-card-body">
-                <b-field label="Name">
+                <b-field :label="trans.get('project.timeline_tables.columns.name')">
                     <b-input
                         type="text"
                         v-model="item.content"
-                        placeholder="Title">
+                        :placeholder="trans.get('project.timeline_tables.columns.title')">
                     </b-input>
                 </b-field>
-                <b-field label="show in share">
+                <b-field :label="trans.get('project.timelines.group.show_in_share')">
                     <b-switch v-model="item.show_share">
-                        {{ item.show_share ? 'Yes' : 'No' }}
+                        {{ item.show_share ? trans.get('general.options.yes') : trans.get('general.options.no') }}
                     </b-switch>
                 </b-field>
-                <b-field label="Group">
-                    <b-select placeholder="Select a group" v-model="item.parent" expanded>
-                        <option :value="null">No Group</option>
+                <b-field :label="trans.get('project.timelines.group.group')">
+                    <b-select :placeholder="trans.get('project.timelines.item.select_group')" v-model="item.parent" expanded>
+                        <option :value="null">{{ trans.get('project.timelines.item.no_group') }}</option>
                         <option
                             v-for="group in groups"
                             :value="group.id"
@@ -34,9 +34,9 @@
                 </b-field>
             </section>
             <footer class="modal-card-foot">
-                <button class="button" type="button" @click="$emit('close')">Close</button>
-                <button class="button is-primary" type="button" @click="saveForm">Save</button>
-                <button class="button is-danger delButton" type="button" v-if="item.id != null" @click="deleteEntry">delete</button>
+                <button class="button" type="button" @click="$emit('close')">{{ trans.get('general.close') }}</button>
+                <button class="button is-primary" type="button" @click="saveForm">{{ trans.get('general.save') }}</button>
+                <button class="button is-danger delButton" type="button" v-if="item.id != null" @click="deleteEntry">{{ trans.get('general.delete') }}</button>
 
             </footer>
         </div>
@@ -79,7 +79,7 @@
                     console.error('CSRF Meta not set. Update not possible');
                     this.$buefy.toast.open({
                         duration: 5000,
-                        message: `Save didn't work. Come back later.`,
+                        message: Vue.prototype.trans.get('project.timelines.messages.save_fail'),
                         type: 'is-danger'
                     });
                     this.$emit('close');
@@ -94,7 +94,7 @@
                     data: that.item,
                     dataType: 'json'
                 }).done(function (data) {
-                    var msg = `Saved successfully`;
+                    var msg = Vue.prototype.trans.get('project.timelines.messages.save_success');
                     that.$buefy.toast.open(msg);
                     if(!window.UseWebSocketKouky) {
                         that.backup.content = that.item.content;
@@ -111,7 +111,7 @@
                         }
                     }
                 }).fail(function (data) {
-                    var msg = (typeof data.responseJSON.message !== "undefined") ? data.responseJSON.message : `Save didn't work. Come back later.`;
+                    var msg = (typeof data.responseJSON.message !== "undefined") ? data.responseJSON.message : Vue.prototype.trans.get('project.timelines.messages.save_fail');
                     that.$buefy.toast.open({
                         duration: 5000,
                         message: msg,
@@ -123,7 +123,7 @@
             deleteEntry: function () {
                 var that = this;
                 this.$buefy.dialog.confirm({
-                        message: 'You want to Delete this Group?',
+                        message: Vue.prototype.trans.get('project.timelines.messages.confirm_delete_group'),
                         onConfirm: function () {
                             $.ajax({
                                 method: "DELETE",
@@ -131,14 +131,14 @@
                                 data: that.item,
                                 dataType: 'json'
                             }).done(function (data) {
-                                var msg = `Delete successfully`;
+                                var msg = Vue.prototype.trans.get('project.timelines.messages.delete_success');
                                 that.$buefy.toast.open(msg);
                                 if(!window.UseWebSocketKouky) {
                                     that.$parent.$parent.$parent.deleteGroupInTimeLine(that.backup.id);
                                 }
                                 that.$emit('close');
                             }).fail(function (data) {
-                                var msg = (typeof data.responseJSON.message !== "undefined") ? data.responseJSON.message : `Delete didn't work. Come back later.`;
+                                var msg = (typeof data.responseJSON.message !== "undefined") ? data.responseJSON.message : Vue.prototype.trans.get('project.timelines.messages.delete_fail');
                                 that.$buefy.toast.open({
                                     duration: 5000,
                                     message: msg,

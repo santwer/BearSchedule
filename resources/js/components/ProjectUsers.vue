@@ -2,20 +2,20 @@
     <div>
         <b-table :data="userData">
             <template slot-scope="props">
-                <b-table-column field="name" label="Name" sortable>
+                <b-table-column field="name" :label="trans.get('project.setting_users.name')" sortable>
                     {{ props.row.name }}
                 </b-table-column>
-                <b-table-column field="email" label="Email" sortable>
+                <b-table-column field="email" :label="trans.get('project.setting_users.email')" sortable>
                     {{ props.row.email }}
                 </b-table-column>
-                <b-table-column field="pivot.role" label="Role" sortable>
+                <b-table-column field="pivot.role" :label="trans.get('project.setting_users.role')" sortable>
                     <b-select placeholder="Select a role" v-model="props.row.pivot.role" :disabled="role !== 'ADMIN'"
                               :name="inputName(props.row.id, 'role')">
                         <option
                             v-for="option in roles"
                             :value="option.id"
                             :key="option.id">
-                            {{ option.name }}
+                            {{ trans.get('project.setting_users.roles_option.' + option.id) }}
                         </option>
                     </b-select>
                 </b-table-column>
@@ -27,7 +27,7 @@
             </template>
         </b-table>
 
-        <ajax-search-input  v-if="role === 'ADMIN'" src="/ajax/autocomplete/User" headline="Add User" v-on:selectitem="addUser"></ajax-search-input>
+        <ajax-search-input  v-if="role === 'ADMIN'" src="/ajax/autocomplete/User" :headline="trans.get('project.setting_users.add_user')" v-on:selectitem="addUser"></ajax-search-input>
     </div>
 </template>
 

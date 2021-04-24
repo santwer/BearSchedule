@@ -9,6 +9,9 @@
     <title>@yield('title') - {{ env('APP_NAME', 'Education') }}</title>
     <link rel="stylesheet" type="text/css" href="{{ mix('css/bulma.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
+    <script>
+        localStorage.clear();
+    </script>
 </head>
 
 <body>

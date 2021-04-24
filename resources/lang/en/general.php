@@ -1,20 +1,20 @@
 <?php
 return [
-  'dateformat' => 'Y-m-d',
-  'months' => [
-      1 =>  'January',
-      2 =>  'February',
-      3 =>  'March',
-      4 =>  'April',
-      5 =>  'May',
-      6 =>  'June',
-      7 =>  'July',
-      8 =>  'August',
-      9 =>  'September',
-      10 =>  'Oktober',
-      11=>  'November',
-      12 =>  'December',
-  ],
+    'dateformat' => 'Y-m-d',
+    'months' => [
+        1 => 'January',
+        2 => 'February',
+        3 => 'March',
+        4 => 'April',
+        5 => 'May',
+        6 => 'June',
+        7 => 'July',
+        8 => 'August',
+        9 => 'September',
+        10 => 'Oktober',
+        11 => 'November',
+        12 => 'December',
+    ],
     'login' => 'Login',
     'logout' => 'Logout',
     'welcome' => 'Welcome :name',
@@ -31,6 +31,7 @@ return [
     'project' => 'Project',
     'projects' => 'Projects',
     'open' => 'Open',
+    'close' => 'Close',
 
     'dashboard' => [
         'news' => 'News',
@@ -44,12 +45,12 @@ return [
         'all_projects' => 'All Projects',
     ],
     'no_project' => [
-      'no_authorization' =>   'No Authorization',
-      'no_authorization_text' =>   'The project you want to display, is not in your authorization.',
+        'no_authorization' => 'No Authorization',
+        'no_authorization_text' => 'The project you want to display, is not in your authorization.',
     ],
 
-
-    'news' => 'News',
-    'news' => 'News',
-    'news' => 'News',
+    'options' => [
+        'yes' => 'Yes',
+        'no' => 'No',
+    ],
 ];

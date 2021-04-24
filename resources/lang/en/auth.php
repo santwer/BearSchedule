@@ -30,6 +30,7 @@ return [
     'if_you_did_not_receive_the_email' => 'If you did not receive the email',
     'click_here_to_request_another' => 'click here to request another',
     'verify_email_text_resent' => 'A fresh verification link has been sent to your email address.',
+    'test' => 'Test',
 
 
 ];

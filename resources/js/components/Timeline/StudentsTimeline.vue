@@ -5,7 +5,7 @@
                 <timeline-item-model ref="itemmodel" :project="project" v-if="canAddItems()"></timeline-item-model>
                 <timeline-group-model ref="groupmodel" :project="project" v-if="canAddItems()"></timeline-group-model>
 
-                <b-tooltip label="Connection status" v-if="isSocketConneted()">
+                <b-tooltip :label="trans.get('project.timelines.connection_status')" v-if="isSocketConneted()">
                     <b-icon v-if="isSocketConneted()"
                         :icon="socketConnectionIcon()"
                         size="is-small" style="padding: 0 0 10px;">
@@ -18,34 +18,34 @@
                 <b-dropdown aria-role="list" v-model="selectedOption">
                     <button class="button" slot="trigger" slot-scope="{ activeMenu }">
                         <b-icon icon="label-multiple-outline" size="is-small" ></b-icon>
-                        <span>Display</span>
+                        <span>{{ trans.get('project.timelines.display') }}</span>
                         <b-icon :icon="activeMenu ? 'menu-up' : 'menu-down'"></b-icon>
                     </button>
 
-                    <b-dropdown-item aria-role="listitem" value="default">Default</b-dropdown-item>
-                    <b-dropdown-item aria-role="listitem" value="weekday">weekday</b-dropdown-item>
-                    <b-dropdown-item aria-role="listitem" value="week">week</b-dropdown-item>
-                    <b-dropdown-item aria-role="listitem" value="day">day</b-dropdown-item>
-                    <b-dropdown-item aria-role="listitem" value="month">month</b-dropdown-item>
-                    <b-dropdown-item aria-role="listitem" value="year">year</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="default">{{ trans.get('project.timelines.default') }}</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="weekday">{{ trans.get('project.timelines.weekday') }}</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="week">{{ trans.get('project.timelines.week') }}</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="day">{{ trans.get('project.timelines.day') }}</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="month">{{ trans.get('project.timelines.month') }}</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="year">{{ trans.get('project.timelines.year') }}</b-dropdown-item>
                 </b-dropdown>
 
                 <b-dropdown aria-role="list" v-model="selectedZoom">
                     <button class="button is-float-right" slot="trigger" slot-scope="{ activeZoom }">
                         <b-icon icon="magnify-scan" size="is-small" ></b-icon>
-                        <span>Zoom</span>
+                        <span>{{ trans.get('project.zoom') }}</span>
                         <b-icon :icon="activeZoom ? 'menu-up' : 'menu-down'"></b-icon>
                     </button>
-                    <b-dropdown-item aria-role="listitem" value="day">day</b-dropdown-item>
-                    <b-dropdown-item aria-role="listitem" value="week">week</b-dropdown-item>
-                    <b-dropdown-item aria-role="listitem" value="month">month</b-dropdown-item>
-                    <b-dropdown-item aria-role="listitem" value="year">year</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="day">{{ trans.get('project.zoom_timeline.day') }}</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="week">{{ trans.get('project.zoom_timeline.week') }}</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="month">{{ trans.get('project.zoom_timeline.month') }}</b-dropdown-item>
+                    <b-dropdown-item aria-role="listitem" value="year">{{ trans.get('project.zoom_timeline.year') }}</b-dropdown-item>
                 </b-dropdown>
 
             </div>
 
-            <b-message title="No Items" v-if="MsgIsActive" aria-close-label="Close message" style="margin-top: 50px;">
-                Since there a no Items, its not possible to show the timeline, yet. Please add Items and Groups first.
+            <b-message :title="trans.get('project.timelines.no_items')" v-if="MsgIsActive" aria-close-label="Close message" style="margin-top: 50px;">
+                {{ trans.get('project.timelines.no_items_message') }}
             </b-message>
             <timeline ref="timeline"
                       v-if="!MsgIsActive"
@@ -71,7 +71,6 @@
     import GroupFilter from "./GroupFilter";
 
     const Handlebars = require("handlebars");
-
     export default {
         name: "StudentsTimeline",
         props: ['project', 'role', 'datapath'],
@@ -90,6 +89,7 @@
                 MsgIsActive: false,
                 options: {
                     editable: false,
+                    locale: Vue.prototype.trans.getLocale(),
                 },
                 activeMenu: false,
                 activeZoom: false,
@@ -223,6 +223,9 @@
                             return a.start > b.start;
                         };
 
+                    }
+                    if(typeof Vue.prototype.trans !== "undefined" && Vue.prototype.trans.getLocale()) {
+                        that.options.locale = Vue.prototype.trans.getLocale();
                     }
 
                     that.dummeLoop = true;
@@ -456,6 +459,7 @@
                 }
             });
             this.getData();
+
         }
     }
 </script>

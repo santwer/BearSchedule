@@ -31,6 +31,7 @@ return [
     'project' => 'Projekt',
     'projects' => 'Projekte',
     'open' => 'Öffnen',
+    'close' => 'Schließen',
 
     'dashboard' => [
         'news' => 'Neuigkeiten',
@@ -48,5 +49,8 @@ return [
       'no_authorization_text' =>   'Das Projekt, das Sie anzeigen möchten, befindet sich nicht in Ihrer Berechtigung. ',
     ],
     'news' => 'Neuigkeiten',
-
+    'options' => [
+        'yes' => 'Ja',
+        'no' => 'Nein',
+    ],
 ];

@@ -1,6 +1,6 @@
 <template>
     <section>
-        <b-button icon-left="plus-thick" @click="openModalNew" class="is-inverted">Add Group</b-button>
+        <b-button icon-left="plus-thick" @click="openModalNew" class="is-inverted">{{ trans.get('project.timelines.group.add') }}</b-button>
     </section>
 </template>
 
