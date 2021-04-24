@@ -45,7 +45,7 @@ if (localStorage.getItem('localization') !== null) {
     Vue.prototype.trans = new Lang({messages, locale: default_locale, fallback: fallback_locale});
         Content.setTableCols();
 } else {
-    $.get('/json/localization.json', (messages) => {
+    $.get('/json/localization', (messages) => {
         localStorage.setItem('localization', messages)
         Vue.prototype.trans.setMessages(messages);
         Content.setTableCols();

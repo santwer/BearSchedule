@@ -19,7 +19,7 @@ use \App\Http\Controllers\Auth\LoginMSController;
 */
 
 //middleware('localization')
-Route::get('json/localization.json', [\App\Http\Controllers\LocaleController::class, 'getLocale']);
+Route::get('json/localization', [\App\Http\Controllers\LocaleController::class, 'getLocale']);
 Route::middleware(['auth'])->group(function () {
     Route::group(['prefix' => 'ajax/'], function () {
         Route::group(['prefix' => 'timeline/'], function () {

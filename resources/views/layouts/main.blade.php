@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.1/moment-with-locales.min.js"></script>
     <script>
-        const enableJira = {{ \App\Helper\JiraHelper::isEnabled() }};
+        const enableJira = {{ \App\Helper\JiraHelper::isEnabled() ? 'true' : 'false' }};
         window.default_locale = "{{ config('app.locale') }}";
         window.fallback_locale = "{{ config('app.fallback_locale') }}";
     </script>
