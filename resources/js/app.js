@@ -39,18 +39,21 @@ if (window.KoukyWebSocket) {
 const default_locale = window.default_language;
 const fallback_locale = window.fallback_locale;
 const defaultmessages = {};
-Vue.prototype.trans = new Lang({defaultmessages, locale: default_locale, fallback: fallback_locale});
-if (localStorage.getItem('localization') !== null) {
-    const messages = localStorage.getItem('localization');
-    Vue.prototype.trans = new Lang({messages, locale: default_locale, fallback: fallback_locale});
-        Content.setTableCols();
-} else {
-    $.get('/json/localization', (messages) => {
-        localStorage.setItem('localization', messages)
-        Vue.prototype.trans.setMessages(messages);
-        Content.setTableCols();
-    });
-}
+// Vue.prototype.trans = new Lang({defaultmessages, locale: default_locale, fallback: fallback_locale});
+// if (localStorage.getItem('localization') !== null) {
+//     const messages = localStorage.getItem('localization');
+//     Vue.prototype.trans = new Lang({messages, locale: default_locale, fallback: fallback_locale});
+//         Content.setTableCols();
+// } else {
+//     $.get('/json/localization', (messages) => {
+//         localStorage.setItem('localization', messages)
+//         Vue.prototype.trans.setMessages(messages);
+//         Content.setTableCols();
+//     });
+// }
+
+const messages = window.messages;
+Vue.prototype.trans = new Lang({messages, locale: default_locale, fallback: fallback_locale});
 
 const Content = new Vue({
     el: '#content',

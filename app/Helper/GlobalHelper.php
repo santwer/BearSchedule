@@ -1,5 +1,7 @@
 <?php
 
+use KgBot\LaravelLocalization\Facades\ExportLocalizations;
+
 function locale_route($name, $parameters = [], $absolute = true)
 {
     // team() returns a team object
@@ -24,4 +26,9 @@ function user_locale() : string
 
 function localeDateFormat($time = false) {
     return __('general.dateformat') . ($time ? ' H:i' : '');
+}
+
+function getTranslatationMessages()
+{
+    return ExportLocalizations::export()->toFlat();
 }

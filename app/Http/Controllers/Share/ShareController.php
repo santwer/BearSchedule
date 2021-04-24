@@ -20,7 +20,7 @@ class ShareController extends Controller
         }
 
         $pageTitle = $this->project->name;
-        $messages = ExportLocalizations::export()->toFlat();
+        $messages = getTranslatationMessages();
 
         return response()->view('share.index', compact('unique', 'pageTitle', 'messages'));
     }
