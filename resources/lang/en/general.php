@@ -3,6 +3,7 @@ return [
     'dateformat' => 'Y-m-d',
     'language' => 'language',
     'language_own' => 'English',
+    'bcp47' => 'en-US',
     'months' => [
         1 => 'January',
         2 => 'February',

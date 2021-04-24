@@ -54,15 +54,23 @@
                             <b-datepicker
                                 :placeholder="trans.get('project.timelines.item.click_to_select')"
                                 v-model="item.start"
+                                :show-week-number="true"
+                                :first-day-of-week="1"
                                 icon="calendar-today"
+                                :locale="trans.get('general.bcp47')"
+
                                 trap-focus>
                             </b-datepicker>
                         </b-field>
                         <b-field :label="trans.get('project.timeline_tables.columns.end')" v-if="item.type === 'range' || item.type === 'background'">
                             <b-datepicker
                                 :placeholder="trans.get('project.timelines.item.click_to_select')"
+                                :locale="trans.get('general.bcp47')"
                                 v-model="item.end"
+                                :first-day-of-week="1"
+                                :show-week-number="true"
                                 icon="calendar-today"
+                                editable
                                 trap-focus>
                             </b-datepicker>
                         </b-field>

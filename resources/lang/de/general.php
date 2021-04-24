@@ -3,6 +3,7 @@ return [
   'dateformat' => 'd.m.Y',
   'language' => 'Sprache',
   'language_own' => 'Deutsch',
+  'bcp47' => 'de-DE',
   'months' => [
       1 =>  'Januar',
       2 =>  'Feburar',
