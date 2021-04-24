@@ -36,7 +36,7 @@ class Timeline extends BaseService
         } else {
             $items = $items->with('links')->get();
         }
-        if(JiraHelper::isEnabled()) {
+        if(JiraHelper::isEnabled($projectId)) {
             return JiraHelper::addIssuesToItems($items);
         }
         return $items;

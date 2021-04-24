@@ -10,9 +10,21 @@ use JiraRestApi\JiraException;
 
 class JiraHelper
 {
-    public static function isEnabled(): bool
+    public static function isEnabled(int $projectId = null): bool
     {
         $enabled = env('ENABLE_JIRA', false);
+        if(is_bool($enabled) && $projectId != null) {
+            $jiraLogin = ProjectOptionsHelper::get($projectId, [
+                'jira_host', 'jira_user', 'jira_password'
+            ]);
+            if (
+                empty($jiraLogin) ||
+                empty($jiraLogin['jira_host']) ||
+                empty($jiraLogin['jira_user']) ||
+                empty($jiraLogin['jira_password'])
+            )
+                return false;
+        }
         if (is_bool($enabled)) {
             return $enabled;
         }
