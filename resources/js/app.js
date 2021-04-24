@@ -38,20 +38,21 @@ if (window.KoukyWebSocket) {
 }
 const default_locale = window.default_language;
 const fallback_locale = window.fallback_locale;
-const defaultmessages = {};
-Vue.prototype.trans = new Lang({defaultmessages, locale: default_locale, fallback: fallback_locale});
+const messages = window.messages;
+//const defaultmessages = {};
+Vue.prototype.trans = new Lang({messages, locale: default_locale, fallback: fallback_locale});
 
-if (localStorage.getItem('localization') !== null && false) {
-    const messages = localStorage.getItem('localization');
-    console.log('test', messages)
-    Vue.prototype.trans = new Lang({messages, locale: default_locale, fallback: fallback_locale});
-} else {
-    $.get('/json/localization', (messages) => {
-        localStorage.setItem('localization', messages)
-        Vue.prototype.trans.setMessages(messages);
-        Content.setTableCols();
-    });
-}
+// if (localStorage.getItem('localization') !== null && false) {
+//     const messages = localStorage.getItem('localization');
+//     console.log('test', messages)
+//     Vue.prototype.trans = new Lang({messages, locale: default_locale, fallback: fallback_locale});
+// } else {
+//     $.get('/json/localization', (messages) => {
+//         localStorage.setItem('localization', messages)
+//         Vue.prototype.trans.setMessages(messages);
+//         Content.setTableCols();
+//     });
+// }
 
 
 const Content = new Vue({
