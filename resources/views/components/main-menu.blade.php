@@ -13,6 +13,7 @@
             tag="a" href="{{ locale_route('project.open', ['project' => $project->id]) }}"></b-menu-item>
         @endforeach
     </b-menu-list>
+    <div style="height: 72px;"></div>
     <div class="bs-footer">
         <p class="has-text-grey">
         &copy; {{ env('APP_NAME', 'BearSchedule') }}, {{ \Illuminate\Support\Facades\Date::now()->year }}
