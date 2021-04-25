@@ -92,7 +92,8 @@ return [
                 'DONE' => 'FERTIG',
             ],
             'colors' => [
-                'default' => 'Default',
+                'undefined' => 'Standard',
+                'default' => 'Standard',
                 '#d32f2f' => 'Rot',
                 '#c2185b' => 'Pink',
                 '#7b1fa2' => 'Lila',

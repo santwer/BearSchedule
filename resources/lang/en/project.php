@@ -92,6 +92,7 @@ return [
                 'DONE' => 'DONE',
             ],
             'colors' => [
+                'undefined' => 'Default',
                 'default' => 'Default',
                 '#d32f2f' => 'Red',
                 '#c2185b' => 'Pink',
