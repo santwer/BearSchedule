@@ -4,9 +4,15 @@
     <b-tabs position="is-right" class="block own-block" v-model="activeTabProject"
             data-tab="{{ isset($activeTab) ? $activeTab : 'timeline' }}" ref="projecttab">
         <b-tab-item label="@lang('project.timeline')" value="timeline" class="tab-timeline">
-
+            <div class="timelineframe">
             <students-timeline project="{{$project}}" role="{{ $role }}" datapath="/ajax/timeline/getdata"  ref="sttimeline"></students-timeline>
-
+            </div>
+            <div class="timelineframe-mobil">
+                <b-message type="is-warning">
+                    @lang('project.mobil-display-message')
+                    @lang('project.mobil-display-message-recommend')
+                </b-message>
+            </div>
         </b-tab-item>
         <b-tab-item label="@lang('project.items')" value="items">
             <edit-table :data="{{ $items }}" :columns="itemColumns" @click="clickItems"></edit-table>

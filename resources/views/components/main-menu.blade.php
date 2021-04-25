@@ -1,4 +1,4 @@
-<div class="is-280 main-menu" id="main-menu" v-if="showMenu">
+<div class="is-280 main-menu" v-bind:class="{ visible: showMenu }" id="main-menu">
 
     <b-menu-list label="@lang('menu.menu')">
     <b-menu-item icon="information-outline" label="@lang('menu.home')" tag="a" href="{{ locale_route('home') }}"></b-menu-item>

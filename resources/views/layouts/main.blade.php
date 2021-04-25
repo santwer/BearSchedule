@@ -52,6 +52,7 @@
 <section class="hero" id="content">
     @section('pre-content')
     @show
+   <div class="menu-button-hide-show"><b-button v-on:click="showMenu = !showMenu"><b-icon icon="menu-open"></b-icon> </b-button></div>
     <div class="correct-hero">
         <div class="columns">
             <x-main-menu projectid="{{isset($project) ? $project : 0 }}"></x-main-menu>

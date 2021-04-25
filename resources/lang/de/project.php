@@ -140,5 +140,7 @@ return [
             'EDITOR' => 'Editor',
             'SUBSCRIBER' => 'Abonnent'
         ]
-    ]
+    ],
+    'mobil-display-message' => 'Projekte sind nicht darstellbar auf Mobiltelefonen. Versuche das Gerät horizontal zu verwenden oder benutze ein Tablet oder PC.',
+    'mobil-display-message-recommend' => 'Wir empfehlen eine Auflösung von mindestens 900px breite.',
 ];

@@ -155,3 +155,51 @@ dark 4a0072
         }
     }
 }
+.menu-button-hide-show {
+    display: none;
+}
+.timelineframe-mobil {
+    display: none;
+}
+@media screen and (max-width: 1200px) {
+    .main-menu {
+        display: none;
+        &.visible {
+            display: block;
+            position: absolute;
+            z-index: 10000;
+            background-color: #f5f6f8;
+            box-shadow: 10px 0 5px rgba(0,0,0,0.2);
+        }
+    }
+    .menu-button-hide-show {
+        display: block;
+        z-index: 10000;
+        .button {
+            background-color: transparent;
+            border-color: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            position: absolute;
+            top: 60px;
+            left: 5px;
+            &:hover {
+                background-color: #1870c7;
+                border-color: transparent;
+                color: #ffffff;
+            }
+        }
+    }
+}
+@media screen and (max-width: 600px) {
+    .tab-timeline  {
+        .timelineframe {
+            display: none;
+        }
+        .timelineframe-mobil {
+            display: block;
+        }
+    }
+}
+
+
+

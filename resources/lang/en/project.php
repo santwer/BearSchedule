@@ -141,5 +141,7 @@ return [
             'EDITOR' => 'Editor',
             'SUBSCRIBER' => 'Subscriber'
         ]
-    ]
+    ],
+    'mobil-display-message' => 'Projects are not displayable on Phones. Try to use your device horizontal or use an Tablet or PC.',
+    'mobil-display-message-recommend' => 'Recommended is at least 900px screen width.',
 ];

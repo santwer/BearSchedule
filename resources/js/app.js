@@ -70,7 +70,7 @@ const Content = new Vue({
     data: {
         loadedLang: false,
         activeTabProject: 'timeline',
-        showMenu: true,
+        showMenu: false,
         sharelink: '',
         projectId: null,
         shareswitch: true,
