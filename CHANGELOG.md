@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 - Localization with language files 
 - Load Localization json in local.storage
 - add Language-Select
+- add to hide menu in mobile view
+- disable timeline for screen < 600px with warning
 ### Changed
 - [Fixed] fix show items in share with group = null
 - [Fixed] remove Parent-Group on Group mask
