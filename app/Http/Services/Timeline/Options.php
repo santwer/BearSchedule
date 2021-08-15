@@ -27,7 +27,8 @@ class Options extends BaseService
             'minHeight' => '550px',
             'groupEditable' => $this->getGroupEditable(),
             'groupTemplate' => $this->getGroupTemplate(),
-            'groupOrder' => $this->getGroupOrder($project_id)
+            'groupOrder' => $this->getGroupOrder($project_id),
+            'margin.item.vertical' => $this->getGroupMargin()
         ];
         foreach ($projectOptions as $option) {
             if (in_array($option->option, $this->ignoreOptions) && $isTimeline) {
@@ -42,6 +43,11 @@ class Options extends BaseService
         if (! isset($this->options['template'])) {
             $this->options['template'] = Handlebars::get('timeline.item.standard');
         }
+    }
+
+    private function getGroupMargin()
+    {
+        return 55;
     }
 
     public function get($option = null): array
@@ -76,9 +82,8 @@ class Options extends BaseService
         return [
             'add' => false,
             'remove' => false,
-            //$role === 'ADMIN' || $role === 'EDITOR'
-            'updateTime' => false,
-            'updateGroup' => false,
+            'updateTime' => ($this->role === 'ADMIN' || $this->role === 'EDITOR'),
+            'updateGroup' => ($this->role === 'ADMIN' || $this->role === 'EDITOR'),
         ];
     }
 
