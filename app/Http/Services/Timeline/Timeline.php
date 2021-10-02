@@ -11,6 +11,7 @@ use App\Models\Timeline\Group;
 use App\Models\Timeline\Item;
 use App\Models\Timeline\ItemLink;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use PhpOption\Option;
 use Ramsey\Uuid\Uuid;
@@ -24,15 +25,24 @@ class Timeline extends BaseService
         return $options->get();
     }
 
-    public function getItems(int $projectId, bool $share = false)
+    public function getItems(int $projectId, bool $share = false, ?Carbon $rangeStart = null, ?Carbon $rangeEnd = null)
     {
-            $items = Item::where('project_id', $projectId)->orderBy('start')->orderBy('id');
+
+        $items = Item::where('project_id', $projectId)->orderBy('start')->orderBy('id')
+            ->where(function ($where) use($rangeStart, $rangeEnd) {
+            if($rangeStart && $rangeEnd) {
+                $where->whereBetween('start', [$rangeStart, $rangeEnd]);
+                $where->orWhereBetween('end', [$rangeStart, $rangeEnd]);
+            }
+        });
         if($share) {
-            $items = $items->with(['links', 'goups'])->where(function ($where) {
+            $items = $items->with(['links', 'goups'])
+                ->where(function ($where) {
                 $where->whereHas('goups', function ($goups) {
                     $goups->where('show_share', 1);
                 })->orWhereNull('group');
-            })->get();
+            })
+                ->get();
         } else {
             $items = $items->with('links')->get();
         }

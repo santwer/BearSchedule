@@ -69,6 +69,7 @@
     import TimelineGroupModel from "./TimelineGroupModel";
     import TimelineItemShowModel from "./TimelineItemShowModel";
     import GroupFilter from "./GroupFilter";
+    import TimelineItemsCollector from "../../Service/TimelineItemsCollector";
 
     const Handlebars = require("handlebars");
     export default {
@@ -103,6 +104,18 @@
             }
         },
         methods: {
+            onItemMove: function (item, callback) {
+                let orgItem = this.items.find(x => x.id === item.id);
+                orgItem.start = item.start;
+                orgItem.end = item.end;
+                $.ajax({
+                    method: "PUT",
+                    url: "/ajax/timeline/item",
+                    data: orgItem,
+                    dataType: 'json'
+                })
+                callback(item);
+            },
             canAddItems: function () {
                 return this.role === 'ADMIN' || this.role === 'EDITOR';
             },
@@ -223,6 +236,7 @@
                             return a.start > b.start;
                         };
 
+                        that.options.onMove = that.onItemMove;
                     }
                     if(typeof Vue.prototype.trans !== "undefined" && Vue.prototype.trans.getLocale()) {
                         that.options.locale = Vue.prototype.trans.getLocale();
@@ -243,9 +257,9 @@
                 } else if (e.group !== null && e.item === null && e.x < 0) {
                     this.groupDpClick(e.group);
                 } else if (e.group !== null && e.what === 'background' && typeof e.target !== "undefined") {
-                    console.log('dp bg', e);
+                   // console.log('dp bg', e);
                 } else {
-                    console.log('dp', e);
+                //    console.log('dp', e);
                 }
             },
             itemDpClick: function (itemId) {
@@ -286,7 +300,6 @@
             },
             deleteItemInTimeLine: function (id) {
                 var item = this.findObjectInArrayByProperty(this.items, 'id', id);
-                console.log(item)
                 const index = this.items.indexOf(item);
                 if (index > -1) {
                     this.items.splice(index, 1);
@@ -349,10 +362,11 @@
                 var lastday = new Date(year, month, day, 23, 59);
                 return [firstday, lastday];
             },
-            rangeChange: function () {
+            rangeChange: function (e) {
+                (new TimelineItemsCollector).get();
                 this.selectedZoom = null;
             },
-            setTimeAxisOption: function (value) {
+            setTimeAxisOption: function (tivalue) {
                 if (value !== 'default') {
                     this.options.timeAxis = {
                         scale: value,
@@ -450,6 +464,7 @@
             }
         },
         mounted() {
+            (new TimelineItemsCollector).set();
             if (typeof this.datapath !== "undefinded") {
                 this.getPath = this.datapath;
             }

@@ -63,6 +63,7 @@
                 </div>
 
                 <div class="column">
+                    <img src="{{ auth()->user()->avatarUrl }}" />
                     <b-field label="@lang('settings.account_create_date')">
                         <b-input value="{{ $user->created_at->format(localeDateFormat(true)) }}" disabled></b-input>
                     </b-field>

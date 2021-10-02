@@ -74,4 +74,10 @@ class User extends Authenticatable
     {
         return $this->projects()->where('project_id', $id)->first() !== null;
     }
+
+    public function getAvatarUrlAttribute() :string
+    {
+        $hash = md5($this->id);
+        return 'https://www.gravatar.com/avatar/' . $hash . '?f=y&d='.env('GRAVATAR_ICON', 'robohash');
+    }
 }
