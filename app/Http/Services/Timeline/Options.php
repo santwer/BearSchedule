@@ -47,7 +47,7 @@ class Options extends BaseService
 
     private function getGroupMargin()
     {
-        return 55;
+        return 10;
     }
 
     public function get($option = null): array
