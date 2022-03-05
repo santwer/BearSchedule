@@ -39,7 +39,7 @@
         "lang.js": "^1.1.14",
         "material-design-icons": "^3.0.1",
         "moment": "^2.29.1",
-        "node-forge": ">=0.10.0",
+        "node-forge": ">=1.0.0",
         "object-path": ">=0.11.8",
         "vue": "^2.6.11",
         "vue-chartjs": "^3.5.1",
