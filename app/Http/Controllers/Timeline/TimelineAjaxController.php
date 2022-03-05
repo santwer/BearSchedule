@@ -145,12 +145,20 @@ class TimelineAjaxController extends Controller
 
     public function setGroup(Request $request)
     {
-        if (! $request->has('content') || empty($request->get('content'))) {
+        if ((! $request->has('content') || empty($request->get('content'))) && $request->get('has_subproject') == "false") {
             return response()->ajax(null, 'Name not set.', 400);
         }
+        if($request->get('has_subproject') != 'false' && (! $request->has('subproject') || empty($request->get('subproject')))) {
+            return response()->ajax(null, 'Project not set.', 400);
+        }
         $request->merge([
-            'title' => $request->get('content'),
+            'title' => $request->get('has_subproject') != 'false' ? 'Project' : $request->get('content'),
         ]);
+        if($request->get('has_subproject') != 'false') {
+            $request->merge([
+                'content' =>  'Project',
+            ]);
+        }
         if (! $request->has('project_id')) {
             return response()->ajax(null, 'Id not set', 400);
         }

@@ -39,8 +39,11 @@ class ProjectController extends Controller
         $items = Item::where('project_id', $project)->get();
         $role = $this->getRoleInProject($project);
         $logdata = ProjectLog::where('project_id', $project)->orderBy('updated_at', 'DESC')->get();
+        $select_projects = auth()->user()->projects()->where('project_id', '!=', $project)->get();
 
-        $this->viewVariables = array_merge(compact('project', 'items', 'groups', 'settings', 'role', 'pageTitle', 'logdata'), $this->viewVariables);
+
+        $this->viewVariables = array_merge(compact('project', 'items', 'groups', 'settings', 'role', 'pageTitle', 'logdata', 'select_projects'),
+            $this->viewVariables);
 
 
         return view('login.project', $this->viewVariables);

@@ -8,7 +8,7 @@
     import TimelineGroupModelForm from "./TimelineGroupModelForm";
     export default {
         name: "TimelineGroupModel",
-        props: ['project'],
+        props: ['project', 'projects'],
         components: {
             TimelineGroupModelForm,
         },
@@ -25,6 +25,8 @@
                     parent: null,
                     project_id: this.project,
                     show_share: true,
+                    subproject: null,
+                    has_subproject: false,
                     visible: 1,
                 };
                 this.$emit('addItem', this.setItem)
@@ -40,7 +42,8 @@
                     parent: this,
                     component: TimelineGroupModelForm,
                     props: {
-                        setItem: that.setItem
+                        setItem: that.setItem,
+                        projects: that.projects,
                     },
                     distroyOnHide: false,
                     hasModalCard: true,

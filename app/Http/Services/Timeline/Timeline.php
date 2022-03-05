@@ -59,24 +59,44 @@ class Timeline extends BaseService
             if($share) {
                 $nestedGroups->where('show_share', 1);
             }
-        } ])->where('project_id', $project)->where(function ($where) use($share) {
+        }, 'subprojectGroups'])->where('project_id', $project)
+        ->where(function ($where) use($share) {
             if($share) {
                 $where->where('show_share', true);
             }
-        })->orderBy('order')->orderBy('id')->get();
+        })->orderBy('order')->orderBy('id')
+            ->get();
         $order = 0;
+        $subprojects = $groups->where('subproject', '!=', null)->pluck('subproject');
+
         foreach($groups as $i => $group)
         {
             $var = $group->nestedgroups->map(function ($nested) {
                 return $nested->id;
             });
+            $var2 = $group->subprojectGroups->map(function ($nested) {
+                return $nested->id;
+            });
+            if ($var->count() > 0 && $var2->count() > 0)
+                $var = $var2->merge($var);
+            elseif ($var2->count() > 0)
+                $var = $var2;
+
             if($group->order === null) {
                 $group->order = $order;
             }
             $order = $order + 1;
             unset($group->nestedgroups);
+            unset($group->subprojectGroups);
             if (!$var->isEmpty()) $group->nestedGroups = $var;
             $groups[$i] = $group;
+        }
+        if($subprojects->count() > 0)
+        {
+            foreach($subprojects as $subproject) {
+                 $groups->merge($this->getGroups($subproject, $share));
+            }
+
         }
 
         return $groups;

@@ -118,6 +118,8 @@ return [
             'add' => 'Add Group',
             'group' => 'Group',
             'show_in_share' => 'show in Share',
+            'use_project' => 'Use other Project as Group',
+            'select_project' => 'Select a Project',
         ],
         'messages' => [
             'save_fail' => 'Save didn\'t work. Come back later.',

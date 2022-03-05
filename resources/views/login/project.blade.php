@@ -5,7 +5,7 @@
             data-tab="{{ isset($activeTab) ? $activeTab : 'timeline' }}" ref="projecttab">
         <b-tab-item label="@lang('project.timeline')" value="timeline" class="tab-timeline">
             <div class="timelineframe">
-            <students-timeline project="{{$project}}" role="{{ $role }}" datapath="/ajax/timeline/getdata"  ref="sttimeline"></students-timeline>
+            <students-timeline project="{{$project}}" role="{{ $role }}" :projects="{{ $select_projects }}" datapath="/ajax/timeline/getdata"  ref="sttimeline"></students-timeline>
             </div>
             <div class="timelineframe-mobil">
                 <b-message type="is-warning">

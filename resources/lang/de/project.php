@@ -118,6 +118,8 @@ return [
             'add' => 'Gruppe',
             'group' => 'Gruppe',
             'show_in_share' => 'beim Teilen anzeigen',
+            'use_project' => 'Anderes Projekt als Gruppe nutzen',
+            'select_project' => 'Wähle ein Projekt',
         ],
         'messages' => [
             'save_fail' => 'Speichern ist fehlgeschlagen. Versuche es später erneut.',

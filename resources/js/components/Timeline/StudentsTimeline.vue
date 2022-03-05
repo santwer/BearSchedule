@@ -3,7 +3,7 @@
         <div v-if="dummeLoop" ref="fullline" id="currentContentTime">
             <div class="buttons topbtns">
                 <timeline-item-model ref="itemmodel" :project="project" v-if="canAddItems()"></timeline-item-model>
-                <timeline-group-model ref="groupmodel" :project="project" v-if="canAddItems()"></timeline-group-model>
+                <timeline-group-model ref="groupmodel" :project="project" :projects="projects" v-if="canAddItems()"></timeline-group-model>
 
                 <b-tooltip :label="trans.get('project.timelines.connection_status')" v-if="isSocketConneted()">
                     <b-icon v-if="isSocketConneted()"
@@ -74,7 +74,7 @@
     const Handlebars = require("handlebars");
     export default {
         name: "StudentsTimeline",
-        props: ['project', 'role', 'datapath'],
+        props: ['project', 'role', 'datapath', 'projects'],
         components: {
             GroupFilter,
             TimelineGroupModel,
@@ -464,6 +464,7 @@
             }
         },
         mounted() {
+
             (new TimelineItemsCollector).set();
             if (typeof this.datapath !== "undefinded") {
                 this.getPath = this.datapath;
@@ -474,7 +475,7 @@
                 }
             });
             this.getData();
-
+            console.log('test', this.projects)
         }
     }
 </script>

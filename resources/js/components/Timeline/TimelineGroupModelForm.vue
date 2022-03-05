@@ -9,12 +9,27 @@
                     @click="$emit('close')"/>
             </header>
             <section class="modal-card-body">
-                <b-field :label="trans.get('project.timeline_tables.columns.name')">
+                <b-field>
+                    <b-checkbox v-model="item.has_subproject">
+                        {{ trans.get('project.timelines.group.use_project') }}
+                    </b-checkbox>
+                </b-field>
+                <b-field :label="trans.get('project.timeline_tables.columns.name')" v-if="!item.has_subproject">
                     <b-input
                         type="text"
                         v-model="item.content"
                         :placeholder="trans.get('project.timeline_tables.columns.title')">
                     </b-input>
+                </b-field>
+                <b-field :label="trans.get('general.project')"  v-else>
+                    <b-select :placeholder="trans.get('project.timelines.group.select_project')" v-model="item.subproject" expanded>
+                        <option
+                            v-for="option in projects"
+                            :value="option.id"
+                            :key="option.id">
+                            {{ option.name }}
+                        </option>
+                    </b-select>
                 </b-field>
                 <b-field :label="trans.get('project.timelines.group.show_in_share')">
                     <b-switch v-model="item.show_share">
@@ -46,7 +61,7 @@
 <script>
     export default {
         name: "TimelineGroupModelForm",
-        props: ['setItem'],
+        props: ['setItem', 'projects'],
         data() {
             return {
                 item: {
@@ -56,10 +71,13 @@
                     start: null,
                     end: null,
                     parent: null,
+                    subproject: null,
+                    has_subproject: false,
                 },
                 backup: {},
                 csrf: null,
-                groups: []
+                groups: [],
+                useProject: false,
             }
         },
         methods: {
@@ -102,6 +120,8 @@
                         that.backup.parent = that.item.parent;
                         that.backup.show_share = that.item.show_share;
                         that.backup.order = that.item.order;
+                        that.backup.subproject = that.item.subproject;
+                        that.backup.has_subproject = that.item.has_subproject;
                     }
                     that.$emit('close');
                     if(!window.UseWebSocketKouky) {
@@ -155,6 +175,8 @@
             //this.groups.unshift({id: -1, content: 'no group'});
             this.item = Object.assign({}, this.backup);
             this.csrf = $('meta[name=csrf-token]').attr('content');
+
+            console.log(this.item)
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': this.csrf
