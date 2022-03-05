@@ -465,6 +465,7 @@
         },
         mounted() {
             (new TimelineItemsCollector).set();
+            console.log(this.datapath)
             if (typeof this.datapath !== "undefinded") {
                 this.getPath = this.datapath;
             }

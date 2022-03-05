@@ -52,7 +52,8 @@ class ShareController extends Controller
         if ($this->checkShare($unique)) {
             response()->json('No Data', 404);
         }
-        $request->request->add(['project' => $this->project->id]);
+
+        $request->merge(['project' => $this->project->id]);
         $timeline = new TimelineController();
         return $timeline->getData($request, true);
     }
