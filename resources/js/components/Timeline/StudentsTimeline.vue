@@ -366,7 +366,7 @@
                 (new TimelineItemsCollector).get();
                 this.selectedZoom = null;
             },
-            setTimeAxisOption: function (tivalue) {
+            setTimeAxisOption: function (value) {
                 if (value !== 'default') {
                     this.options.timeAxis = {
                         scale: value,
@@ -449,8 +449,8 @@
         },
         watch: {
             selectedOption: function (value, n) {
-                this.setTimeAxisOption(value);
-                this.$refs.timeline.setOptions(this.options);
+                 this.setTimeAxisOption(value);
+                 this.$refs.timeline.setOptions(this.options);
             },
             selectedZoom: function (value, n) {
                 var dates = this.setZoomRange(value);

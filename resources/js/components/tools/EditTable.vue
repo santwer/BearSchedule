@@ -1,7 +1,7 @@
 <template>
     <b-table :data="data">
         <template slot-scope="props">
-            <b-table-column v-for="column in columns"
+            <b-table-column v-for="column in columns" :key="column.field"
                             v-bind:field="column.field"
                             v-bind:label="column.label"
                             v-bind:width="column.width"

@@ -101,7 +101,7 @@
                                 <span class="previewColor" :style="getCurrentColorStyle()"></span><span>{{ getCurrentColorName() }}</span>
                                 <b-icon :icon="colorPickerActive ? 'menu-up' : 'menu-down'"></b-icon>
                             </button>
-                            <b-dropdown-item v-for="color in colors" aria-role="listitem" @click="setColor(color)">
+                            <b-dropdown-item v-for="color in colors" :key="color.id" aria-role="listitem" @click="setColor(color)">
                                 <span class="previewColor" :style="color.style"></span> {{ trans.get('project.timelines.item.colors.' + color.id) }}
                             </b-dropdown-item>
                         </b-dropdown>
