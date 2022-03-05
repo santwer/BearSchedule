@@ -78,9 +78,10 @@ class TimelineAjaxController extends Controller
      */
     public function getData(Request $request, bool $share = false)
     {
-        if (! $request->has('project')) {
-            return response()->ajax(null, 'Id not set', 400);
-        }
+        $request->validate([
+            'project' => 'required'
+        ]);
+
         $project_id = $request->get('project');
         $options = $this->logicClass->getOptions($project_id);
         $isGetItems = $this->isDynamicLoading($options, $request);
@@ -109,9 +110,9 @@ class TimelineAjaxController extends Controller
 
     public function getShareLink(Request $request)
     {
-        if (! $request->has('project')) {
-            return response()->ajax(null, 'Id not set', 400);
-        }
+        $request->validate([
+            'project' => 'required'
+        ]);
         $project = $this->logicClass->getShareLink(
             auth()->user(),
             $request->get('project')
@@ -126,9 +127,9 @@ class TimelineAjaxController extends Controller
 
     public function deleteShareLink(Request $request)
     {
-        if (! $request->has('project')) {
-            return response()->ajax(null, 'Id not set', 400);
-        }
+        $request->validate([
+            'project' => 'required'
+        ]);
         $project_id = $request->get('project');
         $project = auth()->user()->projects()->find($project_id);
         if ($project === null) {
@@ -145,15 +146,14 @@ class TimelineAjaxController extends Controller
 
     public function setGroup(Request $request)
     {
-        if (! $request->has('content') || empty($request->get('content'))) {
-            return response()->ajax(null, 'Name not set.', 400);
-        }
+        $request->validate([
+            'content' => 'required',
+            'project_id' => 'required|integer'
+        ]);
         $request->merge([
             'title' => $request->get('content'),
         ]);
-        if (! $request->has('project_id')) {
-            return response()->ajax(null, 'Id not set', 400);
-        }
+
         if (! $request->has('id') || empty($request->get('id'))) {
             $group = new Group;
             $logAction = Actions::ADD;
