@@ -12,7 +12,7 @@
         "fruitcake/laravel-cors": "^2.0",
         "guzzlehttp/guzzle": "^7.0.1",
         "kg-bot/laravel-localization-to-vue": "^2.0",
-        "laravel/framework": "^9.0",
+        "laravel/framework": "^9.19",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^3.0",
         "lesstif/php-jira-rest-client": "^2.5",
