@@ -8,8 +8,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" href="{{ asset('images/logo64.png') }}?v2">
     <title>{{ isset($pageTitle) ? $pageTitle .' - ' : '' }}{{ env('APP_NAME', 'Education') }}</title>
-    <link rel="stylesheet" type="text/css" href="{{ mix('css/bulma.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
+    @vite('resources/css/bulma.css')
+    @vite('resources/css/app.css')
     <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.1/moment-with-locales.min.js"></script>
     <script>
         const enableJira = {{ \App\Helper\JiraHelper::isEnabled() ? 'true' : 'false' }};
@@ -68,7 +68,7 @@
 <script>
     window.KoukyWebSocket = {{ \App\Helper\TimelineHelper::useWebsocket() ? 'true' : 'false' }};
 </script>
-<script async type="module" src="{{ mix('js/app.js') }}"></script>
+@vite('resources/js/app.js')
 </body>
 
 </html>
