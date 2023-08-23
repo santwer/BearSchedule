@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import TimelineGroupModelForm from "./TimelineGroupModelForm";
+    import TimelineGroupModelForm from "./TimelineGroupModelForm.vue";
     export default {
         name: "TimelineGroupModel",
         props: ['project'],

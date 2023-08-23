@@ -5,7 +5,7 @@
 </template>
 
 <script>
-    import TimelineItemModelForm from "./TimelineItemModelForm";
+    import TimelineItemModelForm from "./TimelineItemModelForm.vue";
     export default {
         name: "TimelineItemModel",
         props: ['project'],

@@ -31,7 +31,7 @@
 </template>
 
 <script>
-    import LogTableDataField from "./LogTableDataField";
+    import LogTableDataField from "./LogTableDataField.vue";
     export default {
         name: "LogTable",
         components: {LogTableDataField},

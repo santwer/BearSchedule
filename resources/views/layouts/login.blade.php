@@ -7,8 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="{{ asset('images/logo64.png') }}?v2">
     <title>@yield('title') - {{ env('APP_NAME', 'Education') }}</title>
-    <link rel="stylesheet" type="text/css" href="{{ mix('css/bulma.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ mix('css/app.css') }}">
+    @vite('resources/css/bulma.css')
+    @vite('resources/css/app.css')
     <script>
         localStorage.clear();
     </script>
@@ -60,7 +60,7 @@
     @endif
 </section>
 
-<script async type="text/javascript" src="{{ mix('js/login.js') }}"></script>
+@vite('resources/js/login.js')
 </body>
 
 </html>

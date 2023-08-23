@@ -1,7 +1,11 @@
-window.$ = require('jquery');
-window.Vue = require('vue');
-window.Buefy = require('buefy');
-window.Pusher = require('pusher-js');
+import $ from 'jquery';
+window.$ = $;
+import Vue from 'vue';
+window.Vue = Vue;
+import Buefy from 'buefy';
+window.Buefy = Buefy;
+import Pusher from 'pusher-js';
+window.Pusher = Pusher;
 
 //Vue.component('timeline', vue2vis.Timeline);
 //vue2vis.Timeline
@@ -24,8 +28,8 @@ if (window.KoukyWebSocket) {
 
     window.Echo = new Echo({
         broadcaster: 'pusher',
-        key: process.env.MIX_PUSHER_APP_KEY,
-        cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+        key: import.meta.env.VITE_PUSHER_APP_KEY,
+        cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
         forceTLS: true
     });
     window.Echo.connector.pusher.connection.bind('connected', () => {

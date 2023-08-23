@@ -45,7 +45,7 @@
 </template>
 
 <script>
-    import LinkButton from "../tools/LinkButton";
+    import LinkButton from "../tools/LinkButton.vue";
     export default {
         components: {LinkButton},
         props: ['item'],

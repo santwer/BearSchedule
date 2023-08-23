@@ -1,6 +1,9 @@
-window.$ = require('jquery');
-window.Vue = require('vue');
-window.Buefy = require('buefy');
+import $ from 'jquery';
+window.$ = $;
+import Vue from 'vue';
+window.Vue = Vue;
+import Buefy from 'buefy';
+window.Buefy = Buefy;
 
 
 
