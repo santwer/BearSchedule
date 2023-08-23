@@ -145,9 +145,9 @@
 </template>
 
 <script>
-    import LinkButton from "../tools/LinkButton";
-    import TimelineItemSeries from "./TimelineItemSeries";
-    import IssueSearch from "../Jira/IssueSearch";
+    import LinkButton from "../tools/LinkButton.vue";
+    import TimelineItemSeries from "./TimelineItemSeries.vue";
+    import IssueSearch from "../Jira/IssueSearch.vue";
 
     export default {
         name: "TimelineItemModelForm",

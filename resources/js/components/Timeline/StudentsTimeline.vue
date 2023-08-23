@@ -65,10 +65,10 @@
 
 <script>
     import {DataSet, Timeline} from 'vue2vis';
-    import TimelineItemModel from "./TimelineItemModel";
-    import TimelineGroupModel from "./TimelineGroupModel";
-    import TimelineItemShowModel from "./TimelineItemShowModel";
-    import GroupFilter from "./GroupFilter";
+    import TimelineItemModel from "./TimelineItemModel.vue";
+    import TimelineGroupModel from "./TimelineGroupModel.vue";
+    import TimelineItemShowModel from "./TimelineItemShowModel.vue";
+    import GroupFilter from "./GroupFilter.vue";
     import TimelineItemsCollector from "../../Service/TimelineItemsCollector";
 
     const Handlebars = require("handlebars");

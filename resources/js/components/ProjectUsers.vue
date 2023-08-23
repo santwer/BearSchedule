@@ -32,7 +32,7 @@
 </template>
 
 <script>
-    import AjaxSearchInput from "./tools/AjaxSearchInput";
+    import AjaxSearchInput from "./tools/AjaxSearchInput.vue";
     export default {
 
         name: "ProjectUsers",
