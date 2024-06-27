@@ -10,6 +10,7 @@ use App\Helper\JiraHelper;
 use App\Helper\ModelChangesHelper;
 use App\Helper\TimelineHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TimelineItemRequest;
 use App\Http\Services\Settings\Account;
 use App\Http\Services\Timeline\Timeline;
 use App\Models\Project;
@@ -200,26 +201,11 @@ class TimelineAjaxController extends Controller
      * @param  Request  $request
      * @return mixed
      */
-    public function setItem(Request $request)
+    public function setItem(TimelineItemRequest $request)
     {
-        $validatedData = $request->validate([
-            'project_id' => 'required|int',
-            'title' => 'required|min:3',
-            'group' => 'required_unless:type,=,background',
-            'start' => 'required|min:3',
-        ]);
 
         if ($request->get('start') === 'Invalid Date') {
             return response()->ajax(null, 'Start not set.', 422);
-        }
-        if ($request->has('end') && $request->get('end') !== null && in_array($request->get('type'),
-                ['range', 'background'])) {
-            $end = $this->convertToDateTime($request->get('end'));
-            $start = $this->convertToDateTime($request->get('start'));
-
-            if (! $end->gte($start)) {
-                return response()->ajax(null, 'Starts needs to be before End Date', 422);
-            }
         }
 
         if (! $request->has('id') || empty($request->get('id'))) {
@@ -229,7 +215,14 @@ class TimelineAjaxController extends Controller
             $logAction = Actions::CHANGE;
             $item = Item::find($request->get('id'));
         }
-        $item = $this->fillModelFillableByRequest($item, $request, ['start', 'end']);
+        $useMethods = ['start', 'end'];
+            foreach ($request->validated() as $key => $value) {
+                if(in_array($key, $useMethods)) {
+                    $item->{$key} = $request->{$key}();
+                } else {
+                $item->{$key} = $value;
+            }
+        }
 
         if ($request->has('color')) {
             if ($request->get('color')['id'] == 'default') {
