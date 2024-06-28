@@ -1,0 +1,11 @@
+// Importieren Sie die Bootstrap SCSS
+
+//@import "bootstrap-vue/src/index";
+
+// Import all files from the scss folder
+@import "../scss/_variables";
+
+@import "bootstrap/scss/bootstrap";
+@import "../scss/index";
+
+

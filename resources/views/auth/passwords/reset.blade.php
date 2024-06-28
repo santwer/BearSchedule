@@ -1,44 +1,73 @@
-@extends('layouts.login')
+@extends('design.login')
 @section('title', __('Reset Password'))
 @section('subtitle', 'Please fill to proceed.')
 @section('content')
-                    <form method="POST" action="{{ locale_route('password.update') }}">
+
+    <div class="row">
+        <div class="col-lg-6 d-none d-lg-block bg-password-image"></div>
+        <div class="col-lg-6">
+            <div class="p-5">
+                <div class="text-center">
+                    <h1 class="h4 text-gray-900 mb-2">{{ __('Reset Password') }}</h1>
+                </div>
+
+                @if (session('status'))
+                    <div class="alert alert-success">
+                        <b>{{ __('general.success') }}</b><br/>
+                        {{ session('status') }}
+                    </div>
+                @else
+                    <form method="POST" class="user" action="{{ locale_route('password.update') }}">
                         @csrf
-
-                        <input type="hidden" name="token" value="{{ $token }}">
-
-                        <b-field @error('email') label="Error"
-                                 type="is-danger"
-                                 message="{{ $message }}" @enderror>
-                            <b-input placeholder="{{ __('general.email_address') }}"
-                                     type="email"
-                                     name="email"
-                                     value="{{ $email ?? old('email') }}"
-                                     icon="email" required>
-                            </b-input>
-                        </b-field>
-
-
-                        <b-field @error('password') label="Error"
-                                 type="is-danger"
-                                 message="{{ $message }}" @enderror>
-                            <b-input placeholder="{{ __('general.password') }}"
-                                     type="password"
-                                     name="password"
-                                     icon="key" required autocomplete="new-password">
-                            </b-input>
-                        </b-field>
-
-                        <b-field>
-                            <b-input placeholder="{{ __('auth.password_confirm') }}"
-                                     type="password"
-                                     name="password_confirmation"
-                                     icon="key" required autocomplete="new-password">
-                            </b-input>
-                        </b-field>
-
-                        <button class="button is-block is-primary is-large is-fullwidth" type="submit">{{ __('auth.password_reset) }}</button>
-
+                        <div class="form-group mt-3">
+                            <input type="email" name="email"
+                                   class="form-control form-control-user  @error('email') is-invalid @enderror"
+                                   aria-describedby="emailHelp" value="{{ $email ?? old('email') }}"
+                                   placeholder="{{ __('general.email_address') }}">
+                            @error('email')
+                            <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+                        <div class="form-group mt-3">
+                            <input type="password" name="password"
+                                   class="form-control form-control-user  @error('password') is-invalid @enderror"
+                                   aria-describedby="emailHelp" value=""
+                                   placeholder="{{ __('general.password') }}">
+                            @error('password')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+                        <div class="form-group mt-3">
+                            <input type="password" name="password_confirmation"
+                                   class="form-control form-control-user  @error('password_confirmation') is-invalid @enderror"
+                                   aria-describedby="emailHelp" value=""
+                                   placeholder="{{ __('general.password_confirmation') }}">
+                            @error('password_confirmation')
+                            <div class="invalid-feedback">
+                                {{ $message }}
+                            </div>
+                            @enderror
+                        </div>
+                        <div class="d-grid gap-2  mt-3">
+                            <button type="submit" class="btn btn-primary btn-user">
+                                {{ __('auth.password_confirm') }}
+                            </button>
+                        </div>
                     </form>
-
+                @endif
+                <hr>
+                <div class="text-center">
+                    <a class="small" href="{{ locale_route('login') }}">{{ __('general.login') }}</a>
+                </div>
+                <div class="text-center">
+                    <a class="small" href="{{ locale_route('register') }}">@lang('auth.sign_up')</a>
+                </div>
+                @include('auth.footer')
+            </div>
+        </div>
+    </div>
 @endsection

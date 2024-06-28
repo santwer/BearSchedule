@@ -1,51 +1,73 @@
-@extends('layouts.login')
+@extends('design.login')
 @section('title', __('general.login'))
 @section('subtitle', __('auth.login_start_message'))
 @section('content')
-<form method="POST" action="{{ locale_route('login') }}">
-    @csrf
-    <div class="field">
-        <div class="control">
-            <b-field @error('email') label="Error"
-                     type="is-danger"
-                     message="{{ $message }}" @enderror>
-                <b-input placeholder="{{ __('general.email_address') }}"
-                         type="email"
-                         name="email"
-                         value="{{ old('email') }}"
-                         icon="email">
-                </b-input>
-            </b-field>
-        </div>
-    </div>
-    <div class="field">
-        <div class="control">
-            <b-field @error('password') label="Error"
-                     type="is-danger"
-                     message="{{ $message }}" @enderror>
-                <b-input placeholder="{{ __('general.password') }}"
-                         type="password"
-                         name="password"
-                         icon="key">
-                </b-input>
-            </b-field>
-        </div>
-    </div>
-    <div class="field">
-        <label class="checkbox">
-            <b-checkbox name="remember"  :value="{{ old('remember') ? 'true' : 'false' }}">
-                 @lang('auth.remember_me')
-            </b-checkbox>
 
-        </label>
+<div class="row">
+    <div class="col-lg-6 d-none d-lg-block hero-video">
+        <video autoplay muted loop>
+            <source src="{{ asset('video/planner_normal.mp4') }}" type="video/mp4">
+        </video>
     </div>
-    <div class="field">
-        <button class="button is-block is-primary is-large is-fullwidth" type="submit">@lang('general.login')</button>
+    <div class="col-lg-6">
+        <div class="p-5">
+            <img src="{{ asset('images/logo.svg') }}" style="height: 64px; position: absolute; top: 20px">
+            <div class="text-center">
+                <h1 class="h4 text-gray-900 mb-4">@lang('general.login')</h1>
+            </div>
+            <form method="POST" action="{{ locale_route('login') }}" class="user">
+                @csrf
+                <div class="form-group">
+                    <input type="email" class="form-control form-control-user @error('email') is-invalid @enderror"
+                           aria-describedby="emailHelp" value="{{ old('email') }}" name="email"
+                           placeholder="{{ __('general.email_address') }}">
+                    @error('email')
+                    <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+                <div class="form-group mt-3">
+                    <input type="password" name="password" class="form-control form-control-user @error('password') is-invalid @enderror"
+                           value="{{ old('password') }}"
+                           placeholder="{{ __('general.password') }}">
+                    @error('password')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+                <div class="form-group m-3">
+                    <div class="custom-control custom-checkbox small">
+                        <input type="checkbox" name="remember" class="custom-control-input" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                        <label class="custom-control-label" for="remember">@lang('auth.remember_me')</label>
+                    </div>
+                </div>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-user">
+                        @lang('general.login')
+                    </button>
+                </div>
+                <hr>
+                <div class="d-grid gap-2">
+                    <a href="{{ locale_route('auth.microsoft') }}" class="btn btn-google btn-user">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-windows" viewBox="0 0 16 16">
+                            <path d="M6.555 1.375 0 2.237v5.45h6.555zM0 13.795l6.555.933V8.313H0zm7.278-5.4.026 6.378L16 16V8.395zM16 0 7.33 1.244v6.414H16z"/>
+                        </svg> @lang('auth.login_with_microsoft')
+                    </a>
+                </div>
+            </form>
+            <hr>
+            <div class="text-center">
+                <a class="small" href="{{ locale_route('password.request') }}">@lang('auth.password_forgot')</a>
+            </div>
+            <div class="text-center">
+                <a class="small" href="{{ locale_route('register') }}">@lang('auth.sign_up')</a>
+            </div>
+            @include('auth.footer')
+        </div>
     </div>
-    <div class="field">
-        <b-button tag="a" size="is-medium" icon-left="microsoft-windows" href="{{ locale_route('auth.microsoft') }}">
-            @lang('auth.login_with_microsoft')
-        </b-button>
-    </div>
-</form>
+</div>
+
+
 @endsection

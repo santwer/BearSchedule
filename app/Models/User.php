@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Helper\UserHelper;
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -79,5 +80,15 @@ class User extends Authenticatable
     {
         $hash = md5($this->id);
         return 'https://www.gravatar.com/avatar/' . $hash . '?f=y&d='.env('GRAVATAR_ICON', 'robohash');
+    }
+
+    /**
+     * Send a password reset notification to the user.
+     *
+     * @param  string  $token
+     */
+    public function sendPasswordResetNotification($token): void
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 }

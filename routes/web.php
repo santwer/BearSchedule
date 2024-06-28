@@ -52,25 +52,7 @@ Route::group([
     'where' => ['locale' => '[a-zA-Z]{2}'],
     'middleware' => 'setlocale'
 ], function () {
-    Route::middleware(['auth'])->group(function () {
-        Route::get('/', 'HomeController@index')
-            ->name('home');
-        Route::get('/settings', [\App\Http\Controllers\HomeController::class, 'settings'])->name('user.settings');
-        Route::post('/settings',
-            [\App\Http\Controllers\HomeController::class, 'saveSettings'])->name('user.settings.save');
-        Route::post('/settings/delete',
-            [\App\Http\Controllers\HomeController::class, 'deleteAccount'])->name('user.settings.delete');
-        Route::get('project/create', [ProjectController::class, 'create'])->name('project.create');
-        Route::get('project/{project}', [ProjectController::class, 'index'])->name('project.open');
-        Route::post('project/{project}', [ProjectController::class, 'update'])->name('project.update');
-        Route::post('project/{project}/delete', [ProjectController::class, 'destroy'])->name('project.delete');
 
-
-        Route::group(['prefix' => 'jira/', 'middleware' => 'jira'], function () {
-            Route::get('issue/{project}/{issue}',
-                [\App\Http\Controllers\Timeline\JiraAjaxController::class, 'redirectIssue']);
-        });
-    });
 
 
 //Auth Routes
@@ -124,6 +106,29 @@ Route::group([
         'as' => '',
         'uses' => 'Auth\RegisterController@register'
     ]);
+
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/{vue_capture?}', 'HomeController@index')
+            ->name('home')
+            ->where('vue_capture', '[\/\w\.-]*')
+            ->where('vue_capture', '^(?!api).*$')
+            ->where('vue_capture', '^(?!broadcasting).*$')
+            ->where('vue_capture', '^(?!resource).*$');
+        ;
+//        Route::get('/settings', [\App\Http\Controllers\HomeController::class, 'settings'])->name('user.settings');
+//        Route::post('/settings',
+//            [\App\Http\Controllers\HomeController::class, 'saveSettings'])->name('user.settings.save');
+//        Route::post('/settings/delete',
+//            [\App\Http\Controllers\HomeController::class, 'deleteAccount'])->name('user.settings.delete');
+//        Route::get('project/create', [ProjectController::class, 'create'])->name('project.create');
+//        Route::get('project/{project}', [ProjectController::class, 'index'])->name('project.open');
+//        Route::post('project/{project}', [ProjectController::class, 'update'])->name('project.update');
+//        Route::post('project/{project}/delete', [ProjectController::class, 'destroy'])->name('project.delete');
+//        Route::group(['prefix' => 'jira/', 'middleware' => 'jira'], function () {
+//            Route::get('issue/{project}/{issue}',
+//                [\App\Http\Controllers\Timeline\JiraAjaxController::class, 'redirectIssue']);
+//        });
+    });
 
 });
 Route::fallback([\App\Http\Controllers\LocaleController::class, 'redirect']);

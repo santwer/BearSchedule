@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('design.main')
 @section('content')
 
     <div style="margin: 30px;">

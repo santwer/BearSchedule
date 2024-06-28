@@ -1,0 +1,70 @@
+/*!
+ *  Lang.js for Laravel localization in JavaScript.
+ *
+ *  @version 1.1.12
+ *  @license MIT https://github.com/rmariuzzo/Lang.js/blob/master/LICENSE
+ *  @site    https://github.com/rmariuzzo/Lang.js
+ *  @author  Rubens Mariuzzo <rubens@mariuzzo.com>
+ */
+
+/*!
+ * Sizzle CSS Selector Engine v2.3.6
+ * https://sizzlejs.com/
+ *
+ * Copyright JS Foundation and other contributors
+ * Released under the MIT license
+ * https://js.foundation/
+ *
+ * Date: 2021-02-16
+ */
+
+/*!
+ * Vue.js v2.6.12
+ * (c) 2014-2020 Evan You
+ * Released under the MIT License.
+ */
+
+/*!
+ * jQuery JavaScript Library v3.6.0
+ * https://jquery.com/
+ *
+ * Includes Sizzle.js
+ * https://sizzlejs.com/
+ *
+ * Copyright OpenJS Foundation and other contributors
+ * Released under the MIT license
+ * https://jquery.org/license
+ *
+ * Date: 2021-03-02T17:08Z
+ */
+
+/*! Hammer.JS - v2.0.7 - 2016-04-22
+ * http://hammerjs.github.io/
+ *
+ * Copyright (c) 2016 Jorik Tangelder;
+ * Licensed under the MIT license */
+
+/**
+ * vis.js
+ * https://github.com/almende/vis
+ *
+ * A dynamic, browser-based visualization library.
+ *
+ * @version 4.21.0
+ * @date    2017-10-12
+ *
+ * @license
+ * Copyright (C) 2011-2017 Almende B.V, http://almende.com
+ *
+ * Vis.js is dual licensed under both
+ *
+ * * The Apache 2.0 License
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * and
+ *
+ * * The MIT License
+ *   http://opensource.org/licenses/MIT
+ *
+ * Vis.js may be distributed under either license.
+ */
