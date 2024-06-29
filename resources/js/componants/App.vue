@@ -19,27 +19,23 @@
                             <!-- Nav Item - User Information -->
                             <li class="nav-item dropdown no-arrow"  style="z-index: 1">
                                 <a class="nav-link dropdown-toggle" @click="accountOpen = !accountOpen" role="button">
-                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">Sven Antwertinger</span>
+                                    <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ user.user_name }}</span>
                                     <img class="img-profile rounded-circle"
-                                    src="https://www.gravatar.com/avatar/45c48cce2e2d7fbdea1afc51c7c6ad26?f=y&d=robohash">
+                                    :src="user.user_avatar">
                                 </a>
                                 <!-- Dropdown - User Information -->
                                 <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" :class="{'show': accountOpen}">
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Profile
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    <a class="dropdown-item" @click="goTo('settings')">
+                                        <mdicon name="cogs" class="mr-2 text-gray-400 float-end" size="16"/>
                                         Settings
                                     </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    <a class="dropdown-item" @click="goTo('activity-log')">
+                                        <mdicon name="file-document-outline" class="mr-2 text-gray-400 float-end" size="16"/>
                                         Activity Log
                                     </a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" @click="$refs.logout.submit()">
-                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                        <mdicon name="logout" class="mr-2 text-gray-400 float-end" size="16"/>
                                         Logout
                                     </a>
                                 </div>
@@ -76,14 +72,17 @@
 
 <script>
 import Sidebar from "@/componants/parts/Sidebar.vue";
-
+import {mapActions, mapGetters} from "vuex";
+import RouteMixin from "@/mixins/RouteMixin";
 export default {
     components: {Sidebar},
+    mixins: [RouteMixin],
     computed: {
         logout() {
             return this.$i18n.locale  + '/logout';
-            this.$router.push({name: 'home', params: {locale: this.$i18n.locale}});
+            this.goHome();
         },
+        ...mapGetters(['user']),
     },
     data() {
         return {
@@ -95,6 +94,7 @@ export default {
     },
     methods: {
 
+        ...mapActions(['getMeta']),
     },
     mounted() {
         if (window.user_locale) {
@@ -104,7 +104,7 @@ export default {
 
     created()
     {
-
+        this.getMeta();
     }
 }
 </script>

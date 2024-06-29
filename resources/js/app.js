@@ -2,12 +2,14 @@ import './bootstrap';
 
 
 import { createApp } from 'vue'
+import {createBootstrap} from 'bootstrap-vue-next'
 import { createI18n } from 'vue-i18n'
 import router from './router'
 import mdiVue from 'mdi-vue/v3'
 import * as mdijs from '@mdi/js'
 
 import App from './componants/App.vue'
+import appStorage from "@/storage/AppStorage";
 
 import en from '../../lang/en.json'
 import de from '../../lang/de.json'
@@ -27,6 +29,8 @@ const i18n = createI18n({
 
 const app = createApp(App)
     .use(router)
+    .use(appStorage)
+    .use(createBootstrap())
     .use(mdiVue, {
         icons: mdijs
     })

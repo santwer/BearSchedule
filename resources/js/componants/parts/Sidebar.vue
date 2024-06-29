@@ -37,23 +37,23 @@
             <div id="collapsePages" class="collapse" :class="{hidden: !activeProjects, 'show': activeProjects}"
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="login.html">Login</a>
-                    <a class="collapse-item" href="register.html">Register</a>
-                    <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                    <a class="collapse-item"
+                       v-for="project in projects"
+                       @click="goToProject(project.id)">{{ project.name}}</a>
                 </div>
             </div>
         </li>
 
-        <li class="nav-item" :class="{'active': activeArchive}">
+        <li class="nav-item" :class="{'active': activeArchive}" v-if="archivedProjects.length > 0">
             <a class="nav-link" @click="activeArchive = !activeArchive">
                 <mdicon name="archive-outline" class="float-end"/>
                 <span>{{ $t("general.archive") }}</span>
             </a>
             <div id="collapsePages" class="collapse"  :class="{hidden: !activeArchive, 'show': activeArchive}">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item" href="login.html">Login</a>
-                    <a class="collapse-item" href="register.html">Register</a>
-                    <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
+                    <a class="collapse-item"
+                       v-for="project in archivedProjects"
+                       @click="goToProject(project.id)">{{ project.name}}</a>
                 </div>
             </div>
         </li>
@@ -75,11 +75,13 @@
 
 <script>
 import Logo from '../icons/Logo.vue'
-
+import {mapActions, mapGetters} from "vuex";
+import RouteMixin from "@/mixins/RouteMixin";
 export default {
     components: {
         Logo
     },
+    mixins: [RouteMixin],
     data() {
         return {
             appName: import.meta.env.VITE_APP_NAME,
@@ -89,16 +91,11 @@ export default {
         }
 
     },
+    computed: {
+        ...mapGetters(['archivedProjects','projects']),
+    },
     methods: {
-        goHome() {
-            this.$router.push({name: 'home', params: {locale: this.$i18n.locale}});
-        },
-        goTo(route) {
-            this.$router.push({name: route, params: {locale: this.$i18n.locale}});
-        },
-        goToProject(project) {
-            this.$router.push({name: 'project', params: {locale: this.$i18n.locale, id: project.id}});
-        }
+
     }
 }
 </script>

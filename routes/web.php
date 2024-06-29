@@ -37,6 +37,9 @@ Route::middleware(['auth'])->group(function () {
         });
         Route::get('autocomplete/{controller}', [AutoCompleteController::class, 'index']);
     });
+    Route::group(['prefix' => 'api/'], function () {
+        include 'auth.api.php';
+    });
 });
 
 Route::group(['prefix' => 'share/'], function () {
