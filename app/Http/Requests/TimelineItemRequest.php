@@ -10,6 +10,7 @@ class TimelineItemRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'id' => 'int|nullable',
             'project_id' => 'required|int',
             'title' => 'required',
             'group' => 'required_unless:type,=,background',
@@ -37,10 +38,16 @@ class TimelineItemRequest extends FormRequest
 
     protected function prepareForValidation()
     {
+        if(!is_integer($this->project_id)) {
+            $this->merge([
+                'project_id' => decrypt($this->project_id)
+            ]);
+        }
         $this->merge([
-            'start' => $this->start ? Carbon::createFromFormat('D M d Y H:i:s e+',$this->start)->format('Y-m-d H:i:s') : null,
-            'end' => $this->end ? Carbon::createFromFormat('D M d Y H:i:s e+',$this->end)->format('Y-m-d H:i:s') : null,
+            'start' => $this->start ? Carbon::parse($this->start)->format('Y-m-d H:i:s') : null,
+            'end' => $this->end ? Carbon::parse($this->end)->format('Y-m-d H:i:s') : null,
         ]);
+
     }
 
     public function start()

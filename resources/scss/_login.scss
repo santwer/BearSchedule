@@ -45,6 +45,10 @@ form.user {
   @include button-variant($brand-google, $white);
 }
 
+.btn-mircosoft {
+    @include button-variant($brand-microsoft, $white);
+}
+
 .btn-facebook {
   @include button-variant($brand-facebook, $white);
 }

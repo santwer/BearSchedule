@@ -37,7 +37,7 @@
             <div id="collapsePages" class="collapse" :class="{hidden: !activeProjects, 'show': activeProjects}"
                  data-parent="#accordionSidebar">
                 <div class="bg-white py-2 collapse-inner rounded">
-                    <a class="collapse-item"
+                    <a class="collapse-item" :class="{active: project.id === $route.params.id}"
                        v-for="project in projects"
                        @click="goToProject(project.id)">{{ project.name}}</a>
                 </div>
@@ -63,7 +63,7 @@
 
         <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" @click="toggled = !toggled">
+            <button class="rounded-circle border-0 py-1" @click="toggled = !toggled">
 
                 <mdicon name="chevron-right" size="32" v-if="toggled"/>
                 <mdicon name="chevron-left" size="32" v-else />

@@ -21,6 +21,7 @@
     "general.language": "language",
     "general.language_own": "English",
     "general.bcp47": "en-US",
+    "please select": "please select",
     "general.months": {
         "1": "January",
         "2": "February",
@@ -124,7 +125,7 @@
         "jira_user": "Jira Username",
         "apitoken": "ApiToken"
     },
-    "project.display_options": {
+    "project_display_options": {
         "default": "Default",
         "weekday": "weekday",
         "week": "week",
@@ -132,7 +133,7 @@
         "month": "month",
         "year": "year"
     },
-    "project.timeline_tables": {
+    "project_timeline_tables": {
         "columns": {
             "id": "ID",
             "title": "Title",
@@ -144,7 +145,7 @@
             "name": "Name"
         }
     },
-    "project.timelines": {
+    "project_timelines": {
         "display": "Display",
         "no_items": "No Items",
         "no_items_message": "Since there a no Items, its not possible to show the timeline, yet. Please add Items and Groups first.",

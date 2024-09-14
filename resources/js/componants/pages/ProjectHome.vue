@@ -1,10 +1,16 @@
 <template>
-Hier könnte dein Projekt stehen
+
+
+    <timeline></timeline>
+
 </template>
 
 <script>
 
+import Timeline from "@/componants/pages/Timeline.vue";
+
 export default {
+    components: {Timeline}
 
 }
 

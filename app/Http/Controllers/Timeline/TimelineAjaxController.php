@@ -10,6 +10,7 @@ use App\Helper\JiraHelper;
 use App\Helper\ModelChangesHelper;
 use App\Helper\TimelineHelper;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\GroupRequest;
 use App\Http\Requests\TimelineItemRequest;
 use App\Http\Services\Settings\Account;
 use App\Http\Services\Timeline\Timeline;
@@ -77,7 +78,7 @@ class TimelineAjaxController extends Controller
      * @param  Request  $request
      * @return mixed
      */
-    public function getData(Request $request, bool $share = false)
+    public function getData($id, Request $request, bool $share = false)
     {
         $request->validate([
             'project' => 'required'
@@ -145,15 +146,9 @@ class TimelineAjaxController extends Controller
     }
 
 
-    public function setGroup(Request $request)
+    public function setGroup(GroupRequest $request)
     {
-        $request->validate([
-            'content' => 'required',
-            'project_id' => 'required|integer'
-        ]);
-        $request->merge([
-            'title' => $request->get('content'),
-        ]);
+
 
         if (! $request->has('id') || empty($request->get('id'))) {
             $group = new Group;
@@ -164,7 +159,12 @@ class TimelineAjaxController extends Controller
             $logAction = Actions::CHANGE;
         }
 
-        $group = $this->fillModelFillableByRequest($group, $request);
+        $group->title = $request->title;
+        $group->content = $request->get('content');
+        $group->project_id = $request->project_id;
+        $group->order = $request->order;
+        $group->visible = $request->visible;
+
         $values = $group->getRawOriginal();
         if ($group->save()) {
             $hpValues = ModelChangesHelper::getChangedValues($values, $group);
@@ -250,48 +250,13 @@ class TimelineAjaxController extends Controller
                 $this->logicClass->saveLinks($request->get('links'), $item->id);
             }
             $responseItem = Item::with('links')->find($item->id);
+
+
+            $responseItem->subgroup = $responseItem->group;
+
             if (TimelineHelper::useWebsocket()) {
                 event(new Data($request->get('project_id'), 'ITEM', $responseItem));
             }
-            if ($request->has('jira')) {
-                $jiras = $request->get('jira');
-
-                $item->load('issues');
-                $issues = $item->issues;
-                $deleteIds = $item->issues->whereNotIn('key', $jiras)->pluck('id');
-                if ($deleteIds->count() > 0) {
-                    Item\Issue::whereIn('id', $deleteIds)->delete();
-                }
-                $jiras = collect($jiras)->map(function ($key) use ($item) {
-                    $newItem = new Item\Issue();
-                    $newItem->type = 'JIRA';
-                    $newItem->item_id = $item->id;
-                    $newItem->key = $key;
-                    $log = JiraHelper::getWorkLogTime([$newItem->key], $item->project_id);
-                    if ($log->estimate !== 0) {
-                        $newItem->estimate = $log->estimate;
-                        $newItem->done = $log->done;
-                        $newItem->process = $log->process;
-                    }
-                    return $newItem;
-                });
-
-
-                foreach ($jiras->whereNotIn('key', $issues->pluck('key')) as $i => $newItem) {
-
-                    $newItem->save();
-
-                }
-
-                $avg = JiraHelper::getIssuesAvg($jiras);
-                $responseItem->process = $avg->process > 100 ? 100 : $avg->process;
-                $responseItem->processExtra = $avg->process > 100 ? 'barred' : '';
-                $responseItem->processlabel = ($avg->done / 60 / 60).'h / '.($avg->estimate / 60 / 60).'h';
-
-            } elseif (JiraHelper::isEnabled()) {
-                Item\Issue::where('item_id', $item->id)->delete();
-            }
-
 
             return response()->ajax($responseItem, 'Saved successfully', 200);
         }

@@ -19,6 +19,12 @@ export default {
         },
         goToProject(project) {
             this.route('project',  { id: project});
+        },
+        goToProjectPage(project, page) {
+            if(page === 'timeline') {
+                return this.route('project',  { id: project});
+            }
+            this.route('project-' + page,  { id: project});
         }
     }
 }

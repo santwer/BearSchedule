@@ -16,4 +16,19 @@ export default class Api {
         return axios.delete('/account');
     }
 
+    static getTimeline(id) {
+        return axios.get('/timeline/' + id, );
+    }
+
+    static setItem(item) {
+        return axios.post('/items', item);
+    }
+
+    static deleteItem(id) {
+        return axios.delete('/items/' + id);
+    }
+
+    static setGroup(group) {
+        return axios.post('/groups/', group);
+    }
 }

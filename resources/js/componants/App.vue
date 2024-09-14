@@ -13,11 +13,52 @@
                     <!-- Topbar -->
                     <nav class="navbar-light bg-white topbar mb-4 static-top shadow row">
 
-                        <div class=" col "></div>
+                        <div class="col" style="padding-top: 2.4rem;" v-if="$route.params.id">
+                            <div class="nav nav-tabs ">
+                                <div class="nav-item">
+                                    <a class="nav-link" :class="{active: $route.name === 'project'}" style="height: 2rem"  @click="goToProjectPage($route.params.id, 'timeline')">
+                                        <mdicon name="chart-gantt" size="24"/>
+                                        Timeline
+                                    </a>
+                                </div>
+                                <div class="nav-item">
+                                    <a class="nav-link"  :class="{active: $route.name === 'project-items'}" style="height: 2rem"  @click="goToProjectPage($route.params.id, 'items')">
+                                        <mdicon name="id-card" size="24"/>
+                                        Items
+                                    </a>
+                                </div>
+                                <div class="nav-item">
+                                    <a class="nav-link"  :class="{active: $route.name === 'project-groups'}" style="height: 2rem"  @click="goToProjectPage($route.params.id, 'groups')">
+                                        <mdicon name="folder-multiple" size="24"/>
+                                        Groups
+                                    </a>
+                                </div>
+                                <div class="nav-item">
+                                    <a class="nav-link"  :class="{active: $route.name === 'project-share'}" style="height: 2rem"  @click="goToProjectPage($route.params.id, 'share')">
+                                        <mdicon name="share-variant" size="24"/>
+                                        Share
+                                    </a>
+                                </div>
+                                <div class="nav-item">
+                                    <a class="nav-link"  :class="{active: $route.name === 'project-settings'}" style="height: 2rem"  @click="goToProjectPage($route.params.id, 'settings')">
+                                        <mdicon name="cog" size="24"/>
+                                        Settings
+                                    </a>
+                                </div>
+                                <div class="nav-item">
+                                    <a class="nav-link"  :class="{active: $route.name === 'project-logs'}" style="height: 2rem"  @click="goToProjectPage($route.params.id, 'logs')">
+                                        <mdicon name="text-box-outline" size="24"/>
+                                        Logs
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col" v-else></div>
+                        <div class="col-2">
                         <!-- Topbar Navbar -->
-                        <ul class="navbar-nav col-2 align-self-end text-right">
+                        <ul class="navbar-nav  align-self-end text-right">
                             <!-- Nav Item - User Information -->
-                            <li class="nav-item dropdown no-arrow"  style="z-index: 1">
+                            <li class="nav-item dropdown no-arrow"  style="z-index: 10">
                                 <a class="nav-link dropdown-toggle" @click="accountOpen = !accountOpen" role="button">
                                     <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ user.user_name }}</span>
                                     <img class="img-profile rounded-circle"
@@ -41,6 +82,7 @@
                                 </div>
                             </li>
                         </ul>
+                        </div>
 
                     </nav>
                     <!-- End of Topbar -->
@@ -74,10 +116,14 @@
 import Sidebar from "@/componants/parts/Sidebar.vue";
 import {mapActions, mapGetters} from "vuex";
 import RouteMixin from "@/mixins/RouteMixin";
+import {routeLocationKey} from "vue-router";
 export default {
     components: {Sidebar},
     mixins: [RouteMixin],
     computed: {
+        routeLocationKey() {
+            return routeLocationKey
+        },
         logout() {
             return this.$i18n.locale  + '/logout';
             this.goHome();
@@ -110,5 +156,7 @@ export default {
 </script>
 
 <style scoped>
-
+.nav-link {
+    cursor: pointer;
+}
 </style>

@@ -123,8 +123,8 @@
         "jira_user": "Jira Benutzername",
         "apitoken": "ApiToken"
     },
-    "project.display_options": {
-        "default": "Default",
+    "project_display_options": {
+        "default": "Standard",
         "weekday": "Wochentag",
         "week": "Woche",
         "day": "Tag",
