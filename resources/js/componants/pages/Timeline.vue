@@ -1,27 +1,35 @@
 <template>
     <div class="row mb-2">
-        <div class="col-6">
+        <div class="col-3">
             <div class="btn-group">
-                <button class="btn btn-outline-primary btn-sm" @click="addItem()">
+                <button class="btn btn-outline-dark btn-sm" @click="addItem()">
                     <mdicon name="plus" size="20"/>
-                    {{ $t('Add Item') }}
+                    <span class="d-none d-lg-inline">{{ $t('Add Item') }}</span>
                 </button>
-                <button class="btn btn-outline-primary btn-sm" @click="addGroup()">
+                <button class="btn btn-outline-dark btn-sm" @click="addGroup()">
                     <mdicon name="folder-plus" size="20"/>
-                    {{ $t('Add Group') }}
+                    <span class="d-none d-lg-inline">{{ $t('Add Group') }}</span>
                 </button>
             </div>
         </div>
-        <div class="col-6">
-            <BButtonGroup class="float-end">
+        <div class="col-9" style="text-align: right">
+            <BButtonGroup  size="sm">
+                <BButton variant="outline-primary" :title="$t('project_share')">
+                    <mdicon name="share-variant" size="20"/>
+                    <span class="badge bg-primary rounded-pill">1</span>
+                </BButton>
+            </BButtonGroup>
+
+
+            <BButtonGroup>
                 <BDropdown v-model="selectedGroupShow"
                            auto-close="outside"
-                           variant="outline-primary"
+                           variant="outline-dark"
                            class="px-1"
                            size="sm">
                     <template #button-content>
                         <mdicon name="filter" size="20"/>
-                        {{ $t('project.groups') }}
+                        <span class="d-none d-lg-inline">{{ $t('project_groups') }}</span>
                     </template>
                     <div class="mx-3" v-for="(group, i) in groups">
                         <BFormCheckbox
@@ -35,10 +43,10 @@
                         </BFormCheckbox>
                     </div>
                 </BDropdown>
-                <BDropdown v-model="selectedOptionShow" class="px-1" variant="outline-primary" size="sm">
+                <BDropdown v-model="selectedOptionShow" class="px-1" variant="outline-dark" size="sm">
                     <template #button-content>
                         <mdicon name="magnify-plus-outline" size="20"/>
-                        {{ $t('project_timelines.display') }}
+                        <span class="d-none d-lg-inline">{{ $t('project_timelines.display') }}</span>
                     </template>
                     <BDropdownItem @click="selectedOption = null" :active="selectedOption === null">
                         {{ $t('project_display_options.default') }}
@@ -59,10 +67,10 @@
                         {{ $t('project_display_options.year') }}
                     </BDropdownItem>
                 </BDropdown>
-                <BDropdown v-model="selectedZoomShow" class="px-1" variant="outline-primary" size="sm">
+                <BDropdown v-model="selectedZoomShow" class="px-1" variant="outline-dark" size="sm">
                     <template #button-content>
                         <mdicon name="magnify-plus-outline" size="20"/>
-                        {{ $t('project.zoom') }}
+                        <span class="d-none d-lg-inline">{{ $t('project_zoom') }}</span>
                     </template>
                     <BDropdownItem @click="selectedZoom = 'day'">
                         {{ $t('Day') }}
@@ -77,8 +85,21 @@
                         {{ $t('Year') }}
                     </BDropdownItem>
                 </BDropdown>
+
             </BButtonGroup>
 
+
+
+            <BButtonGroup  size="sm"  class="mx-1">
+                <BButton variant="primary" :title="$t('project_timeline')"><mdicon name="chart-gantt" size="20"/></BButton>
+                <BButton variant="outline-dark" :title="$t('project_list')"><mdicon name="view-list" size="20"/></BButton>
+            </BButtonGroup>
+
+            <BButtonGroup  size="sm" class="ml-1">
+                <BButton variant="outline-dark" :title="$t('project_settings')">
+                    <mdicon name="cog" size="20"/>
+                </BButton>
+            </BButtonGroup>
         </div>
     </div>
     <loading v-if="loading"></loading>

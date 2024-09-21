@@ -72,6 +72,8 @@
         "yes": "Ja",
         "no": "Nein"
     },
+    "menu.imprint": "Impressum",
+    "menu.privacy": "Datenschutz",
     "menu.menu": "Men\u00fc",
     "menu.home": "Startseite",
     "menu.settings": "Einstellungen",
@@ -84,41 +86,44 @@
     "passwords.throttled": "Bitte versuche es zu einem sp\u00e4terem Zeitpunkt erneut.",
     "passwords.token": "Der Passwort-Zur\u00fccksetungs-Code ist ung\u00fcltig.",
     "passwords.user": "Wir k\u00f6nnen keinen Benutzer mit dieser Email ermitteln.",
-    "project.timeline": "Timeline",
-    "project.item": "Element",
-    "project.items": "Elemente",
-    "project.groups": "Gruppen",
-    "project.share": "Teilen",
-    "project.weblink": "Link",
-    "project.logs": "Logs",
-    "project.settings": "Einstellungen",
-    "project.url": "URL",
-    "project.project_name": "Projekt Name",
-    "project.item_design": "Element Design",
-    "project.select_itemtype": "Select Elementtyp",
-    "project.itemtype": {
+    "project_timeline": "Timeline",
+    "project_list": "Listenansicht",
+    "project_item": "Element",
+    "project_items": "Elemente",
+    "project_groups": "Gruppen",
+    "project_share": "Teilen",
+    "project_weblink": "Link",
+    "project_logs": "Logs",
+    "project_settings": "Einstellungen",
+    "project_project_settings": "Projekt Einstellungen",
+    "project_project_members": "Projekt Teilnehmer",
+    "project_url": "URL",
+    "project_project_name": "Projekt Name",
+    "project_item_design": "Element Design",
+    "project_select_itemtype": "Select Elementtyp",
+    "project_itemtype": {
         "default": "Standard",
         "with_subtitle": "mit zweit-Titel",
         "jira_with_subtitle": "Jira Element mit zweit-Titel"
     },
-    "project.item_orientation": "Element Orientierung ",
-    "project.axis_orientation": "Achsen Orientierung ",
-    "project.axis_ori": {
+    "project_item_orientation": "Element Orientierung ",
+    "project_axis_orientation": "Achsen Orientierung ",
+    "project_axis_ori": {
         "bottom": "unten",
         "top": "oben",
         "both": "beide",
         "none": "keine"
     },
-    "project.zoom": "Zoom",
-    "project.initial_zoom": "Anf\u00e4nglicher Zoom",
-    "project.zoom_timeline": {
+    "project_zoom": "Zoom",
+    "project_initial_zoom": "Anf\u00e4nglicher Zoom",
+    "project_zoom_timeline": {
         "auto": "Auto",
         "year": "Jahr",
         "month": "Monat",
         "week": "Woche",
         "day": "Tag"
     },
-    "project.jira": {
+    "project_jira": {
         "jira_host": "Jira Host",
         "jira_user": "Jira Benutzername",
         "apitoken": "ApiToken"
@@ -131,7 +136,7 @@
         "month": "Monat",
         "year": "jahr"
     },
-    "project.timeline_tables": {
+    "project_timeline_tables": {
         "columns": {
             "id": "ID",
             "title": "Titel",
@@ -143,7 +148,7 @@
             "name": "Name"
         }
     },
-    "project.timelines": {
+    "project_timelines": {
         "display": "Anzeige",
         "no_items": "keine Elemente",
         "no_items_message": "Da noch keine Items vorhanden sind, ist es noch nicht m\u00f6glich die Timeline zu laden. Bitte erst Gruppen und Items anlegen.",
@@ -212,8 +217,8 @@
         },
         "connection_status": "Verbindungsstatus"
     },
-    "project.filter_groups": "Filter Gruppen",
-    "project.setting_users": {
+    "project_filter_groups": "Filter Gruppen",
+    "project_setting_users": {
         "name": "Name",
         "email": "Email",
         "add_user": "Benutzer hinzuf\u00fcgen",
@@ -224,8 +229,8 @@
             "SUBSCRIBER": "Abonnent"
         }
     },
-    "project.mobil-display-message": "Projekte sind nicht darstellbar auf Mobiltelefonen. Versuche das Ger\u00e4t horizontal zu verwenden oder benutze ein Tablet oder PC.",
-    "project.mobil-display-message-recommend": "Wir empfehlen eine Aufl\u00f6sung von mindestens 900px breite.",
+    "project_mobil-display-message": "Projekte sind nicht darstellbar auf Mobiltelefonen. Versuche das Ger\u00e4t horizontal zu verwenden oder benutze ein Tablet oder PC.",
+    "project_mobil-display-message-recommend": "Wir empfehlen eine Aufl\u00f6sung von mindestens 900px breite.",
     "settings.account": "Konto",
     "settings.error": "Fehler",
     "settings.name": "Name",

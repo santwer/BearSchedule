@@ -42,7 +42,7 @@ export default createRouter({
         {
             path: '/:locale/project/:id/settings',
             name: 'project-settings',
-            component: () => import('./componants/pages/ActivityLog.vue')
+            component: () => import('./componants/pages/ProjectSettings.vue')
         },
         {
             path: '/:locale/project/:id/logs',

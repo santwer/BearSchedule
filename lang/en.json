@@ -74,7 +74,8 @@
         "yes": "Yes",
         "no": "No"
     },
-    "menu.menu": "Menu",
+    "menu.imprint": "imprint",
+    "menu.privacy": "privacy",
     "menu.home": "Dashboard",
     "menu.settings": "Settings",
     "menu.create_new_project": "Create new Project",
@@ -86,41 +87,44 @@
     "passwords.throttled": "Please wait before retrying.",
     "passwords.token": "This password reset token is invalid.",
     "passwords.user": "We can't find a user with that email address.",
-    "project.timeline": "Timeline",
-    "project.item": "Item",
-    "project.items": "Items",
-    "project.groups": "Groups",
-    "project.share": "Share",
-    "project.weblink": "Link",
-    "project.logs": "Logs",
-    "project.settings": "Settings",
-    "project.url": "URL",
-    "project.project_name": "Project Name",
-    "project.item_design": "Item Design",
-    "project.select_itemtype": "Select Itemtype",
-    "project.itemtype": {
+    "project_timeline": "Timeline",
+    "project_item": "Item",
+    "project_items": "Items",
+    "project_list": "Listview",
+    "project_groups": "Groups",
+    "project_share": "Share",
+    "project_weblink": "Link",
+    "project_logs": "Logs",
+    "project_settings": "Settings",
+    "project_project_settings": "Project settings",
+    "project_project_members": "Project participants",
+    "project_url": "URL",
+    "project_project_name": "Project Name",
+    "project_item_design": "Item Design",
+    "project_select_itemtype": "Select Itemtype",
+    "project_itemtype": {
         "default": "Default",
         "with_subtitle": "with Subtitle",
         "jira_with_subtitle": "Jira Item Process with Subtitle"
     },
-    "project.item_orientation": "Item orientation",
-    "project.axis_orientation": "Axis orientation",
-    "project.axis_ori": {
+    "project_item_orientation": "Item orientation",
+    "project_axis_orientation": "Axis orientation",
+    "project_axis_ori": {
         "bottom": "bottom",
         "top": "top",
         "both": "both",
         "none": "none"
     },
-    "project.zoom": "Zoom",
-    "project.initial_zoom": "Initial Zoom",
-    "project.zoom_timeline": {
+    "project_zoom": "Zoom",
+    "project_initial_zoom": "Initial Zoom",
+    "project_zoom_timeline": {
         "auto": "Auto",
         "year": "Year",
         "month": "Month",
         "week": "Week",
         "day": "Day"
     },
-    "project.jira": {
+    "project_jira": {
         "jira_host": "Jira Host",
         "jira_user": "Jira Username",
         "apitoken": "ApiToken"
@@ -214,8 +218,8 @@
         },
         "connection_status": "Connection status"
     },
-    "project.filter_groups": "Filter Groups",
-    "project.setting_users": {
+    "project_filter_groups": "Filter Groups",
+    "project_setting_users": {
         "name": "Name",
         "email": "Email",
         "add_user": "Add User",
@@ -226,8 +230,8 @@
             "SUBSCRIBER": "Subscriber"
         }
     },
-    "project.mobil-display-message": "Projects are not displayable on Phones. Try to use your device horizontal or use an Tablet or PC.",
-    "project.mobil-display-message-recommend": "Recommended is at least 900px screen width.",
+    "project_mobil-display-message": "Projects are not displayable on Phones. Try to use your device horizontal or use an Tablet or PC.",
+    "project_mobil-display-message-recommend": "Recommended is at least 900px screen width.",
     "settings.account": "Account",
     "settings.info": "Info",
     "settings.error": "Error",
