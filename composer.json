@@ -1,10 +1,22 @@
 {
-    "name": "laravel/laravel",
+    "name": "santwer/bearschedule",
     "type": "project",
-    "description": "The Laravel Framework.",
+    "description": "Simple and clear project management tool. With which it is possible to display one or more projects graphically. ",
     "keywords": [
         "framework",
-        "laravel"
+        "laravel",
+        "vuejs",
+        "project management",
+        "project",
+        "management",
+        "tool",
+        "graphical",
+        "timeline",
+        "schedule",
+        "gantt",
+        "gantt chart",
+        "planning",
+        "planner"
     ],
     "license": "MIT",
     "require": {
