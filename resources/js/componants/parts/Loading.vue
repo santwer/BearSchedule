@@ -1,6 +1,8 @@
 
 <template>
+    <div style="min-height: 200px;" v-if="loading">
     <BSpinner class="loader" label="Large Spinner" v-if="loading"/>
+    </div>
 </template>
 
 <script>

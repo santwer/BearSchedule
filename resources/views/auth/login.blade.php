@@ -11,10 +11,18 @@
     </div>
     <div class="col-lg-6">
         <div class="p-5">
+            <div class="btn-group btn-group-sm position-absolute" style="right: 0.5rem; top: 0.5rem">
+                <button type="button" class="btn" title="{{ __('general.dark_mode_toogle') }}"
+                        :class="{'btn-dark': this.theme !== 'dark','btn-light': this.theme === 'dark'}" @click="toggleTheme">
+                    <mdicon name="theme-light-dark"  size="16"/>
+                </button>
+            </div>
+
             <img src="{{ asset('images/logo.svg') }}" style="height: 64px; position: absolute; top: 20px">
             <div class="text-center">
                 <h1 class="h4 text-gray-900 mb-4">@lang('general.login')</h1>
             </div>
+
             <form method="POST" action="{{ locale_route('login') }}" class="user">
                 @csrf
                 <div class="form-group">

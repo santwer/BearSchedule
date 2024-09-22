@@ -1,20 +1,30 @@
 <template>
     <div class="row mb-2">
         <div class="col-3">
-            <div class="btn-group">
-                <button class="btn btn-outline-dark btn-sm" @click="addItem()">
+            <BButtonGroup size="sm">
+
+                <BButton :variant=" isDark ? 'light' : 'outline-primary'" :title="$t('Add Item')" @click="addItem()">
                     <mdicon name="plus" size="20"/>
                     <span class="d-none d-lg-inline">{{ $t('Add Item') }}</span>
-                </button>
-                <button class="btn btn-outline-dark btn-sm" @click="addGroup()">
+                </BButton>
+                <BButton :variant=" isDark ? 'light' : 'outline-primary'" :title="$t('Add Group')" @click="addGroup()">
                     <mdicon name="folder-plus" size="20"/>
                     <span class="d-none d-lg-inline">{{ $t('Add Group') }}</span>
-                </button>
-            </div>
+                </BButton>
+            </BButtonGroup>
         </div>
         <div class="col-9" style="text-align: right">
-            <BButtonGroup  size="sm">
-                <BButton variant="outline-primary" :title="$t('project_share')">
+            <BButtonGroup size="sm" class="px-1">
+                <BButton :variant=" isDark ? 'light' : 'outline-dark'" :title="$t('project_excel')" :disabled="true">
+                    <mdicon name="file-excel-outline" size="20"/>
+                </BButton>
+            </BButtonGroup>
+            <BButtonGroup size="sm">
+                <BButton
+                    :variant=" isDark ? 'light' : 'outline-primary'"
+                    @click="$refs.share.show()"
+                    :title="$t('project_share')"
+                >
                     <mdicon name="share-variant" size="20"/>
                     <span class="badge bg-primary rounded-pill">1</span>
                 </BButton>
@@ -24,7 +34,7 @@
             <BButtonGroup>
                 <BDropdown v-model="selectedGroupShow"
                            auto-close="outside"
-                           variant="outline-dark"
+                           :variant="isDark ? 'light' : 'outline-dark'"
                            class="px-1"
                            size="sm">
                     <template #button-content>
@@ -43,9 +53,12 @@
                         </BFormCheckbox>
                     </div>
                 </BDropdown>
-                <BDropdown v-model="selectedOptionShow" class="px-1" variant="outline-dark" size="sm">
+                <BDropdown v-model="selectedOptionShow" class="px-1" :variant="isDark ? 'light' : 'outline-dark'"
+                           size="sm"
+                           :title="$t('project_timelines.display')"
+                           v-show="tab === 'timeline'">
                     <template #button-content>
-                        <mdicon name="magnify-plus-outline" size="20"/>
+                        <mdicon name="label-multiple-outline" size="20"/>
                         <span class="d-none d-lg-inline">{{ $t('project_timelines.display') }}</span>
                     </template>
                     <BDropdownItem @click="selectedOption = null" :active="selectedOption === null">
@@ -67,7 +80,10 @@
                         {{ $t('project_display_options.year') }}
                     </BDropdownItem>
                 </BDropdown>
-                <BDropdown v-model="selectedZoomShow" class="px-1" variant="outline-dark" size="sm">
+                <BDropdown v-model="selectedZoomShow" class="px-1" :variant="isDark ? 'light' : 'outline-dark'"
+                           size="sm"
+                           :title="$t('project_zoom')"
+                           v-show="tab === 'timeline'">
                     <template #button-content>
                         <mdicon name="magnify-plus-outline" size="20"/>
                         <span class="d-none d-lg-inline">{{ $t('project_zoom') }}</span>
@@ -84,26 +100,106 @@
                     <BDropdownItem @click="selectedZoom = 'year'">
                         {{ $t('Year') }}
                     </BDropdownItem>
+
+
+
                 </BDropdown>
 
             </BButtonGroup>
 
 
-
-            <BButtonGroup  size="sm"  class="mx-1">
-                <BButton variant="primary" :title="$t('project_timeline')"><mdicon name="chart-gantt" size="20"/></BButton>
-                <BButton variant="outline-dark" :title="$t('project_list')"><mdicon name="view-list" size="20"/></BButton>
+            <BButtonGroup size="sm" class="mx-1">
+                <BButton :variant="tab === 'timeline' ? 'primary' : 'outline-dark'" :title="$t('project_timeline')"
+                         @click="tab='timeline'">
+                    <mdicon name="chart-gantt" size="20"/>
+                </BButton>
+                <BButton :variant="tab === 'list' ? 'primary' : (isDark ? 'light' : 'outline-dark')"
+                         :title="$t('project_list')" @click="tab='list'">
+                    <mdicon name="view-list" size="20"/>
+                </BButton>
             </BButtonGroup>
-
-            <BButtonGroup  size="sm" class="ml-1">
-                <BButton variant="outline-dark" :title="$t('project_settings')">
+            <BButtonGroup size="sm" class="mx-1">
+                <BButton :variant="isDark ? 'light' : 'outline-dark'" :title="$t('project_settings')"
+                @click="goToProjectPage(project_id, 'settings')">
                     <mdicon name="cog" size="20"/>
                 </BButton>
             </BButtonGroup>
         </div>
     </div>
     <loading v-if="loading"></loading>
-    <div ref="visualization" v-if="renderComponent"></div>
+    <div ref="visualization" v-if="renderComponent" v-show="tab === 'timeline'"></div>
+    <div class="" v-if="!loading" v-show="tab === 'list'">
+        <!-- Header Group Name -->
+        <div class="card mb-1" v-if="items.filter(x => x.group === null || x.group === undefined)">
+            <div class="card-body">
+                <h5 class="card-title">No Group</h5>
+                <BTable :sort-by="[{key: 'start', order: 'asc'}]"
+                        :items="items.filter(x => x.group === null || x.group === undefined)"
+                        :fields="sortFields"
+                >
+                    <template #cell(edit)="row">
+                        <BButtonGroup size="sm">
+                            <BButton
+                                :variant=" isDark ? 'light' : 'outline-primary'"
+                                :title="$t('Edit')"
+                                @click="editItem(row.item.id)">
+                                <mdicon name="pencil" size="20"/>
+                            </BButton>
+                        </BButtonGroup>
+                    </template>
+                    <template #cell(style)="row">
+                        <div class="stylebox" :style="row.item.style"></div>
+                    </template>
+                    <template #cell(type)="row">
+                        {{ $t('project_timelines.item.types.' + row.item.type) }}
+                    </template>
+                    <template #cell(start)="row">
+                        {{ formatDateToUserDate(row.item.start) }}
+                    </template>
+                    <template #cell(end)="row">
+                        {{ formatDateToUserDate(row.item.end) }}
+                    </template>
+                </BTable>
+            </div>
+        </div>
+        <div class="card mb-1" v-for="group in groups">
+            <div class="card-body">
+                <h5 class="card-title">{{ group.content }}</h5>
+                <BAlert variant="info" :model-value="true" v-if="items.filter(x => x.group === group.id).length === 0">
+                    Keine Items in der Gruppe vorhanden.
+                </BAlert>
+                <BTable :sort-by="[{key: 'start', order: 'asc'}]"
+                        :items="items.filter(x => x.group === group.id)"
+                        :fields="sortFields"
+                        v-else
+                >
+                    <template #cell(edit)="row">
+                        <BButtonGroup size="sm">
+                            <BButton
+                                :variant=" isDark ? 'light' : 'outline-primary'"
+                                :title="$t('Edit')"
+                                @click="editItem(row.item.id)">
+                                <mdicon name="pencil" size="20"/>
+                            </BButton>
+                        </BButtonGroup>
+                    </template>
+                    <template #cell(style)="row">
+                        <div class="stylebox" :style="row.item.style"></div>
+                    </template>
+                    <template #cell(type)="row">
+                        {{ $t('project_timelines.item.types.' + row.item.type) }}
+                    </template>
+                    <template #cell(start)="row">
+                        {{ formatDateToUserDate(row.item.start) }}
+                    </template>
+                    <template #cell(end)="row">
+                        {{ formatDateToUserDate(row.item.end) }}
+                    </template>
+                </BTable>
+            </div>
+        </div>
+
+    </div>
     <ItemModal
         ref="itemmodal"
         :groups="groups"
@@ -114,6 +210,7 @@
         :groups="groups"
         v-on:save="saveGroup"
     ></GroupModal>
+    <ShareModal ref="share"></ShareModal>
 </template>
 
 <script>
@@ -125,10 +222,26 @@ import ItemModal from "@/componants/parts/ItemModal.vue";
 import Loading from "@/componants/parts/Loading.vue";
 import GroupModal from "@/componants/parts/GroupModal.vue";
 import moment from 'moment';
-import {BModal, BButton, BButtonGroup, BDropdown, BDropdownItem, BFormCheckbox} from "bootstrap-vue-next";
+import 'moment/locale/de';
+import {
+    BModal,
+    BButton,
+    BAlert,
+    BButtonGroup,
+    BDropdown,
+    BFormInput,
+    BDropdownItem,
+    BFormCheckbox,
+    BTable
+} from "bootstrap-vue-next";
+import ThemeMixin from "@/mixins/ThemeMixin";
+import ShareModal from "@/componants/parts/ShareModal.vue";
+import routeMixin from "@/mixins/RouteMixin";
 
 export default {
+    mixins: [ThemeMixin, routeMixin],
     components: {
+        ShareModal,
         GroupModal,
         Loading,
         ItemModal,
@@ -137,10 +250,22 @@ export default {
         BButtonGroup,
         BFormCheckbox,
         BDropdown,
+        BFormInput,
+        BAlert,
+        BTable,
         BDropdownItem
     },
     data() {
         return {
+            sortFields: [
+                {key: 'style', label: '', sortable: false},
+                {key: 'title', label: this.$t('project_timeline_tables.columns.title'), sortable: true},
+                {key: 'subtitle', label: this.$t('project_timeline_tables.columns.subtitle'), sortable: true},
+                {key: 'type', label: this.$t('project_timeline_tables.columns.type'), sortable: true},
+                {key: 'start', label: this.$t('project_timeline_tables.columns.start'), sortable: true},
+                {key: 'end', label: this.$t('project_timeline_tables.columns.end'), sortable: true},
+                {key: 'edit', label: '', sortable: false}
+            ],
             timeline: null,
             items: [],
             groups: [],
@@ -149,17 +274,26 @@ export default {
             selectedItems: null,
             renderComponent: true,
             selectedZoom: null,
+            selectedZoomValue: null,
             selectedOption: null,
             selectedGroup: [],
             selectedZoomShow: false,
             selectedOptionShow: false,
             selectedGroupShow: false,
+            tab: 'timeline',
         }
     },
     methods: {
+        editItem(id) {
+            this.$refs.itemmodal.openItem(this.items.find(x => x.id === id));
+        },
+        formatDateToUserDate(date) {
+
+            return moment(date).format(this.$t('date_format_js'));
+        },
         setGroups() {
-            console.log('test',this.groups)
-          this.timeline.setGroups(this.groups);
+            console.log('test', this.groups)
+            this.timeline.setGroups(this.groups);
             //todo set visible on timeline
         },
         saveGroup(data) {
@@ -399,4 +533,15 @@ export default {
 
 <style>
 @import "../../../scss/_timeline.scss";
+
+.stylebox {
+    width: 27px;
+    height: 27px;
+    display: inline-block;
+    margin-right: 5px;
+    border: 1px solid;
+    border-color: #004ba0;
+    background-color: rgba(99, 164, 255, 0.4);
+
+}
 </style>

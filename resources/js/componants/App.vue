@@ -43,9 +43,10 @@ import Sidebar from "@/componants/parts/Sidebar.vue";
 import {mapActions, mapGetters} from "vuex";
 import RouteMixin from "@/mixins/RouteMixin";
 import {routeLocationKey} from "vue-router";
+import ThemeMixin from "@/mixins/ThemeMixin";
 export default {
     components: {Sidebar},
-    mixins: [RouteMixin],
+    mixins: [RouteMixin, ThemeMixin],
     computed: {
         routeLocationKey() {
             return routeLocationKey
@@ -81,6 +82,7 @@ export default {
     created()
     {
         this.getMeta();
+        this.themeOnCreated();
     }
 }
 </script>
@@ -89,4 +91,5 @@ export default {
 .nav-link {
     cursor: pointer;
 }
+
 </style>

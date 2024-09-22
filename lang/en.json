@@ -1,5 +1,13 @@
 {
+    "date_format_js": "YYYY-MM-DD",
     "auth.sign_up": "Registieren",
+    "copy": "copy",
+    "open": "open",
+    "remove person from project": "remove {name} from project",
+    "Do you want to remove person from project": "Do you want to remove {name} from project",
+    "successfully copied": "successfully copied",
+    "text could not be copied": "text could not be copied",
+    "Cannot update role, since there need to be one Admin per Project": "Cannot update role, since there need to be one Admin per Project",
     "auth.password_new": "Neues Passwort",
     "auth.password_forgot": "Passwort vergessen",
     "auth.password_forgot_question": "Passwort vergessen?",
@@ -22,6 +30,10 @@
     "general.language_own": "English",
     "general.bcp47": "en-US",
     "please select": "please select",
+    "locale": {
+        "de": "Deutsch",
+        "en": "English"
+    },
     "general.months": {
         "1": "January",
         "2": "February",
@@ -36,7 +48,9 @@
         "11": "November",
         "12": "December"
     },
+    "general.cancel": "Cancel",
     "general.login": "Login",
+    "general.dark_mode_toogle": "Dark Mode Toogle",
     "general.logout": "Logout",
     "general.welcome": "Welcome :name",
     "general.success": "Success",
@@ -93,6 +107,8 @@
     "project_list": "Listview",
     "project_groups": "Groups",
     "project_share": "Share",
+    "project_excel": "Excel Export",
+    "share project to everyone without account": "Share project to everyone without account",
     "project_weblink": "Link",
     "project_logs": "Logs",
     "project_settings": "Settings",

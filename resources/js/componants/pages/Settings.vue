@@ -91,8 +91,10 @@ import Api from "@/Api";
 import {BToast,BSpinner} from "bootstrap-vue-next";
 import Loading from "@/componants/parts/Loading.vue";
 import Error from "@/componants/parts/Error.vue";
+import ThemeMixin from "@/mixins/ThemeMixin";
 
 export default {
+    mixins: [ThemeMixin],
     data() {
         return {
             settings: {},

@@ -43,7 +43,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::group(['prefix' => 'share/'], function () {
-    Route::get('{unique}/', [ShareController::class, 'index']);
+    Route::get('{unique}/', [ShareController::class, 'index'])->name('share.index');
     Route::get('{unique}/ajax/getdata', [ShareController::class, 'getData']);
     Route::get('{unique}/share.js', [ShareController::class, 'getShareJs']);
     Route::get('{unique}/share.css', [ShareController::class, 'getShareCss']);
@@ -111,6 +111,8 @@ Route::group([
     ]);
 
     Route::middleware(['auth'])->group(function () {
+        Route::get('project/create', [ProjectController::class, 'create'])
+            ->name('project.create');
         Route::get('/{vue_capture?}', 'HomeController@index')
             ->name('home')
             ->where('vue_capture', '[\/\w\.-]*')

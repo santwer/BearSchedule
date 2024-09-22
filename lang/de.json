@@ -1,5 +1,13 @@
 {
+    "date_format_js": "DD.MM.YYYY",
     "auth.sign_up": "Registieren",
+    "copy": "kopieren",
+    "open": "öffnen",
+    "remove person from project": "{name} von Projekt entfernen",
+    "Do you want to remove person from project": "Möchtest du {name} vom Projekt entfernen",
+    "successfully copied": "Erfolgreich kopiert",
+    "text could not be copied": "Text konnte nicht kopiert werden",
+    "Cannot update role, since there need to be one Admin per Project": "Rolle kann nicht geändert werden, da es mindestens einen Admin pro Projekt geben muss",
     "auth.password_new": "Neues Passwort",
     "auth.password_forgot": "Passwort vergessen",
     "auth.password_forgot_question": "Passwort vergessen?",
@@ -21,6 +29,10 @@
     "general.language": "Sprache",
     "general.language_own": "Deutsch",
     "general.bcp47": "de-DE",
+    "locale": {
+        "de": "Deutsch",
+        "en": "English"
+    },
     "general.months": {
         "1": "Januar",
         "2": "Feburar",
@@ -35,9 +47,11 @@
         "11": "November",
         "12": "Dezember"
     },
+    "general.cancel": "Abbrechen",
     "general.login": "Anmelden",
     "general.logout": "Abmelden",
     "general.welcome": "Hallo :name",
+    "general.dark_mode_toogle": "Dark Mode Wechsel",
     "general.success": "Erfolgreich",
     "general.disclaimer": "Impressum",
     "general.view_on_github": "View on GitHub",
@@ -92,6 +106,8 @@
     "project_items": "Elemente",
     "project_groups": "Gruppen",
     "project_share": "Teilen",
+    "share project to everyone without account": "Projekt teilen ohne Account",
+    "project_excel": "Excel Export",
     "project_weblink": "Link",
     "project_logs": "Logs",
     "project_settings": "Einstellungen",

@@ -22,7 +22,7 @@
 
 <body class="bg-gradient-primary">
 
-<div class="container">
+<div class="container" id="app">
 
     <!-- Outer Row -->
     <div class="row justify-content-center">
@@ -40,7 +40,7 @@
     </div>
 
 </div>
-
+@vite('resources/js/login.js')
 </body>
 
 </html>

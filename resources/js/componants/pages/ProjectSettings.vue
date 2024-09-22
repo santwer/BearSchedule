@@ -1,12 +1,23 @@
 <template>
     <div>
         <div class="container-fluid">
-            <h1 class="h3 mb-4 text-gray-800">{{ $t('project_project_settings') }}</h1>
+            <h1 class="h3 mb-4 text-gray-800">
+                <button class="btn rounded-circle border-0 p-0 shadow-sm rounded  btn-outline-primary"
+                @click="goToProject(this.$route.params.id)"
+                >
+                    <mdicon name="chevron-left" size="32"/>
+                </button>
+
+                {{ $t('project_project_settings') }}
+            </h1>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                     <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">{{ $t('project_settings') }}</h6>
+                        <div class="card-header py-3" :class="{'text-gray-200': isDark, 'text-primary': !isDark}">
+                            <h6 class="m-0 font-weight-bold ">
+                                <mdicon name="cog" size="20"/>
+                                {{ $t('project_settings') }}
+                            </h6>
                         </div>
                         <div class="card-body">
                             <form>
@@ -54,10 +65,13 @@
                     </div>
                 </div>
 
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">{{ $t('project_project_members') }}</h6>
+                            <h6 class="m-0 font-weight-bold" :class="{'text-gray-200': isDark, 'text-primary': !isDark}">
+                                <mdicon name="file-document-multiple-outline" size="20"/>
+                                {{ $t('project_logs') }}
+                            </h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -93,7 +107,10 @@
 
 <script>
 import {BTable,BButton,BFormSelect} from 'bootstrap-vue-next'
+import routeMixin from "@/mixins/RouteMixin";
+import themeMixin from "@/mixins/ThemeMixin";
 export default {
+    mixins: [routeMixin, themeMixin],
     components: {BTable,BButton,BFormSelect},
     data() {
         return {

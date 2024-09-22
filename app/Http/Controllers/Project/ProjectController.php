@@ -54,10 +54,11 @@ class ProjectController extends Controller
         $project->save();
         $this->viewVariables['activeTab'] = 'settings';
         $project->users()->attach(auth()->user()->id, ['role' => 'ADMIN']);
-        $vars = ['project' => $project->id, 'activeTab' => 'settings'];
+        $vars = ['project' => $project->encryptId, 'activeTab' => 'settings'];
 
         ProjectLog::entry(Actions::ADD, Types::SETTINGS, '', '{"Project": "Created"}', auth()->user()->id, $project->id);
-        return redirect(locale_route('project.open', $vars));
+
+        return response()->redirectTo('/project/' . $project->encryptId);
 
     }
 
