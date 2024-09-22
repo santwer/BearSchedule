@@ -7,7 +7,7 @@
     "devDependencies": {
         "@intlify/unplugin-vue-i18n": "^0.12.2",
         "@vue/compiler-sfc": "^3.1.0",
-        "axios": "^1.4.0",
+        "axios": "^1.7.7",
         "laravel-vite-plugin": "^0.7.5",
         "sass": "^1.77.6",
         "vite": "^4.0.0",
