@@ -7,8 +7,8 @@ COPY composer.lock composer.json /var/www/
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
 # Install php extensions
-RUN chmod +x /usr/local/bin/install-php-extensions && sync && \
-    install-php-extensions mbstring pdo_mysql zip exif pcntl gd memcached bcmath
+RUN chmod +x /usr/local/bin/install-php-extensions && sync
+RUN install-php-extensions mbstring pdo_mysql zip exif pcntl gd memcached bcmath
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
