@@ -1,0 +1,82 @@
+version: '3'
+services:
+
+  #PHP Service
+  app:
+    build:
+      context: .
+      dockerfile: .docker/php/Dockerfile
+    container_name: app
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: app
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./:/var/www
+      - ./.docker/php/bear.ini:/usr/local/etc/php/conf.d/bear.ini
+    networks:
+      - app-network
+
+  #Nginx Service
+  webserver:
+    image: nginx:alpine
+    container_name: webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./:/var/www
+      - ./storage/logs:/var/log/nginx/
+      - ./.docker/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./.docker/certbot/www:/var/certbot/:ro
+      - ./.docker/certbot/conf/:/etc/nginx/ssl/:ro
+    networks:
+      - app-network
+
+  #MySQL Service
+  db:
+    image: mariadb
+    container_name: db
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MARIADB_DATABASE: ${DB_DATABASE}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MARIADB_USER: ${DB_USERNAME}
+      MARIADB_PASSWORD: ${DB_PASSWORD}
+      SERVICE_NAME: mariadb
+    volumes:
+      - dbdata:/var/lib/mysql/
+      - ./.docker/mariadb/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - app-network
+
+  npm:
+    container_name: npm-vite
+    build:
+      context: .
+      dockerfile: .docker/node/Dockerfile
+    environment:
+      NODE_ENV: production
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+
+#Docker Networks
+networks:
+  app-network:
+    driver: bridge
+
+#Volumes
+volumes:
+  dbdata:
+    driver: local
