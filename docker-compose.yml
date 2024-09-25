@@ -16,6 +16,8 @@ services:
     volumes:
       - ./:/var/www
       - ./.docker/php/bear.ini:/usr/local/etc/php/conf.d/bear.ini
+    extra_hosts:
+        - "github.com:2a01:4f8:c010:d56::2"
     networks:
       - app-network
 
