@@ -20,10 +20,10 @@
                         <mdicon name="theme-light-dark" size="16"/>
                     </button>
                 </div>
+                <div  class="logostyle"><img src="{{ asset('images/logo.svg') }}"></div>
 
-                <img src="{{ asset('images/logo.svg') }}" style="height: 64px; position: absolute; top: 20px">
                 <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-4">@lang('general.login')</h1>
+                    <h1 class="h4 text-primary mb-4">@lang('general.login')</h1>
                 </div>
 
                 <form method="POST" action="{{ locale_route('login') }}" class="user">

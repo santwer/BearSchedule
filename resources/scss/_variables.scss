@@ -11,9 +11,9 @@ $gray-300: #dddfeb !default;
 $gray-400: #d1d3e2 !default;
 $gray-500: #b7b9cc !default;
 $gray-600: #858796 !default;
-$gray-700: #6e707e !default;
+$gray-700: #374151 !default;
 $gray-800: #5a5c69 !default;
-$gray-900: #3a3b45 !default;
+$gray-900: #1f2937 !default;
 $black: #000 !default;
 
 $blue: #004ba0  !default;
@@ -26,6 +26,8 @@ $yellow: #f6c23e !default;
 $green: #1cc88a !default;
 $teal: #20c9a6 !default;
 $cyan: #36b9cc !default;
+
+
 
 // Custom Colors
 $brand-google: #ea4335 !default;
@@ -52,6 +54,7 @@ $box-shadow: 0 0.15rem 1.75rem 0 rgba($gray-900, .15) !default;
 // Borders Radius
 $border-radius: 0.35rem !default;
 $border-color: darken($gray-200, 2%) !default;
+$border-color-dark: darken($gray-600, 10%) !default;
 
 // Spacing Variables
 // Change below variable if the height of the navbar changes
@@ -80,3 +83,31 @@ $dropdown-border-color: $border-color !default;
 $login-image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' !default;
 $register-image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' !default;
 $password-image: 'https://images.unsplash.com/photo-1531403009284-440f080d1e12?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' !default;
+
+$body-color-dark: $gray-300 !default;
+$body-bg-dark: $gray-700 !default;
+//$primary: $white !default;
+.logostyle {
+    height: 80px;
+    width: 80px;
+    position: absolute;
+    top: 10px;
+    padding: 6px 2px 0 2px;
+    img {
+        height: 64px;
+    }
+}
+[data-bs-theme="dark"] {
+    .text-primary {
+        color: $gray-100 !important;
+    }
+    .text-gray-800 {
+        color: $gray-400 !important;
+    }
+
+    .logostyle {
+        border-radius: 50%;
+        background-color: $gray-200;
+    }
+
+}

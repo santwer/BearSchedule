@@ -8,7 +8,7 @@
         <div class="col-lg-6">
             <div class="p-5">
                 <div class="text-center">
-                    <h1 class="h4 text-gray-900 mb-2">{{ __('auth.password_forgot_question') }}</h1>
+                    <h1 class="h4 text-primary mb-2">{{ __('auth.password_forgot_question') }}</h1>
                     <p class="mb-4">{{ __('auth.sentence explain') }}!</p>
                 </div>
                 @if (session('status'))

@@ -65,17 +65,17 @@
             <!-- Dropdown - User Information -->
             <div class="collapse" :class="{'hidden': !accountOpen, 'show': accountOpen}">
                 <div class=" py-2 collapse-inner rounded "
-                     :class="{'bg-white': !isDark, 'bg-gray-800': isDark, 'text-gray-400': isDark}">
+                     :class="{'bg-white': !isDark, 'bg-gray-400': isDark, 'text-gray-800': isDark}">
                     <a class="collapse-item" @click="goTo('settings')">
-                        <mdicon name="account-cog" class="mr-2 text-gray-400 float-end" size="16"/>
+                        <mdicon name="account-cog" class="mr-2 text-gray-800 float-end" size="16"/>
                         {{ $t('project_settings') }}
                     </a>
                     <a class="collapse-item" @click=" goTo('activity-log')">
-                        <mdicon name="file-document-outline" class="mr-2 text-gray-400 float-end" size="16"/>
+                        <mdicon name="file-document-outline" class="mr-2 text-gray-800 float-end" size="16"/>
                         {{ $t('project_logs') }}
                     </a>
                     <a class="collapse-item" @click="$refs.logout.submit()">
-                        <mdicon name="logout" class="mr-2 text-gray-400 float-end" size="16"/>
+                        <mdicon name="logout" class="mr-2 text-gray-800 float-end" size="16"/>
                         {{ $t('general.logout') }}
                     </a>
                 </div>
@@ -103,13 +103,13 @@
             <div id="collapsePages" class="collapse" :class="{hidden: !activeProjects, 'show': activeProjects}"
                  data-parent="#accordionSidebar">
                 <div class=" py-2 collapse-inner rounded "
-                     :class="{'bg-white': !isDark, 'bg-gray-800': isDark, 'text-gray-400': isDark}">
+                     :class="{'bg-white': !isDark, 'bg-gray-400': isDark, 'text-gray-800': isDark}">
                     <a class="collapse-item" :class="{active: project.id === $route.params.id}"
                        v-for="project in projects"
                        @click="goToProject(project.id)">{{ project.name }}</a>
                 </div>
                 <div class=" py-2 collapse-inner rounded "
-                     :class="{'bg-white': !isDark, 'bg-gray-800': isDark, 'text-gray-400': isDark}">
+                     :class="{'bg-white': !isDark, 'bg-gray-400': isDark, 'text-gray-800': isDark}">
                     <a class="collapse-item" href="/project/create">
                         <mdicon name="plus" class="mr-2 float-end" size="16"/>
                         {{ $t('menu.new_project') }}
