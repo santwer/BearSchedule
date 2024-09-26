@@ -237,10 +237,10 @@ ul.inline-with-dot-inbetween li:not(:last-child):after {
 }
 
 .tofadeOut {
-    //z-index: 10;
-    //min-width: 225px;
-    //background: rgb(0,39,84);
-    //background: linear-gradient(0deg, rgba(0,39,84,1) 50%, rgba(0,39,84,0) 100%);
-    //padding-top: 50px;
+  /*  z-index: 10;
+    min-width: 225px;
+    background: rgb(0,39,84);
+    background: linear-gradient(0deg, rgba(0,39,84,1) 50%, rgba(0,39,84,0) 100%);
+    padding-top: 50px; */
 }
 </style>
