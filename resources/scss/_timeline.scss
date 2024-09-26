@@ -131,6 +131,7 @@
 }
 [data-bs-theme="dark"] {
     .vis-timeline {
+        border: 0 !important;
         background-color: $body-bg-dark;
         color: $body-color-dark;
         .vis-panel {
