@@ -8,6 +8,7 @@
     "successfully copied": "successfully copied",
     "text could not be copied": "text could not be copied",
     "Cannot update role, since there need to be one Admin per Project": "Cannot update role, since there need to be one Admin per Project",
+    "auth.sentence explain": "So, you sent your password on a one-way trip to Neverland? No worries, we'll help you!",
     "auth.password_new": "Neues Passwort",
     "auth.password_forgot": "Passwort vergessen",
     "auth.password_forgot_question": "Passwort vergessen?",
@@ -63,6 +64,7 @@
     "general.password": "Password",
     "general.project_schedule": "Project schedule",
     "general.content_not_loaded": "Content not loaded",
+    "general.password_confirmation": "Password Confirmation",
     "general.project": "Project",
     "general.projects": "Projects",
     "general.archive": "Archive",
@@ -367,5 +369,13 @@
             "rule-name": "custom-message"
         }
     },
-    "validation.attributes": []
+    "validation.attributes": [],
+    "The secret parameter was not passed.": "The secret parameter was not passed.",
+    "The secret parameter was invalid or did not exist.": "The secret parameter was invalid or did not exist.",
+    "The response parameter was not passed.": "The response parameter was not passed.",
+    "The response parameter is invalid or has expired.": "The response parameter is invalid or has expired.",
+    "The request was rejected because it was malformed.": "The request was rejected because it was malformed.",
+    "The response parameter has already been validated before.": "The response parameter has already been validated before.",
+    "An internal error happened while validating the response.": "An internal error happened while validating the response.",
+    "An unexpected error occurred.": "An unexpected error occurred."
 }

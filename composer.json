@@ -28,7 +28,8 @@
         "laravel/ui": "^4.0",
         "lesstif/php-jira-rest-client": "^5.8",
         "microsoft/microsoft-graph": "^1.19",
-        "pusher/pusher-php-server": "^7.2"
+        "pusher/pusher-php-server": "^7.2",
+        "ryangjchandler/laravel-cloudflare-turnstile": "^1.1"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.6",

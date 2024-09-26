@@ -8,6 +8,7 @@
     "successfully copied": "Erfolgreich kopiert",
     "text could not be copied": "Text konnte nicht kopiert werden",
     "Cannot update role, since there need to be one Admin per Project": "Rolle kann nicht geändert werden, da es mindestens einen Admin pro Projekt geben muss",
+    "auth.sentence explain": "Na, hast du dein Passwort auf Nimmerwiedersehen geschickt? Kein Problem, wir helfen dir!",
     "auth.password_new": "Neues Passwort",
     "auth.password_forgot": "Passwort vergessen",
     "auth.password_forgot_question": "Passwort vergessen?",
@@ -57,6 +58,7 @@
     "general.view_on_github": "View on GitHub",
     "general.privacy_policy": "Datenschutz",
     "general.email_address": "E-Mail Adresse",
+    "general.password_confirmation": "Password bestätigen",
     "general.save": "Speichern",
     "general.delete": "L\u00f6schen",
     "general.password": "Passwort",
@@ -363,5 +365,13 @@
             "rule-name": "custom-message"
         }
     },
-    "validation.attributes": []
+    "validation.attributes": [],
+    "The secret parameter was not passed.": "Das Geheimnis-Parameter wurde nicht \u00fcbergeben.",
+    "The secret parameter was invalid or did not exist.": "Das Geheimnis-Parameter war ung\u00fcltig oder existierte nicht.",
+    "The response parameter was not passed.": "Der Antwort-Parameter wurde nicht \u00fcbergeben.",
+    "The response parameter is invalid or has expired.": "Der Antwort-Parameter ist ung\u00fcltig oder abgelaufen.",
+    "The request was rejected because it was malformed.": "Die Anfrage wurde abgelehnt, weil sie fehlerhaft war.",
+    "The response parameter has already been validated before.": "Der Antwort-Parameter wurde bereits zuvor validiert.",
+    "An internal error happened while validating the response.": "Ein interner Fehler ist w\u00e4hrend der Validierung der Antwort aufgetreten.",
+    "An unexpected error occurred.": "Ein unerwarteter Fehler ist aufgetreten."
 }

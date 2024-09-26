@@ -1,8 +1,12 @@
 @extends('design.login')
 @section('title', 'Register')
 @section('subtitle', 'Please fill to proceed.')
+@section('head')
+    @if(config('services.turnstile.key'))
+        @turnstileScripts()
+    @endif
+@endsection
 @section('content')
-
 
                     <!-- Nested Row within Card Body -->
                     <div class="row">
@@ -20,6 +24,7 @@
                                 @else
                                     <form class="user" method="POST" action="{{ locale_route('register') }}">
                                         @csrf
+
                                         <div class="form-group mt-3">
 
                                                 <input type="text" class="form-control form-control-user @error('name') is-invalid @enderror" name="name"
@@ -63,11 +68,26 @@
                                                 @enderror
                                             </div>
                                         </div>
+                                        @if(config('services.turnstile.key'))
+                                        <div class="form-group mt-3 text-center">
+                                            <x-turnstile
+                                                data-theme="light"
+                                            />
+                                            @error('cf-turnstile-response')
+                                            <div class=" text-danger">
+                                                {{ $message }}
+                                            </div>
+                                            @enderror
+
+                                        </div>
+                                        @endif
+
                                         <div class="d-grid gap-2 mt-3">
                                             <button type="submit" class="btn btn-primary btn-user">
                                                 {{ __('Register') }}
                                             </button>
                                         </div>
+                                        @if(config('auth.microsoft.client_id'))
                                         <hr>
                                         <div class="d-grid gap-2">
                                             <a href="{{ locale_route('auth.microsoft') }}" class="btn btn-google btn-user">
@@ -76,6 +96,7 @@
                                                 </svg> @lang('auth.login_with_microsoft')
                                             </a>
                                         </div>
+                                        @endif
                                     </form>
                                 @endif
                                 <hr>

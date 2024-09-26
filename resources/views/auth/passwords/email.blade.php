@@ -30,7 +30,7 @@
                             </div>
                             @enderror
                         </div>
-                        <div class="d-grid gap-2">
+                        <div class="d-grid gap-2 mt-2">
                             <button type="submit" class="btn btn-primary btn-user">
                                 {{ __('auth.send_password_reset_link') }}
                             </button>
