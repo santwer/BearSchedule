@@ -17,7 +17,7 @@ class RoleRequest extends FormRequest
 
     public function projectId() : int
     {
-        if(!is_integer($this->project)) {
+        if(!is_numeric($this->project)) {
             return decrypt($this->project);
         }
         return $this->project;

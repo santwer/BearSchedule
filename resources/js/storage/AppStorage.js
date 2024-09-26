@@ -8,6 +8,7 @@ export default createStore({
         projects: [],
         user: {},
         meta: {},
+        theme: 'light'
     }
   },
     mutations: {
@@ -20,6 +21,9 @@ export default createStore({
         setMeta(state, meta) {
             state.meta = meta;
         },
+        setTheme(state, theme) {
+            state.theme = theme;
+        }
     },
     getters: {
         projects(state) {
@@ -34,6 +38,9 @@ export default createStore({
         meta(state) {
             return state.meta;
         },
+        theme(state) {
+            return state.theme;
+        }
     },
     actions: {
         getMeta({commit}) {

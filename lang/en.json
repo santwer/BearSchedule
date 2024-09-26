@@ -186,6 +186,7 @@
             "enter_tags": "Enter some tags",
             "add_tags": "Add a tag",
             "series": "Series",
+            "no_group_created_yet": "No Group created yet",
             "types": {
                 "box": "box",
                 "point": "point",

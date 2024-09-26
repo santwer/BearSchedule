@@ -276,7 +276,7 @@ class TimelineAjaxController extends Controller
         foreach ($model->getFillable() as $fillable) {
             if ($request->has($fillable) && ! empty($request->get($fillable))) {
                 if (isset($casts[$fillable]) && $casts[$fillable] === 'integer') {
-                    $model->{$fillable} = is_integer($request->get($fillable)) ? $request->get($fillable) : null;
+                    $model->{$fillable} = is_numeric($request->get($fillable)) ? $request->get($fillable) : null;
                 } else {
                     if (isset($casts[$fillable]) && $casts[$fillable] === 'boolean') {
                         $model->{$fillable} = $request->get($fillable) == "true";

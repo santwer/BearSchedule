@@ -13,7 +13,7 @@ class ShareController extends Controller
 {
     public function index($project, Request $request)
     {
-        if (!is_integer($project)) {
+        if (!is_numeric($project)) {
             $project = decrypt($project);
         }
         $project = Project::with('users')->findOrFail($project);

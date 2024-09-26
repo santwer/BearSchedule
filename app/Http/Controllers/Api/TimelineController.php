@@ -17,7 +17,7 @@ class TimelineController extends TimelineAjaxController
     protected $logicClass = Timeline::class;
     public function index($project, Request $request)
     {
-        if (!is_integer($project)) {
+        if (!is_numeric($project)) {
             $project = decrypt($project);
         }
         $options = $this->logicClass->getOptions($project);

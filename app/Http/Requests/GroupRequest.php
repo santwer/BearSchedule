@@ -17,7 +17,7 @@ class GroupRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        if(!is_integer($this->project_id)) {
+        if(!is_numeric($this->project_id)) {
             $this->merge([
                 'project_id' => decrypt($this->project_id)
             ]);

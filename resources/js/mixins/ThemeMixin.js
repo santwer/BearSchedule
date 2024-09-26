@@ -1,23 +1,22 @@
+import {mapGetters} from "vuex";
+
 export default {
     data() {
         return {
-            theme: null,
+           // theme: null,
         }
     },
     computed: {
         isDark() {
             return this.theme === 'dark';
-        }
+        },
+        ...mapGetters(['theme'])
     },
     methods: {
         toggleTheme() {
-            this.theme = this.theme === 'light' ? 'dark' : 'light';
+            this.$store.commit('setTheme', this.theme === 'light' ? 'dark' : 'light');
             this.saveTheme();
             this.applyTheme(this.theme);
-            this.$nextTick(() => {
-               //reload page
-               window.location.reload();
-            });
         },
         applyTheme(theme) {
             document.documentElement.setAttribute('data-bs-theme', this.theme);
@@ -36,7 +35,8 @@ export default {
             return 'light';
         },
         detectThemeSet() {
-            this.theme = this.detectTheme();
+            this.$store.commit('setTheme', this.detectTheme());
+
         },
         themeOnCreated() {
             this.detectThemeSet();

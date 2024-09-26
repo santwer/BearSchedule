@@ -185,6 +185,7 @@
             "enter_tags": "F\u00fcge Tags an",
             "add_tags": "Neuer Tag",
             "series": "Serie",
+            "no_group_created_yet": "Noch keine Gruppe erstellt",
             "types": {
                 "box": "Box",
                 "point": "Punkt",

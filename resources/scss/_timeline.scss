@@ -1,7 +1,11 @@
+@import "variables";
 .vis-timeline {
     margin-top: 0px;
     border: 0;
+
     background-color: #f9fafc;
+
+    border-radius: 4px;
     .vis-time-axis .vis-text.vis-major {
         font-weight: bold;
     }
@@ -53,7 +57,9 @@
     .vis-time-axis .vis-grid.vis-sunday {
         background: rgba(174, 82, 212, 0.11);
     }
-
+    .vis-time-axis .vis-text {
+        color: $body-color;
+    }
 }
 
 .vis-item {
@@ -123,5 +129,76 @@
     }
     .vis-timeline {
         margin-top: 45px;
+    }
+}
+[data-bs-theme="dark"] {
+    .vis-timeline {
+        background-color: $body-bg-dark;
+        color: $body-color-dark;
+        .vis-panel {
+            border-color: $border-color-dark;
+            .vis-label {
+                &.vis-nested-group {
+                    background-color: #ee0c19;
+                }
+            }
+            .vis-left {
+                border-color: $border-color-dark;
+            }
+            .vis-labelset .vis-label {
+                border-color: $border-color-dark;
+                color: $body-color-dark;
+            }
+        }
+        .vis-foreground  {
+            .vis-group {
+                border-color: $border-color-dark;
+            }
+        }
+        .vis-time-axis .vis-grid.vis-major {
+            border-color: $border-color-dark;
+        }
+        .vis-time-axis .vis-grid.vis-minor {
+            border-color: $border-color-dark;
+        }
+        .vis-time-axis .vis-grid.vis-odd {
+            //background: #fafbfd;
+            background:  lighten($body-bg-dark, 10%) ;
+        }
+        .vis-time-axis .vis-grid.vis-saturday,
+        .vis-time-axis .vis-grid.vis-sunday {
+            background: rgba(174, 82, 212, 0.11);
+        }
+        .vis-time-axis .vis-text {
+            color: $body-color-dark;
+        }
+
+        .vis-item {
+            border-color: #004ba0;
+            background-color: rgba(99, 164, 255, 0.4);
+
+            &.vis-selected {
+                border-color: darken($orange, 20%);
+                background-color:  rgba($orange, 0.6) !important;
+                color: #000 !important;
+            }
+
+            .progress-wrapper {
+                background: $gray-300;
+
+                .progress {
+                    background: $blue;
+
+                    &.barred {
+                        background: $red;
+                    }
+                }
+
+                .progress-label {
+                    text-shadow: 1px 1px 0 white, 1px 0 0 white, -1px 0 0 white, 0 1px 0 white, 0 -1px 0 white;
+                    color: #000000;
+                }
+            }
+        }
     }
 }

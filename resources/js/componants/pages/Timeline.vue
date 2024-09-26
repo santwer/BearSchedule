@@ -3,11 +3,11 @@
         <div class="col-3">
             <BButtonGroup size="sm">
 
-                <BButton :variant=" isDark ? 'light' : 'outline-primary'" :title="$t('Add Item')" @click="addItem()">
+                <BButton :variant=" isDark ? 'secondary' : 'outline-primary'" :title="$t('Add Item')" @click="addItem()">
                     <mdicon name="plus" size="20"/>
                     <span class="d-none d-lg-inline">{{ $t('Add Item') }}</span>
                 </BButton>
-                <BButton :variant=" isDark ? 'light' : 'outline-primary'" :title="$t('Add Group')" @click="addGroup()">
+                <BButton :variant=" isDark ? 'secondary' : 'outline-primary'" :title="$t('Add Group')" @click="addGroup()">
                     <mdicon name="folder-plus" size="20"/>
                     <span class="d-none d-lg-inline">{{ $t('Add Group') }}</span>
                 </BButton>
@@ -15,13 +15,13 @@
         </div>
         <div class="col-9" style="text-align: right">
             <BButtonGroup size="sm" class="px-1">
-                <BButton :variant=" isDark ? 'light' : 'outline-dark'" :title="$t('project_excel')" :disabled="true">
+                <BButton :variant=" isDark ? 'secondary' : 'outline-dark'" :title="$t('project_excel')" :disabled="true">
                     <mdicon name="file-excel-outline" size="20"/>
                 </BButton>
             </BButtonGroup>
             <BButtonGroup size="sm">
                 <BButton
-                    :variant=" isDark ? 'light' : 'outline-primary'"
+                    :variant=" isDark ? 'secondary' : 'outline-primary'"
                     @click="$refs.share.show()"
                     :title="$t('project_share')"
                 >
@@ -34,7 +34,7 @@
             <BButtonGroup>
                 <BDropdown v-model="selectedGroupShow"
                            auto-close="outside"
-                           :variant="isDark ? 'light' : 'outline-dark'"
+                           :variant="isDark ? 'secondary' : 'outline-dark'"
                            class="px-1"
                            size="sm">
                     <template #button-content>
@@ -53,7 +53,7 @@
                         </BFormCheckbox>
                     </div>
                 </BDropdown>
-                <BDropdown v-model="selectedOptionShow" class="px-1" :variant="isDark ? 'light' : 'outline-dark'"
+                <BDropdown v-model="selectedOptionShow" class="px-1" :variant="isDark ? 'secondary' : 'outline-dark'"
                            size="sm"
                            :title="$t('project_timelines.display')"
                            v-show="tab === 'timeline'">
@@ -80,7 +80,7 @@
                         {{ $t('project_display_options.year') }}
                     </BDropdownItem>
                 </BDropdown>
-                <BDropdown v-model="selectedZoomShow" class="px-1" :variant="isDark ? 'light' : 'outline-dark'"
+                <BDropdown v-model="selectedZoomShow" class="px-1" :variant="isDark ? 'secondary' : 'outline-dark'"
                            size="sm"
                            :title="$t('project_zoom')"
                            v-show="tab === 'timeline'">
@@ -109,17 +109,17 @@
 
 
             <BButtonGroup size="sm" class="mx-1">
-                <BButton :variant="tab === 'timeline' ? 'primary' : 'outline-dark'" :title="$t('project_timeline')"
+                <BButton :variant="tab === 'timeline' ? 'primary' : (isDark ? 'secondary' : 'outline-dark')" :title="$t('project_timeline')"
                          @click="tab='timeline'">
                     <mdicon name="chart-gantt" size="20"/>
                 </BButton>
-                <BButton :variant="tab === 'list' ? 'primary' : (isDark ? 'light' : 'outline-dark')"
+                <BButton :variant="tab === 'list' ? 'primary' : (isDark ? 'secondary' : 'outline-dark')"
                          :title="$t('project_list')" @click="tab='list'">
                     <mdicon name="view-list" size="20"/>
                 </BButton>
             </BButtonGroup>
             <BButtonGroup size="sm" class="mx-1">
-                <BButton :variant="isDark ? 'light' : 'outline-dark'" :title="$t('project_settings')"
+                <BButton :variant="isDark ? 'secondary' : 'outline-dark'" :title="$t('project_settings')"
                 @click="goToProjectPage(project_id, 'settings')">
                     <mdicon name="cog" size="20"/>
                 </BButton>
@@ -127,10 +127,13 @@
         </div>
     </div>
     <loading v-if="loading"></loading>
-    <div ref="visualization" v-if="renderComponent" v-show="tab === 'timeline'"></div>
+    <div ref="visualization" v-if="renderComponent" v-show="tab === 'timeline'" class="shadow"></div>
     <div class="" v-if="!loading" v-show="tab === 'list'">
+        <div class="alert alert-info" v-if="items.length === 0 && groups.length === 0">
+            <h4 class="alert-heading">{{ $t('project_timelines.item.no_group_created_yet') }}</h4>
+        </div>
         <!-- Header Group Name -->
-        <div class="card mb-1" v-if="items.filter(x => x.group === null || x.group === undefined)">
+        <div class="card mb-1" v-if="items.filter(x => x.group === null || x.group === undefined).length > 0">
             <div class="card-body">
                 <h5 class="card-title">No Group</h5>
                 <BTable :sort-by="[{key: 'start', order: 'asc'}]"
@@ -140,7 +143,7 @@
                     <template #cell(edit)="row">
                         <BButtonGroup size="sm">
                             <BButton
-                                :variant=" isDark ? 'light' : 'outline-primary'"
+                                :variant=" isDark ? 'secondary' : 'outline-primary'"
                                 :title="$t('Edit')"
                                 @click="editItem(row.item.id)">
                                 <mdicon name="pencil" size="20"/>
@@ -176,7 +179,7 @@
                     <template #cell(edit)="row">
                         <BButtonGroup size="sm">
                             <BButton
-                                :variant=" isDark ? 'light' : 'outline-primary'"
+                                :variant=" isDark ? 'secondary' : 'outline-primary'"
                                 :title="$t('Edit')"
                                 @click="editItem(row.item.id)">
                                 <mdicon name="pencil" size="20"/>
@@ -366,9 +369,17 @@ export default {
                 return moment(date).utc();
             }
 
-
+            this.options['minHeight'] = this.getMinHeight(this.options['minHeight']);
             this.options.onMove = this.onItemMove;
             this.options.locale = this.$i18n.locale;
+        },
+        getMinHeight(minHeight) {
+            let calculatedMin = window.innerHeight - 85;
+            minHeight = parseInt(minHeight.split('px')[0])
+            if(minHeight > calculatedMin){
+                return minHeight
+            }
+            return calculatedMin;
         },
         initTimeline() {
             if (this.timeline) {
