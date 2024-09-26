@@ -37,6 +37,7 @@ const app = createApp({
         this.themeOnCreated();
     }
 })
+    .use(appStorage)
     .use(mdiVue, {
         icons: mdijs
     })
