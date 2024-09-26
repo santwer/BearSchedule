@@ -57,7 +57,10 @@ class ProjectController extends Controller
         $vars = ['project' => $project->encryptId, 'activeTab' => 'settings'];
 
         ProjectLog::entry(Actions::ADD, Types::SETTINGS, '', '{"Project": "Created"}', auth()->user()->id, $project->id);
-
+        $this->setOptions([
+            'orientation.item' => 'top',
+            'orientation.axis' => 'both',
+        ], $project->id);
         return response()->redirectTo('/project/' . $project->encryptId);
 
     }

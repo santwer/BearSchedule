@@ -3,6 +3,9 @@
     "auth.sign_up": "Registieren",
     "copy": "copy",
     "open": "open",
+    "rename": "rename",
+    "put to archive": "put to archive",
+    "get to archive": "get to archive",
     "remove person from project": "remove {name} from project",
     "Do you want to remove person from project": "Do you want to remove {name} from project",
     "successfully copied": "successfully copied",
@@ -55,6 +58,8 @@
     "general.logout": "Logout",
     "general.welcome": "Welcome :name",
     "general.success": "Success",
+    "add user to project": "add user to project",
+    "enter name or email...": "enter name or email...",
     "general.disclaimer": "Disclaimer",
     "general.view_on_github": "View on GitHub",
     "general.privacy_policy": "Privacy Policy",
@@ -126,11 +131,11 @@
         "jira_with_subtitle": "Jira Item Process with Subtitle"
     },
     "project_item_orientation": "Item orientation",
-    "project_axis_orientation": "Axis orientation",
+    "project_axis_orientation": "Axis label",
     "project_axis_ori": {
         "bottom": "bottom",
         "top": "top",
-        "both": "both",
+        "both": "top/bottom",
         "none": "none"
     },
     "project_zoom": "Zoom",

@@ -3,11 +3,13 @@
         <div class="col-3">
             <BButtonGroup size="sm">
 
-                <BButton :variant=" isDark ? 'secondary' : 'outline-primary'" :title="$t('Add Item')" @click="addItem()">
+                <BButton :variant=" isDark ? 'secondary' : 'outline-primary'" :title="$t('Add Item')"
+                         @click="addItem()">
                     <mdicon name="plus" size="20"/>
                     <span class="d-none d-lg-inline">{{ $t('Add Item') }}</span>
                 </BButton>
-                <BButton :variant=" isDark ? 'secondary' : 'outline-primary'" :title="$t('Add Group')" @click="addGroup()">
+                <BButton :variant=" isDark ? 'secondary' : 'outline-primary'" :title="$t('Add Group')"
+                         @click="addGroup()">
                     <mdicon name="folder-plus" size="20"/>
                     <span class="d-none d-lg-inline">{{ $t('Add Group') }}</span>
                 </BButton>
@@ -15,7 +17,8 @@
         </div>
         <div class="col-9" style="text-align: right">
             <BButtonGroup size="sm" class="px-1">
-                <BButton :variant=" isDark ? 'secondary' : 'outline-dark'" :title="$t('project_excel')" :disabled="true">
+                <BButton :variant=" isDark ? 'secondary' : 'outline-dark'" :title="$t('project_excel')"
+                         :disabled="true">
                     <mdicon name="file-excel-outline" size="20"/>
                 </BButton>
             </BButtonGroup>
@@ -26,7 +29,7 @@
                     :title="$t('project_share')"
                 >
                     <mdicon name="share-variant" size="20"/>
-                    <span class="badge bg-primary rounded-pill">1</span>
+                    <span class="badge bg-primary rounded-pill" v-if="shared_count > 1">{{ shared_count }}</span>
                 </BButton>
             </BButtonGroup>
 
@@ -102,14 +105,13 @@
                     </BDropdownItem>
 
 
-
                 </BDropdown>
 
             </BButtonGroup>
 
-
             <BButtonGroup size="sm" class="mx-1">
-                <BButton :variant="tab === 'timeline' ? 'primary' : (isDark ? 'secondary' : 'outline-dark')" :title="$t('project_timeline')"
+                <BButton :variant="tab === 'timeline' ? 'primary' : (isDark ? 'secondary' : 'outline-dark')"
+                         :title="$t('project_timeline')"
                          @click="tab='timeline'">
                     <mdicon name="chart-gantt" size="20"/>
                 </BButton>
@@ -119,11 +121,57 @@
                 </BButton>
             </BButtonGroup>
             <BButtonGroup size="sm" class="mx-1">
-                <BButton :variant="isDark ? 'secondary' : 'outline-dark'" :title="$t('project_settings')"
-                @click="goToProjectPage(project_id, 'settings')">
-                    <mdicon name="cog" size="20"/>
-                </BButton>
+
+                <BDropdown v-model="timelineOptionShow" class="px-1" :variant="isDark ? 'secondary' : 'outline-dark'"
+                           size="sm"
+                           auto-close="outside"
+                           :title="$t('project_settings')"
+                           >
+                    <template #button-content>
+                        <mdicon name="cog" size="20"/>
+                    </template>
+                    <div class="form-group pb-2 mx-2 input-group-sm">
+                        <label>{{ $t('project_item_design') }}</label>
+                        <select class="form-select "  v-model="template" v-on:change="updateSetting('template')">
+                            <option v-for="temp in templates" :value="temp">{{ $t(temp.text) }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group mx-2 input-group-sm">
+                        <label>{{ $t('project_initial_zoom') }}</label>
+                        <select class="form-select" v-model="displayscale" v-on:change="updateSetting('displayscale')">
+                            <option :value="null">{{ $t('project_zoom_timeline.auto') }}</option>
+                            <option value="year">{{ $t('project_zoom_timeline.year') }}</option>
+                            <option value="month">{{ $t('project_zoom_timeline.month') }}</option>
+                            <option value="week">{{ $t('project_zoom_timeline.week') }}</option>
+                            <option value="day">{{ $t('project_zoom_timeline.day') }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group py-2 mx-2 input-group-sm">
+                        <label>{{ $t('project_axis_orientation') }}</label>
+                        <select class="form-select" v-model="this.options.orientation.axis" v-on:change="updateSetting('orientation.axis')">
+                            <option :value="undefined">{{ $t('project_axis_ori.bottom') }}</option>
+                            <option value="top">{{ $t('project_axis_ori.top') }}</option>
+                            <option value="both">{{ $t('project_axis_ori.both') }}</option>
+                            <option value="none">{{ $t('project_axis_ori.none') }}</option>
+                        </select>
+                    </div>
+                    <div class="form-group mx-2 input-group-sm">
+                        <label>{{ $t('project_item_orientation') }}</label>
+                        <select class="form-select" v-model="this.options.orientation.item" v-on:change="updateSetting('orientation.item')">
+                            <option :value="undefined">{{ $t('project_axis_ori.bottom') }}</option>
+                            <option value="top">{{ $t('project_axis_ori.top') }}</option>
+                        </select>
+                    </div>
+                    <hr>
+                    <BButtonGroup class="px-2" style="width: 100%">
+                        <BButton :variant="isDark ? 'secondary' : 'outline-dark'" :title="$t('rename')"><mdicon name="pencil" size="16"/></BButton>
+                        <BButton  variant="info" v-if="true" :title="$t('put to archive')"><mdicon name="archive-arrow-down" size="16"/></BButton>
+                        <BButton :title="$t('get to archive')" v-else><mdicon name="archive-arrow-up" size="16"/></BButton>
+                        <BButton variant="danger" :title="$t('general.delete')"><mdicon name="delete" size="16"/></BButton>
+                    </BButtonGroup>
+                </BDropdown>
             </BButtonGroup>
+
         </div>
     </div>
     <loading v-if="loading"></loading>
@@ -272,7 +320,9 @@ export default {
             timeline: null,
             items: [],
             groups: [],
-            options: {},
+            options: {
+                orientation: {axis: undefined, item: undefined}
+            },
             loading: false,
             selectedItems: null,
             renderComponent: true,
@@ -281,12 +331,45 @@ export default {
             selectedOption: null,
             selectedGroup: [],
             selectedZoomShow: false,
+            timelineOptionShow: false,
             selectedOptionShow: false,
             selectedGroupShow: false,
+            shared_count: 0,
             tab: 'timeline',
+            template: null,
+            displayscale: null,
+            templates: [
+            ],
         }
     },
     methods: {
+        updateSetting(name) {
+            let value = null;
+            if(name === 'displayscale') {
+                value = this.displayscale;
+            }
+            else if(name === 'template') {
+                value = this.template.value;
+                this.options.template = Handlebars.compile(this.template.template);
+            }
+            else if(name.includes('.')) {
+                value = this.options[name.split('.')[0]][name.split('.')[1]];
+            } else {
+                value = this.options[name];
+            }
+
+            this.timeline.setOptions(this.options);
+
+
+
+            Api.setProjectSetting(this.$route.params.id, name, value)
+                .then(response => {
+                    console.log(response.data)
+                })
+                .catch(error => {
+                    console.log(error)
+                });
+        },
         editItem(id) {
             this.$refs.itemmodal.openItem(this.items.find(x => x.id === id));
         },
@@ -336,6 +419,8 @@ export default {
 
                 this.items = response.data.items.map(x => this.removeNullValues(x));
                 this.groups = response.data.groups.map(x => this.removeNullValues(x));
+                this.shared_count = response.data.shared_count;
+                this.templates = response.data.item_templates;
                 this.setOptions(response.data.options);
                 this.initTimeline();
             });
@@ -343,6 +428,9 @@ export default {
         setOptions(options) {
             if (typeof options.template !== "undefined") {
                 options.template = Handlebars.compile(options.template);
+                options.xss = {
+                    disabled: true
+                }
             }
             if (typeof options.groupTemplate !== "undefined") {
                 options.groupTemplate = Handlebars.compile(options.groupTemplate);
@@ -353,7 +441,10 @@ export default {
                     options.start = dates[0];
                     options.end = dates[1];
                 }
+                this.displayscale = options.displayscale;
                 delete options.displayscale;
+            } else {
+                this.displayscale = null;
             }
             this.options = options;
             this.options['snap'] = function (date, scale, step) {
@@ -376,7 +467,7 @@ export default {
         getMinHeight(minHeight) {
             let calculatedMin = window.innerHeight - 85;
             minHeight = parseInt(minHeight.split('px')[0])
-            if(minHeight > calculatedMin){
+            if (minHeight > calculatedMin) {
                 return minHeight
             }
             return calculatedMin;
@@ -386,7 +477,6 @@ export default {
                 this.timeline.destroy();
             }
             // Create a DataSet (allows two way data-binding)
-
             this.timeline = new Timeline(
                 this.$refs.visualization,
                 this.items,
@@ -406,6 +496,10 @@ export default {
                 else if (properties.group && properties.what === 'group-label') {
                     let group = this.groups.find(x => x.id === properties.group);
                     this.$refs.groupmodal.openGroup(group);
+                }
+                else if (properties.group && properties.what === 'background' && properties.event.target.classList.contains('vis-item-overflow')) {
+                    //has class vis-item-overflow
+                    console.log(properties.event.target)
                 }
                 console.log(properties)
             });

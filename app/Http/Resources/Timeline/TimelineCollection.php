@@ -18,6 +18,8 @@ class TimelineCollection extends ResourceCollection
             'options' => new OptionResource($this->collection['options']),
             'groups' => GroupResource::collection($this->collection['groups']),
             'items' => ItemResource::collection($this->collection['items']),
+            'shared_count' => $this->collection['shared_count'],
+            'item_templates' => $this->collection['item_templates'],
         ];
     }
 }

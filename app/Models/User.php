@@ -19,7 +19,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password', 'is_ms_account', 'uuid'
+        'name',
+        'email',
+        'password',
+        'is_ms_account',
+        'uuid'
     ];
 
     /**
@@ -28,7 +32,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -40,7 +45,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function projects() {
+    public function projects()
+    {
         return $this->belongsToMany(Project::class, 'project_user')->withPivot(['role']);
     }
 
@@ -49,25 +55,36 @@ class User extends Authenticatable
         return $this->hasMany(ProjectLog::class, 'user_id', 'id');
     }
 
-    public static function ajaxSearch(string $q):Collection
+    public static function ajaxSearch(string $q, $project_id): Collection
     {
-        $domains =  UserHelper::viewableUsers();
-        if(empty($domains) || $domains === null) {
+        $domains = UserHelper::viewableUsers();
+
+        if (empty($domains) || $domains === null) {
             return self::where('email', 'like', $q)
+                ->whereDoesntHave('projects', function ($query) use ($project_id) {
+                    $query->where('project_id', $project_id);
+                })
                 ->selectRaw("id, name, email, CONCAT(name, ' (', email, ')') as value")
                 ->get();
         }
-        if(in_array('*', $domains)) {
-            return self::where('email', 'like', '%'.$q.'%')->orWhere('name', 'like', '%'.$q.'%')
+        if (in_array('*', $domains)) {
+            return self::where('email', 'like', '%' . $q . '%')->orWhere('name', 'like', '%' . $q . '%')
+                ->whereDoesntHave('projects', function ($query) use ($project_id) {
+                    $query->where('project_id', $project_id);
+                })
                 ->selectRaw("id, name, email, CONCAT(name, ' (', email, ')') as value")
                 ->get();
         }
 
-            return self::where('email', 'like', $q)->orWhere(function ($where) use($domains, $q) {
-                foreach ($domains as $domain) {
-                    $where->where('email', 'like', '%' . $q . '%@'.$domain);
-                }
-            })->selectRaw("id, name, email, CONCAT(name, ' (', email, ')') as value")
+        return self::where('email', 'like', $q)->where(function ($where) use ($domains, $q) {
+            foreach ($domains as $domain) {
+                $where->orWhere('email', 'like', '%' . $q . '%@' . $domain);
+            }
+        })
+            ->whereDoesntHave('projects', function ($query) use ($project_id) {
+                $query->where('project_id', $project_id);
+            })
+            ->selectRaw("id, name, email, CONCAT(name, ' (', email, ')') as value")
             ->get();
     }
 
@@ -76,16 +93,16 @@ class User extends Authenticatable
         return $this->projects()->where('project_id', $id)->first() !== null;
     }
 
-    public function getAvatarUrlAttribute() :string
+    public function getAvatarUrlAttribute(): string
     {
         $hash = md5($this->id);
-        return 'https://www.gravatar.com/avatar/' . $hash . '?f=y&d='.env('GRAVATAR_ICON', 'robohash');
+        return 'https://www.gravatar.com/avatar/' . $hash . '?f=y&d=' . env('GRAVATAR_ICON', 'robohash');
     }
 
     /**
      * Send a password reset notification to the user.
      *
-     * @param  string  $token
+     * @param string $token
      */
     public function sendPasswordResetNotification($token): void
     {

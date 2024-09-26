@@ -106,7 +106,10 @@
                      :class="{'bg-white': !isDark, 'bg-gray-400': isDark, 'text-gray-800': isDark}">
                     <a class="collapse-item" :class="{active: project.id === $route.params.id}"
                        v-for="project in projects"
-                       @click="goToProject(project.id)">{{ project.name }}</a>
+                       @click="goToProject(project.id)">{{ project.name }}
+
+                    </a>
+
                 </div>
                 <div class=" py-2 collapse-inner rounded "
                      :class="{'bg-white': !isDark, 'bg-gray-400': isDark, 'text-gray-800': isDark}">
@@ -192,7 +195,7 @@ export default {
             }
 
             if (url.includes('/' + currentLocale + '/')) {
-                url = url.replace('/' +currentLocale+ '/', '/' +locale+ '/');
+                url = url.replace('/' + currentLocale + '/', '/' + locale + '/');
             }
 
             window.location.href = url;
@@ -236,11 +239,25 @@ ul.inline-with-dot-inbetween li:not(:last-child):after {
     padding-bottom: 50px;
 }
 
+.collapse-item .editbtn {
+    display: none;
+    margin-top: -5px;
+    position: absolute;
+    right: 10px;
+}
+.toggled .collapse-item .editbtn {
+    right: -35px;
+}
+.collapse-item:hover .editbtn {
+    display: inline;
+}
+
+
 .tofadeOut {
-  /*  z-index: 10;
-    min-width: 225px;
-    background: rgb(0,39,84);
-    background: linear-gradient(0deg, rgba(0,39,84,1) 50%, rgba(0,39,84,0) 100%);
-    padding-top: 50px; */
+    /*  z-index: 10;
+      min-width: 225px;
+      background: rgb(0,39,84);
+      background: linear-gradient(0deg, rgba(0,39,84,1) 50%, rgba(0,39,84,0) 100%);
+      padding-top: 50px; */
 }
 </style>

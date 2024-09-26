@@ -1,17 +1,20 @@
 @import "variables";
 .vis-timeline {
     margin-top: 0px;
-    border: 0 !important;
-    background-color: #f9fafc;
-    border-radius: 4px;
+    background-color: $white;
+    border-radius: 4px !important;
     .vis-time-axis .vis-text.vis-major {
         font-weight: bold;
     }
+    .vis-item.vis-range, .vis-item.vis-point, .vis-item.vis-background {
+        border-radius: 3px;
+    }
+
     .vis-item .vis-item-content {
         border-radius: 3px;
     }
     .vis-panel {
-        border-color: #e6e7e9;
+        border-color: $border-color;
 
 
         .vis-label {
@@ -25,12 +28,12 @@
         }
 
         .vis-left {
-            border-color: #edf2f5;
+            border-color: $border-color;
         }
 
 
         .vis-labelset .vis-label {
-            border-color: #e6e7e9;
+            border-color: $border-color;
             .vis-inner {
                 min-width: 200px;
             }
@@ -42,14 +45,14 @@
     }
     .vis-foreground  {
         .vis-group {
-            border-color: #e6e7e9;
+            border-color: $border-color;
         }
 
     }
     /* alternating column backgrounds */
     .vis-time-axis .vis-grid.vis-odd {
         //background: #fafbfd;
-        background: rgba(255,255,255);
+        background: darken($white, 5%) ;
     }
     .vis-time-axis .vis-grid.vis-saturday,
     .vis-time-axis .vis-grid.vis-sunday {

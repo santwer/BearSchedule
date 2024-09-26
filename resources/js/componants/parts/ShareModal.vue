@@ -37,9 +37,32 @@
                         </div>
                     </template>
                 </BTable>
+                <div class="m-3 mt-0">
+                    <div class="form-group">
+                        <label>{{ $t('add user to project') }}</label>
+                        <BInputGroup>
+                            <template #append>
+                                <BInputGroupText v-if="searchLoader">
+                                    <BSpinner small variant="light"/>
+                                </BInputGroupText>
+                            </template>
+                            <BFormInput list="my-list-id"
+                                        v-on:keyup="initLoading"
+                                        :placeholder="$t('enter name or email...')"
+                                        v-model="searchPerson"
+                                        v-debounce:500ms="doSearch"/>
+                        </BInputGroup>
+                        <datalist id="my-list-id" v-on:select="setParticipant('x')">
+                            <option v-for="entry in datalistSearch" :value="JSON.stringify(entry)">{{
+                                    entry.value
+                                }}
+                            </option>
+                        </datalist>
+                    </div>
+                </div>
             </div>
             <div class="card mt-3">
-                <div class="card-header"  :class="{'text-gray-200': isDark, 'text-primary': !isDark}">
+                <div class="card-header" :class="{'text-gray-200': isDark, 'text-primary': !isDark}">
                     {{ $t('share project to everyone without account') }}
                 </div>
 
@@ -75,7 +98,7 @@
         v-on:backdrop="toDeleteItem = null"
         v-on:close="toDeleteItem = null"
         v-b-modal.modal-center>
-            <p>{{ $t('Do you want to remove person from project', {name: toDeleteItem ? toDeleteItem.name : ''}) }}</p>
+        <p>{{ $t('Do you want to remove person from project', {name: toDeleteItem ? toDeleteItem.name : ''}) }}</p>
     </BModal>
 </template>
 
@@ -89,26 +112,35 @@ import {
     BTable,
     BInputGroup,
     BInputGroupText,
-    BFormInput
+    BFormInput,
+    BSpinner
 } from "bootstrap-vue-next";
 import Loading from "@/componants/parts/Loading.vue";
 import Error from "@/componants/parts/Error.vue";
 import ThemeMixin from "@/mixins/ThemeMixin";
 import Api from "@/Api";
+import App from "@/componants/App.vue";
+
 
 export default {
     mixins: [ThemeMixin],
     components: {
         Loading,
         Error,
-        BModal, BButton, BFormCheckbox, BButtonGroup, BFormSelect, BTable, BInputGroup, BFormInput, BInputGroupText
+        BModal, BButton, BFormCheckbox, BButtonGroup,
+        BFormSelect, BTable, BInputGroup, BFormInput,
+        BInputGroupText, BSpinner
     },
     data() {
         return {
+            datalistSearch: [],
+            searchPerson: null,
             modal: false,
             loading: false,
+            searchLoader: false,
             toDeleteItem: null,
             deleteModal: false,
+            eventSource: null,
             error: null,
             copyState: null,
             shareUrl: 'https://example.com/share/1234',
@@ -118,8 +150,7 @@ export default {
                 {key: 'role', label: this.$t('project_setting_users.role'), sortable: true},
                 {key: 'remove', label: '', sortable: false}
             ],
-            sortItems: [
-            ],
+            sortItems: [],
             roleOptions: [
                 {value: 'ADMIN', text: this.$t('project_setting_users.roles_option.ADMIN')},
                 {value: 'EDITOR', text: this.$t('project_setting_users.roles_option.EDITOR')},
@@ -128,6 +159,35 @@ export default {
         }
     },
     methods: {
+
+        initLoading() {
+            if (this.searchPerson.length >= 3) {
+                this.searchLoader = true;
+            }
+        },
+        doSearch() {
+            if (this.searchPerson.length >= 3) {
+                this.searchLoader = true;
+                Api.searchPerson(this.$route.params.id, this.searchPerson)
+                    .then(response => {
+                        this.datalistSearch = response.data;
+                        this.searchLoader = false;
+                    })
+                    .catch(error => {
+                        this.searchLoader = false;
+                        this.error = error;
+                    });
+
+            }
+        },
+        setParticipant(partcipant) {
+            partcipant.role_state = null;
+            partcipant.role = 'SUBSCRIBER';
+
+            this.sortItems.push(partcipant);
+            this.changeRole({item: partcipant, value: 'SUBSCRIBER'});
+
+        },
         getData() {
             this.loading = true;
             this.error = null;
@@ -175,7 +235,7 @@ export default {
                     row.item.role_state = true;
                     row.item.role = row.value;
                     setTimeout(() => {
-                        row.item.role_state= null;
+                        row.item.role_state = null;
                     }, 3000);
                 })
                 .catch(error => {
@@ -183,8 +243,8 @@ export default {
                     row.value = row.item.role;
                     row.item.save_error = error.response.data.message;
                     setTimeout(() => {
-                        row.item.role_state= null;
-                        row.item.save_error= null;
+                        row.item.role_state = null;
+                        row.item.save_error = null;
                     }, 30000);
                 });
         },
@@ -202,10 +262,26 @@ export default {
         },
         openDeleteModal(toDeleteItem) {
 
-                this.toDeleteItem = toDeleteItem;
-                this.deleteModal = true;
+            this.toDeleteItem = toDeleteItem;
+            this.deleteModal = true;
 
         },
+    },
+    watch: {
+        searchPerson() {
+            //string is json
+            if (typeof this.searchPerson === 'string') {
+                try {
+                    let searchPerson = JSON.parse(this.searchPerson);
+                    if (searchPerson.id) {
+                        this.setParticipant(Object.assign({}, searchPerson));
+                        this.searchPerson = null;
+                    }
+                } catch (e) {
+
+                }
+            }
+        }
     }
 }
 </script>

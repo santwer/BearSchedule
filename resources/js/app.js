@@ -4,6 +4,7 @@ import './bootstrap';
 import { createApp } from 'vue'
 import {createBootstrap} from 'bootstrap-vue-next'
 import { createI18n } from 'vue-i18n'
+import vueDebounce from 'vue-debounce'
 import router from './router'
 import mdiVue from 'mdi-vue/v3'
 import * as mdijs from '@mdi/js'
@@ -35,6 +36,7 @@ const app = createApp(App)
     .use(router)
     .use(appStorage)
     .use(createBootstrap())
+    .directive('debounce', vueDebounce({ lock: true }))
     .use(mdiVue, {
         icons: mdijs
     })

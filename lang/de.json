@@ -3,6 +3,9 @@
     "auth.sign_up": "Registieren",
     "copy": "kopieren",
     "open": "öffnen",
+    "rename": "Umbenennen",
+    "put to archive": "In Archiv verschieben",
+    "get to archive": "Aus Archiv holen",
     "remove person from project": "{name} von Projekt entfernen",
     "Do you want to remove person from project": "Möchtest du {name} vom Projekt entfernen",
     "successfully copied": "Erfolgreich kopiert",
@@ -54,6 +57,8 @@
     "general.welcome": "Hallo :name",
     "general.dark_mode_toogle": "Dark Mode Wechsel",
     "general.success": "Erfolgreich",
+    "add user to project": "Benutzer zum Projekt hinzufügen",
+    "enter name or email...": "Name oder Email eingeben...",
     "general.disclaimer": "Impressum",
     "general.view_on_github": "View on GitHub",
     "general.privacy_policy": "Datenschutz",
@@ -125,11 +130,11 @@
         "jira_with_subtitle": "Jira Element mit zweit-Titel"
     },
     "project_item_orientation": "Element Orientierung ",
-    "project_axis_orientation": "Achsen Orientierung ",
+    "project_axis_orientation": "Achsen Beschriftung",
     "project_axis_ori": {
         "bottom": "unten",
         "top": "oben",
-        "both": "beide",
+        "both": "oben/unten",
         "none": "keine"
     },
     "project_zoom": "Zoom",

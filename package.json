@@ -27,6 +27,7 @@
         "uuid": "^9.0.0",
         "vis-timeline": "^7.7.3",
         "vue": "^3.4.30",
+        "vue-debounce": "^5.0.0",
         "vue-i18n": "^9.2.2",
         "vue-loader": "^17.0.1",
         "vue-router": "^4.2.4",
