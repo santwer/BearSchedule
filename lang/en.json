@@ -77,6 +77,9 @@
     "general.archive": "Archive",
     "general.active": "Active",
     "general.open": "Open",
+    "general.archivevd_projects": "Archived projects",
+    "general.active_projects": "Active projects",
+    "collaboration": "Collaboration",
     "general.close": "Close",
     "general.dashboard": {
         "news": "News",
