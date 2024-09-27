@@ -77,7 +77,10 @@ export default {
             let items = this.$parent.getItemsAtTime(this.time, this.group);
             if (items.length === 0) {
                 this.item = null;
-            } else {
+            } else if(items.filter(x => x.type === 'background').length > 0) {
+                this.item = items.filter(x => x.type === 'background')[0].id;
+            }
+            else {
                 this.item = items[0].id;
             }
         },
