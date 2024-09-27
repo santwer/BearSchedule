@@ -15,7 +15,7 @@
 # BearSchedule
 BearSchedule is a PHP/Laravel Project for easy use to show and share Project schedules.
 
-<img src="https://repository-images.githubusercontent.com/292673266/4a5cdf80-a5bb-11eb-94d3-411eda14e451"/>
+<img src="https://raw.githubusercontent.com/santwer/BearSchedule/refs/heads/main/.src/web_2024.jpg"/>
 
 
 ## Requierements
