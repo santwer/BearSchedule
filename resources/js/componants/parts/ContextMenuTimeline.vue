@@ -80,9 +80,6 @@ export default {
             } else if(items.filter(x => x.type === 'background').length > 0) {
                 this.item = items.filter(x => x.type === 'background')[0].id;
             }
-            else {
-                this.item = items[0].id;
-            }
         },
         adjustPosition() {
             let width = this.$refs.context.offsetWidth;

@@ -533,7 +533,10 @@ export default {
             if (items.length === 0) {
                 return null;
             }
-            return items[0].id;
+            else if(items.filter(x => x.type === 'background').length > 0) {
+                return items.filter(x => x.type === 'background')[0].id;
+            }
+            return null;
 
         },
         initTimeline() {
