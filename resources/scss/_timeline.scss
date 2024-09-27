@@ -1,7 +1,7 @@
 @import "variables";
 .vis-timeline {
     margin-top: 0px;
-    background-color: $white;
+    background-color: darken($white,2%);
     border-radius: 4px !important;
     .vis-time-axis .vis-text.vis-major {
         font-weight: bold;
@@ -43,6 +43,9 @@
 
 
     }
+    .vis-right, .vis-top, .vis-bottom {
+        background-color: $white;
+    }
     .vis-foreground  {
         .vis-group {
             border-color: $border-color;
@@ -53,6 +56,10 @@
     .vis-time-axis .vis-grid.vis-odd {
         //background: #fafbfd;
         background: darken($white, 5%) ;
+    }
+    .vis-time-axis .vis-grid.vis-even {
+        //background: #fafbfd;
+        background:  $white;
     }
     .vis-time-axis .vis-grid.vis-saturday,
     .vis-time-axis .vis-grid.vis-sunday {
@@ -135,7 +142,7 @@
 [data-bs-theme="dark"] {
     .vis-timeline {
         border: 0 !important;
-        background-color: $body-bg-dark;
+        background-color: darken($body-bg-dark,5%);
         color: $body-color-dark;
         .vis-panel {
             border-color: $border-color-dark;
@@ -152,6 +159,12 @@
                 color: $body-color-dark;
             }
         }
+
+        .vis-right, .vis-top, .vis-bottom {
+            background-color: $body-bg-dark,;
+        }
+
+
         .vis-foreground  {
             .vis-group {
                 border-color: $border-color-dark;
@@ -166,6 +179,10 @@
         .vis-time-axis .vis-grid.vis-odd {
             //background: #fafbfd;
             background:  lighten($body-bg-dark, 10%) ;
+        }
+        .vis-time-axis .vis-grid.vis-even {
+            //background: #fafbfd;
+            background:  $body-bg-dark;
         }
         .vis-time-axis .vis-grid.vis-saturday,
         .vis-time-axis .vis-grid.vis-sunday {

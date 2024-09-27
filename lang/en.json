@@ -4,6 +4,8 @@
     "copy": "copy",
     "open": "open",
     "rename": "rename",
+    "edit group": "edit group",
+    "edit item": "edit item",
     "put to archive": "put to archive",
     "get to archive": "get to archive",
     "remove person from project": "remove {name} from project",
@@ -178,6 +180,7 @@
         "no_items_message": "Since there a no Items, its not possible to show the timeline, yet. Please add Items and Groups first.",
         "item": {
             "new": "Add Item",
+            "empty": "[empty]",
             "data": "Data",
             "no_group": "No Group",
             "select_group": "Select a group",
@@ -235,6 +238,8 @@
         "messages": {
             "save_fail": "Save didn't work. Come back later.",
             "save_success": "Saved successfully",
+            "save_failed": "Save failed",
+            "changes_saved_success": "Changes saved successfully",
             "delete_success": "Delete successfully",
             "delete_fail": "Delete didn't work. Come back later.",
             "confirm_delete_group": "You want to Delete this Group?",

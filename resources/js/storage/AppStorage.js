@@ -40,6 +40,9 @@ export default createStore({
         },
         theme(state) {
             return state.theme;
+        },
+        projectById: (state) => (id) => {
+            return state.projects.find(project => project.id === id || project.id === parseInt(id));
         }
     },
     actions: {

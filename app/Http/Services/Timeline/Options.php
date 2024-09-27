@@ -80,7 +80,7 @@ class Options extends BaseService
     private function getEdiable(int $projectId)
     {
         return [
-            'add' => false,
+            'add' => ($this->role === 'ADMIN' || $this->role === 'EDITOR'),
             'remove' => false,
             'updateTime' => ($this->role === 'ADMIN' || $this->role === 'EDITOR'),
             'updateGroup' => ($this->role === 'ADMIN' || $this->role === 'EDITOR'),

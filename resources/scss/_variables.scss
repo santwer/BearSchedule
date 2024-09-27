@@ -108,6 +108,8 @@ $body-bg-dark: $gray-700 !default;
     .logostyle {
         border-radius: 50%;
         background-color: $gray-200;
+        -webkit-box-shadow: 0 0 5px 1px  $gray-200;
+        box-shadow: 0 0 5px 1px  $gray-200;
     }
 
 }

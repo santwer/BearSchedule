@@ -15,8 +15,7 @@ import appStorage from "@/storage/AppStorage";
 
 import en from '../../lang/en.json'
 import de from '../../lang/de.json'
-import moment from 'moment';
-import 'moment/locale/de';
+import moment from 'moment/min/moment-with-locales';
 
 //get locale from browser storage if not set from browser
 let locale = localStorage.getItem('locale') || navigator.language || navigator.userLanguage || 'en';
@@ -30,7 +29,7 @@ const i18n = createI18n({
         de, en
     }
 });
-moment.locale(locale);
+
 
 const app = createApp(App)
     .use(router)

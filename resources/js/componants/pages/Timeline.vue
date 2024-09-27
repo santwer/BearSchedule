@@ -1,6 +1,6 @@
 <template>
     <div class="row mb-2">
-        <div class="col-3">
+        <div class="col-2 col-sm-4">
             <BButtonGroup size="sm">
 
                 <BButton :variant=" isDark ? 'secondary' : 'outline-primary'" :title="$t('Add Item')"
@@ -15,8 +15,8 @@
                 </BButton>
             </BButtonGroup>
         </div>
-        <div class="col-9" style="text-align: right">
-            <BButtonGroup size="sm" class="px-1">
+        <div class="col-10 col-sm-8" style="text-align: right">
+            <BButtonGroup size="sm" class="px-2" v-if="false">
                 <BButton :variant=" isDark ? 'secondary' : 'outline-dark'" :title="$t('project_excel')"
                          :disabled="true">
                     <mdicon name="file-excel-outline" size="20"/>
@@ -25,7 +25,7 @@
             <BButtonGroup size="sm">
                 <BButton
                     :variant=" isDark ? 'secondary' : 'outline-primary'"
-                    @click="$refs.share.show()"
+                    @click="openShare()"
                     :title="$t('project_share')"
                 >
                     <mdicon name="share-variant" size="20"/>
@@ -120,19 +120,19 @@
                     <mdicon name="view-list" size="20"/>
                 </BButton>
             </BButtonGroup>
-            <BButtonGroup size="sm" class="mx-1">
+            <BButtonGroup size="sm" class="">
 
-                <BDropdown v-model="timelineOptionShow" class="px-1" :variant="isDark ? 'secondary' : 'outline-dark'"
+                <BDropdown v-model="timelineOptionShow" class="" :variant="isDark ? 'secondary' : 'outline-dark'"
                            size="sm"
                            auto-close="outside"
                            :title="$t('project_settings')"
-                           >
+                >
                     <template #button-content>
                         <mdicon name="cog" size="20"/>
                     </template>
                     <div class="form-group pb-2 mx-2 input-group-sm">
                         <label>{{ $t('project_item_design') }}</label>
-                        <select class="form-select "  v-model="template" v-on:change="updateSetting('template')">
+                        <select class="form-select " v-model="template" v-on:change="updateSetting('template')">
                             <option v-for="temp in templates" :value="temp">{{ $t(temp.text) }}</option>
                         </select>
                     </div>
@@ -148,7 +148,8 @@
                     </div>
                     <div class="form-group py-2 mx-2 input-group-sm">
                         <label>{{ $t('project_axis_orientation') }}</label>
-                        <select class="form-select" v-model="this.options.orientation.axis" v-on:change="updateSetting('orientation.axis')">
+                        <select class="form-select" v-model="this.options.orientation.axis"
+                                v-on:change="updateSetting('orientation.axis')">
                             <option :value="undefined">{{ $t('project_axis_ori.bottom') }}</option>
                             <option value="top">{{ $t('project_axis_ori.top') }}</option>
                             <option value="both">{{ $t('project_axis_ori.both') }}</option>
@@ -157,17 +158,41 @@
                     </div>
                     <div class="form-group mx-2 input-group-sm">
                         <label>{{ $t('project_item_orientation') }}</label>
-                        <select class="form-select" v-model="this.options.orientation.item" v-on:change="updateSetting('orientation.item')">
+                        <select class="form-select" v-model="this.options.orientation.item"
+                                v-on:change="updateSetting('orientation.item')">
                             <option :value="undefined">{{ $t('project_axis_ori.bottom') }}</option>
                             <option value="top">{{ $t('project_axis_ori.top') }}</option>
                         </select>
                     </div>
                     <hr>
                     <BButtonGroup class="px-2" style="width: 100%">
-                        <BButton :variant="isDark ? 'secondary' : 'outline-dark'" :title="$t('rename')"><mdicon name="pencil" size="16"/></BButton>
-                        <BButton  variant="info" v-if="true" :title="$t('put to archive')"><mdicon name="archive-arrow-down" size="16"/></BButton>
-                        <BButton :title="$t('get to archive')" v-else><mdicon name="archive-arrow-up" size="16"/></BButton>
-                        <BButton variant="danger" :title="$t('general.delete')"><mdicon name="delete" size="16"/></BButton>
+                        <BButton
+                            :variant="isDark ?
+                            'secondary' : 'outline-dark'"
+                            :title="$t('rename')"
+                            @click="openRenameModal">
+                            <mdicon name="pencil" size="16"/>
+                        </BButton>
+                        <BButton
+                            variant="info"
+                            v-if="true"
+                            :title="$t('put to archive')"
+                        >
+                            <mdicon name="archive-arrow-down" size="16"/>
+                        </BButton>
+                        <BButton
+                            :title="$t('get to archive')"
+                            v-else>
+                            <mdicon
+                                name="archive-arrow-up"
+                                size="16"/>
+                        </BButton>
+                        <BButton
+                            variant="danger"
+                            :title="$t('general.delete')"
+                        >
+                            <mdicon name="delete" size="16"/>
+                        </BButton>
                     </BButtonGroup>
                 </BDropdown>
             </BButtonGroup>
@@ -183,7 +208,7 @@
         <!-- Header Group Name -->
         <div class="card mb-1" v-if="items.filter(x => x.group === null || x.group === undefined).length > 0">
             <div class="card-body">
-                <h5 class="card-title">No Group</h5>
+                <h5 class="card-title">{{ $t('project_timelines.item.no_group') }}</h5>
                 <BTable :sort-by="[{key: 'start', order: 'asc'}]"
                         :items="items.filter(x => x.group === null || x.group === undefined)"
                         :fields="sortFields"
@@ -262,6 +287,8 @@
         v-on:save="saveGroup"
     ></GroupModal>
     <ShareModal ref="share"></ShareModal>
+    <rename-modal ref="rename"></rename-modal>
+    <context-menu-timeline ref="contextmenu"></context-menu-timeline>
 </template>
 
 <script>
@@ -272,8 +299,8 @@ import Handlebars from "handlebars";
 import ItemModal from "@/componants/parts/ItemModal.vue";
 import Loading from "@/componants/parts/Loading.vue";
 import GroupModal from "@/componants/parts/GroupModal.vue";
-import moment from 'moment';
-import 'moment/locale/de';
+import moment from 'moment/min/moment-with-locales';
+
 import {
     BModal,
     BButton,
@@ -288,10 +315,14 @@ import {
 import ThemeMixin from "@/mixins/ThemeMixin";
 import ShareModal from "@/componants/parts/ShareModal.vue";
 import routeMixin from "@/mixins/RouteMixin";
+import RenameModal from "@/componants/parts/RenameModal.vue";
+import ContextMenuTimeline from "@/componants/parts/ContextMenuTimeline.vue";
 
 export default {
     mixins: [ThemeMixin, routeMixin],
     components: {
+        ContextMenuTimeline,
+        RenameModal,
         ShareModal,
         GroupModal,
         Loading,
@@ -338,28 +369,39 @@ export default {
             tab: 'timeline',
             template: null,
             displayscale: null,
-            templates: [
-            ],
+            templates: [],
         }
     },
     methods: {
+        setSelection(id, focus = false) {
+            this.timeline.setSelection(id, {
+                focus: focus,
+                animation: true,
+            });
+        },
+        openShare() {
+            this.$refs.share.show();
+        },
+        openRenameModal() {
+            this.$refs.rename.openModal();
+        },
         updateSetting(name) {
             let value = null;
-            if(name === 'displayscale') {
+            if (name === 'displayscale') {
                 value = this.displayscale;
             }
-            else if(name === 'template') {
+            else if (name === 'template') {
                 value = this.template.value;
                 this.options.template = Handlebars.compile(this.template.template);
             }
-            else if(name.includes('.')) {
+            else if (name.includes('.')) {
                 value = this.options[name.split('.')[0]][name.split('.')[1]];
-            } else {
+            }
+            else {
                 value = this.options[name];
             }
 
             this.timeline.setOptions(this.options);
-
 
 
             Api.setProjectSetting(this.$route.params.id, name, value)
@@ -370,6 +412,19 @@ export default {
                     console.log(error)
                 });
         },
+        getItemsAtTime(time, group) {
+            return this.items.filter(x => {
+                let timeover =  this.getTimeFromDate(x.start) <= time.getTime()
+                    && this.getTimeFromDate(x.end) >= time.getTime();
+                if(group) {
+                    return timeover && (x.group === group || x.group === null || x.group === undefined);
+                }
+                return timeover;
+            });
+        },
+        getTimeFromDate(date) {
+            return new Date(date).getTime();
+        },
         editItem(id) {
             this.$refs.itemmodal.openItem(this.items.find(x => x.id === id));
         },
@@ -378,7 +433,6 @@ export default {
             return moment(date).format(this.$t('date_format_js'));
         },
         setGroups() {
-            console.log('test', this.groups)
             this.timeline.setGroups(this.groups);
             //todo set visible on timeline
         },
@@ -443,7 +497,8 @@ export default {
                 }
                 this.displayscale = options.displayscale;
                 delete options.displayscale;
-            } else {
+            }
+            else {
                 this.displayscale = null;
             }
             this.options = options;
@@ -463,6 +518,7 @@ export default {
             this.options['minHeight'] = this.getMinHeight(this.options['minHeight']);
             this.options.onMove = this.onItemMove;
             this.options.locale = this.$i18n.locale;
+            moment.locale(this.$i18n.locale)
         },
         getMinHeight(minHeight) {
             let calculatedMin = window.innerHeight - 85;
@@ -472,10 +528,44 @@ export default {
             }
             return calculatedMin;
         },
+        getPossibleItems(time,group) {
+            let items = this.getItemsAtTime(time, group);
+            if (items.length === 0) {
+                return null;
+            }
+            return items[0].id;
+
+        },
         initTimeline() {
             if (this.timeline) {
                 this.timeline.destroy();
             }
+
+            this.options.onAdd = (item, callback) => {
+                let possibleItem = this.getPossibleItems(item.start, item.group);
+                if (possibleItem) {
+                    this.openItemById(possibleItem);
+                    return;
+                }
+
+                item.id = null;
+                let endDate = new Date( item.start.getTime());
+                endDate.setHours(23, 59, 59, 999);
+                item.end = endDate;
+                item.type = 'range';
+                item.content = '';
+                item.project_id = this.$route.params.id;
+                let emptyObject = this.$refs.itemmodal.newItem();
+                Object.keys(emptyObject).forEach(key => {
+                    if (typeof item[key] === "undefined") {
+                        item[key] = emptyObject[key];
+                    }
+                });
+
+                this.$refs.itemmodal.openItem(item);
+                //return callback(null);
+            };
+
             // Create a DataSet (allows two way data-binding)
             this.timeline = new Timeline(
                 this.$refs.visualization,
@@ -488,27 +578,63 @@ export default {
             this.timeline.on('select', function (properties) {
                 this.selectedItems = properties.items ?? null;
             });
+
             this.timeline.on('doubleClick', (properties) => {
                 if (properties.item && properties.what === 'item') {
-                    let item = this.items.find(x => x.id === properties.item);
-                    this.$refs.itemmodal.openItem(item);
+                    this.openItemById(properties.item);
                 }
                 else if (properties.group && properties.what === 'group-label') {
-                    let group = this.groups.find(x => x.id === properties.group);
-                    this.$refs.groupmodal.openGroup(group);
+                    this.openGroupById(properties.group)
                 }
                 else if (properties.group && properties.what === 'background' && properties.event.target.classList.contains('vis-item-overflow')) {
                     //has class vis-item-overflow
-                    console.log(properties.event.target)
+                    //console.log(properties.event.target)
                 }
-                console.log(properties)
+                //console.log(properties)
+            });
+            this.timeline.on('contextmenu', (properties) => {
+                this.$refs.contextmenu.open(properties);
+                properties.event.preventDefault();
+
             });
             this.loading = false;
         },
-
+        openItemById(id) {
+            let item = this.items.find(x => x.id === id);
+            this.setSelection([id])
+            this.$refs.itemmodal.openItem(item);
+        },
+        openGroupById(id) {
+            let group = this.groups.find(x => x.id === id);
+            this.$refs.groupmodal.openGroup(group);
+        },
 
         addItem() {
             this.$refs.itemmodal.showModal();
+        },
+        addItemPrefix(time, group) {
+            let startDate = new Date( time.getTime());
+            startDate.setHours(0, 0, 0, 0);
+            let item = {
+                start: startDate,
+                end: null,
+                group: group,
+                type: 'range',
+                content: '',
+                project_id: this.$route.params.id
+            };
+            let endDate = new Date( time.getTime());
+            endDate.setHours(23, 59, 59, 999);
+            item.end = endDate;
+
+            let emptyObject = this.$refs.itemmodal.newItem();
+            Object.keys(emptyObject).forEach(key => {
+                if (typeof item[key] === "undefined") {
+                    item[key] = emptyObject[key];
+                }
+            });
+
+            this.$refs.itemmodal.openItem(item);
         },
         addGroup() {
             this.$refs.groupmodal.showModal();
@@ -607,7 +733,7 @@ export default {
     watch: {
         selectedZoom(value) {
             var dates = this.setZoomRange(value);
-            console.log('dates', dates)
+
             this.timeline.setWindow(dates[0], dates[1]);
         },
         selectedOption: function (value, n) {

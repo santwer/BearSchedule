@@ -4,7 +4,7 @@
         v-model="modal"
         size="lg"
 
-        title="Item"
+        :title="item.id === null ? $t('project_timelines.item.new') : (item.title === '' ? $t('project_timelines.item.empty') : item.title)"
         v-on:ok="save"
         v-b-modal.modal-center>
         <loading v-if="loading"></loading>
@@ -15,7 +15,8 @@
                 <div class="form-group">
                     <label for="group">{{ $t('project_timelines.group.group') }}</label>
                     <select class="form-select" v-model="item.group">
-                        <option :value="null" :disabled="true">{{ $t('please select') }}</option>
+                        <option :value="null" :disabled="item.type !== 'background'">
+                            {{ item.type !== 'background' ? $t('please select') : $t('project_timelines.item.no_group')  }}</option>
                         <option v-for="group in groups" :value="group.id">{{ group.content }}</option>
                     </select>
                 </div>
@@ -32,7 +33,8 @@
                 <!-- textarea for content -->
                 <div class="form-group">
                     <label for="start">{{ $t('project_timeline_tables.columns.content') }}</label>
-                    <textarea class="form-control" v-model="item.content"></textarea>
+                    <textarea class="form-control" style="height: 100px"
+                              v-model="item.content"></textarea>
                 </div>
 
             </div>
@@ -87,12 +89,12 @@
             <template v-slot:footer="{ ok, cancel, hide }">
                     <div class="col">
                         <BButtonGroup>
-                        <BButton variant="secondary" class="mr-2" @click="cancel">Close</BButton>
-                        <BButton variant="danger" @click="cancel">Delete</BButton>
+                        <BButton :variant="'secondary'" class="mr-2" @click="cancel">{{$t('general.close')}}</BButton>
+                        <BButton variant="danger" @click="cancel">{{$t('general.delete')}}</BButton>
                         </BButtonGroup>
                     </div>
                     <div class="col ">
-                        <BButton variant="primary" class="float-end" @click="save">Save</BButton>
+                        <BButton variant="primary" class="float-end" @click="save">{{$t('general.save')}}</BButton>
                     </div>
 
             </template>
@@ -105,7 +107,9 @@ import {BModal, BButton,BButtonGroup} from "bootstrap-vue-next";
 import Api from "@/Api";
 import Error from "@/componants/parts/Error.vue";
 import Loading from "@/componants/parts/Loading.vue";
+import themeMixin from "@/mixins/ThemeMixin";
 export default {
+    mixins: ['themeMixin'],
     components: {
         Loading,
         Error,
@@ -166,12 +170,17 @@ export default {
         showModal() {
             this.item = this.newItem();
             this.modal = true;
+            this.error = null;
         },
         openItem(item) {
+            this.error = null;
             this.item = Object.assign({}, item);
             this.item.end = this.dateFromISO(this.item.end);
             this.item.start = this.dateFromISO(this.item.start);
             this.item.color = this.getCurrentColorByStyle();
+            if(this.item.group === undefined) {
+                this.item.group = null;
+            }
             this.modal = true;
         },
         getCurrentColorByStyle() {
@@ -203,8 +212,11 @@ export default {
             return cssEntries;
         },
         dateFromISO(isoDate) {
-            if (null === isoDate) {
+            if (null === isoDate || undefined === isoDate) {
                 return null;
+            }
+            if (typeof isoDate === "object") {
+                return isoDate.toISOString().slice(0,10);
             }
             let date = new Date(isoDate);
             return date.toISOString().slice(0,10);

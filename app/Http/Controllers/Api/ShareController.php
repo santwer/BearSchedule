@@ -31,7 +31,7 @@ class ShareController extends Controller
         if($project->users->contains($request->user)) {
             //if user is last admin, do not update role
             if($request->role !== 'ADMIN'
-                && $project->users()->where('user_id', $request->user)->wherePivot('role', 'ADMIN')->count() === 1) {
+                && $project->users()->wherePivot('role', 'ADMIN')->count() === 1) {
                 return response()->json(['message' => __('Cannot update role, since there need to be one Admin per Project')], 422);
             }
 
