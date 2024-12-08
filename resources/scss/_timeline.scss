@@ -148,7 +148,7 @@
             border-color: $border-color-dark;
             .vis-label {
                 &.vis-nested-group {
-                    background-color: #ee0c19;
+                    background-color: darken($body-bg-dark,2%);
                 }
             }
             .vis-left {

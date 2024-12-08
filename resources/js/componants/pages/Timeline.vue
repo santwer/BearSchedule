@@ -4,11 +4,13 @@
             <BButtonGroup size="sm">
 
                 <BButton :variant=" isDark ? 'secondary' : 'outline-primary'" :title="$t('Add Item')"
-                         @click="addItem()">
+                         @click="addItem()" :disabled="loading">
                     <mdicon name="plus" size="20"/>
                     <span class="d-none d-lg-inline">{{ $t('Add Item') }}</span>
                 </BButton>
-                <BButton :variant=" isDark ? 'secondary' : 'outline-primary'" :title="$t('Add Group')"
+                <BButton :variant=" isDark ? 'secondary' : 'outline-primary'"
+                         :title="$t('Add Group')"
+                         :disabled="loading"
                          @click="addGroup()">
                     <mdicon name="folder-plus" size="20"/>
                     <span class="d-none d-lg-inline">{{ $t('Add Group') }}</span>
@@ -17,13 +19,15 @@
         </div>
         <div class="col-10 col-sm-8" style="text-align: right">
             <BButtonGroup size="sm" class="px-2" v-if="false">
-                <BButton :variant=" isDark ? 'secondary' : 'outline-dark'" :title="$t('project_excel')"
+                <BButton
+                    :variant=" isDark ? 'secondary' : 'outline-dark'" :title="$t('project_excel')"
                          :disabled="true">
                     <mdicon name="file-excel-outline" size="20"/>
                 </BButton>
             </BButtonGroup>
             <BButtonGroup size="sm">
                 <BButton
+                    :disabled="loading"
                     :variant=" isDark ? 'secondary' : 'outline-primary'"
                     @click="openShare()"
                     :title="$t('project_share')"
@@ -36,6 +40,7 @@
 
             <BButtonGroup>
                 <BDropdown v-model="selectedGroupShow"
+                           :disabled="loading"
                            auto-close="outside"
                            :variant="isDark ? 'secondary' : 'outline-dark'"
                            class="px-1"
@@ -47,16 +52,16 @@
                     <div class="mx-3" v-for="(group, i) in groups">
                         <BFormCheckbox
                             v-on:change="setGroups"
-                            v-model="groups[i].visible"
+                            v-model="group.className"
                             name="groups[]"
-                            :value="1"
-                            :unchecked-value="false"
+                            value="visible"
+                            unchecked-value="hiddengroup"
                         >
-                            {{ group.content }}
+                           {{ group.content }}
                         </BFormCheckbox>
                     </div>
                 </BDropdown>
-                <BDropdown v-model="selectedOptionShow" class="px-1" :variant="isDark ? 'secondary' : 'outline-dark'"
+                <BDropdown v-model="selectedOptionShow"  :disabled="loading" class="px-1" :variant="isDark ? 'secondary' : 'outline-dark'"
                            size="sm"
                            :title="$t('project_timelines.display')"
                            v-show="tab === 'timeline'">
@@ -83,7 +88,7 @@
                         {{ $t('project_display_options.year') }}
                     </BDropdownItem>
                 </BDropdown>
-                <BDropdown v-model="selectedZoomShow" class="px-1" :variant="isDark ? 'secondary' : 'outline-dark'"
+                <BDropdown v-model="selectedZoomShow"  :disabled="loading" class="px-1" :variant="isDark ? 'secondary' : 'outline-dark'"
                            size="sm"
                            :title="$t('project_zoom')"
                            v-show="tab === 'timeline'">
@@ -110,19 +115,19 @@
             </BButtonGroup>
 
             <BButtonGroup size="sm" class="mx-1">
-                <BButton :variant="tab === 'timeline' ? 'primary' : (isDark ? 'secondary' : 'outline-dark')"
+                <BButton  :disabled="loading" :variant="tab === 'timeline' ? 'primary' : (isDark ? 'secondary' : 'outline-dark')"
                          :title="$t('project_timeline')"
                          @click="tab='timeline'">
                     <mdicon name="chart-gantt" size="20"/>
                 </BButton>
-                <BButton :variant="tab === 'list' ? 'primary' : (isDark ? 'secondary' : 'outline-dark')"
+                <BButton  :disabled="loading" :variant="tab === 'list' ? 'primary' : (isDark ? 'secondary' : 'outline-dark')"
                          :title="$t('project_list')" @click="tab='list'">
                     <mdicon name="view-list" size="20"/>
                 </BButton>
             </BButtonGroup>
             <BButtonGroup size="sm" class="">
 
-                <BDropdown v-model="timelineOptionShow" class="" :variant="isDark ? 'secondary' : 'outline-dark'"
+                <BDropdown  :disabled="loading" v-model="timelineOptionShow" class="" :variant="isDark ? 'secondary' : 'outline-dark'"
                            size="sm"
                            auto-close="outside"
                            :title="$t('project_settings')"
@@ -199,7 +204,7 @@
 
         </div>
     </div>
-    <loading v-if="loading"></loading>
+    <loading v-if="loading || isLoading"></loading>
     <div ref="visualization" v-if="renderComponent" v-show="tab === 'timeline'" class="shadow"></div>
     <div class="" v-if="!loading" v-show="tab === 'list'">
         <div class="alert alert-info" v-if="items.length === 0 && groups.length === 0">
@@ -279,6 +284,7 @@
     <ItemModal
         ref="itemmodal"
         :groups="groups"
+        v-on:delete="openItemDeleteModal"
         v-on:save="saveItem"
     ></ItemModal>
     <GroupModal
@@ -288,7 +294,14 @@
     ></GroupModal>
     <ShareModal ref="share"></ShareModal>
     <rename-modal ref="rename"></rename-modal>
-    <context-menu-timeline ref="contextmenu"></context-menu-timeline>
+    <context-menu-timeline
+        v-on:copy="copyItem"
+        ref="contextmenu"></context-menu-timeline>
+    <item-delete
+        ref="itemDeleteModal"
+    v-on:delete="deleteItem"
+    ></item-delete>
+
 </template>
 
 <script>
@@ -317,10 +330,15 @@ import ShareModal from "@/componants/parts/ShareModal.vue";
 import routeMixin from "@/mixins/RouteMixin";
 import RenameModal from "@/componants/parts/RenameModal.vue";
 import ContextMenuTimeline from "@/componants/parts/ContextMenuTimeline.vue";
+import ClipboardMixin from "@/mixins/ClipboardMixin";
+import ItemDelete from "@/componants/parts/ItemDelete.vue";
+import {routeLocationKey} from "vue-router";
+import {mapGetters} from "vuex";
 
 export default {
-    mixins: [ThemeMixin, routeMixin],
+    mixins: [ThemeMixin, routeMixin, ClipboardMixin],
     components: {
+        ItemDelete,
         ContextMenuTimeline,
         RenameModal,
         ShareModal,
@@ -361,18 +379,78 @@ export default {
             selectedZoomValue: null,
             selectedOption: null,
             selectedGroup: [],
+            selGroup: null,
             selectedZoomShow: false,
             timelineOptionShow: false,
             selectedOptionShow: false,
             selectedGroupShow: false,
             shared_count: 0,
+            toDelete: null,
             tab: 'timeline',
             template: null,
             displayscale: null,
             templates: [],
+            copyMethod: this.copyItem,
+            pasteMethod: this.pasteItem,
         }
     },
+    computed: {
+        ...mapGetters(['user', 'isLoading']),
+    },
     methods: {
+        openItemDeleteModal(id) {
+            this.$refs.itemDeleteModal.openModal(id);
+        },
+        deleteItem(id) {
+            Api.deleteItem(id).then(response => {
+                this.items = this.items.filter(x => x.id !== id);
+                this.timeline.setItems(this.items);
+            });
+        },
+        copyItem(id) {
+            if(null === id) {
+                let selected = this.timeline.getSelection();
+                if (!Array.isArray(selected) || selected.length === 0) {
+                    console.log('no item selected');
+                    return;
+                }
+                id = selected[0];
+            }
+            let item = this.items.find(x => x.id === id);
+            this.copyItemToClipboard(item);
+        },
+        pasteItem(group) {
+            if(this.$refs.itemmodal.modal) {
+                return;
+            }
+            if(this.$refs.groupmodal.modal) {
+                return;
+            }
+
+
+            let item = this.getItemFromClipboard();
+            if (item === null) {
+                return;
+            }
+            if(group === null && this.selGroup) {
+                group = this.selGroup;
+            }
+            if(group !== null) {
+                item.group = group;
+            }
+            delete item.id;
+            this.saveItem(item);
+
+            Api.setItem(item).then(response => {
+               // let index = this.items.indexOf(item);
+               //  if (index > -1) {
+               //       this.items.splice(index, 1);
+               //  }
+               //  let savedItem = response.data.data;
+               //
+               //  this.saveItem(savedItem);
+            });
+        },
         setSelection(id, focus = false) {
             this.timeline.setSelection(id, {
                 focus: focus,
@@ -480,6 +558,15 @@ export default {
             });
         },
         setOptions(options) {
+            if(typeof options.template !== "undefined") {
+                //if template contrains {{subtitle}} then template is a this.templates[1]
+                if (options.template.includes('{{subtitle}}')) {
+                    this.template = this.templates[1];
+                }
+                else {
+                    this.template = this.templates[0];
+                }
+            }
             if (typeof options.template !== "undefined") {
                 options.template = Handlebars.compile(options.template);
                 options.xss = {
@@ -503,7 +590,8 @@ export default {
             }
             this.options = options;
             this.options['snap'] = function (date, scale, step) {
-                return new Date(date.toDateString());
+                return moment(date).startOf('day');
+                return moment(date).utc().startOf('day');
             };
             this.options['groupOrder'] = function (a, b) {
                 return a.order - b.order;
@@ -512,6 +600,7 @@ export default {
                 return a.start > b.start;
             };
             this.options['moment'] = function (date) {
+                return moment(date);
                 return moment(date).utc();
             }
 
@@ -554,7 +643,7 @@ export default {
                 item.id = null;
                 let endDate = new Date( item.start.getTime());
                 endDate.setHours(23, 59, 59, 999);
-                item.end = endDate;
+                item.end = moment(endDate);
                 item.type = 'range';
                 item.content = '';
                 item.project_id = this.$route.params.id;
@@ -598,7 +687,9 @@ export default {
             this.timeline.on('contextmenu', (properties) => {
                 this.$refs.contextmenu.open(properties);
                 properties.event.preventDefault();
-
+            });
+            this.timeline.on('click',(properties) => {
+                this.selGroup = properties.group;
             });
             this.loading = false;
         },
@@ -732,8 +823,21 @@ export default {
                 };
             }
         },
+        checkVisible() {
+            // this.groups.forEach((group, i) => {
+            //     // group.order = i;
+            //     if(group.visible === false) {
+            //         group.className = 'hiddengroup';
+            //     } else {
+            //         group.className = '';
+            //     }
+            // });
+        }
     },
     watch: {
+        groups: function (value) {
+            this.checkVisible();
+        },
         selectedZoom(value) {
             var dates = this.setZoomRange(value);
 
@@ -756,8 +860,19 @@ export default {
         this.$watch(
             () => this.$route.params.id,
             () => {
-                this.project_id = this.$route.params.id;
-                this.getData();
+                this.loading = true;
+                this.tab = 'timeline';
+                this.timeline.destroy();
+                this.$nextTick(() => {
+                    this.timeline = null;
+                    this.items = [];
+                    this.groups = [];
+                    this.options = {
+                        orientation: {axis: undefined, item: undefined}
+                    };
+                    this.project_id = this.$route.params.id;
+                    this.getData();
+                });
             }
         )
     }
@@ -777,5 +892,8 @@ export default {
     border-color: #004ba0;
     background-color: rgba(99, 164, 255, 0.4);
 
+}
+.hiddengroup {
+    display: none;
 }
 </style>

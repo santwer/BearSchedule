@@ -9,83 +9,91 @@
         v-b-modal.modal-center>
         <loading v-if="loading"></loading>
         <div v-else>
-            <div class="card">
-                <div class="card-header" :class="{'text-gray-200': isDark, 'text-primary': !isDark}">
-                    {{ $t('project_project_members') }}
-                </div>
-                <BTable :sort-by="[{key: 'name', order: 'desc'}]"
-                        :items="sortItems"
-                        :fields="sortFields"
-                >
-                    <template #cell(remove)="row">
-                        <BButton variant="outline-danger"
-                                 size="sm" class="pt-0 px-1"
-                                 @click="openDeleteModal(row.item)"
+            <BTabs card>
+                <BTab  active>
+                    <template #title>
+                        <mdicon name="account-multiple" size="20"/> {{ $t('project_project_members') }}
+                    </template>
+                    <div class="card">
+                        <BTable :sort-by="[{key: 'name', order: 'desc'}]"
+                                :items="sortItems"
+                                :fields="sortFields"
                         >
-                            <mdicon name="close-thick" size="20"/>
-                        </BButton>
-                    </template>
-                    <template #cell(role)="row">
-                        <BFormSelect v-model="row.value"
-                                     :state="row.item.role_state"
-                                     :disabled="row.item.role_state === false"
-                                     :options="roleOptions"
-                                     v-on:change="changeRole(row)"
-                                     size="sm"/>
-                        <div class="text-danger" v-if="row.item.save_error">
-                            {{ row.item.save_error }}
+                            <template #cell(remove)="row">
+                                <BButton variant="outline-danger"
+                                         size="sm" class="pt-0 px-1"
+                                         @click="openDeleteModal(row.item)"
+                                >
+                                    <mdicon name="close-thick" size="20"/>
+                                </BButton>
+                            </template>
+                            <template #cell(role)="row">
+                                <BFormSelect v-model="row.value"
+                                             :state="row.item.role_state"
+                                             :disabled="row.item.role_state === false"
+                                             :options="roleOptions"
+                                             v-on:change="changeRole(row)"
+                                             size="sm"/>
+                                <div class="text-danger" v-if="row.item.save_error">
+                                    {{ row.item.save_error }}
+                                </div>
+                            </template>
+                        </BTable>
+                        <div class="m-3 mt-0">
+                            <div class="form-group">
+                                <label>{{ $t('add user to project') }}</label>
+                                <BInputGroup>
+                                    <template #append>
+                                        <BInputGroupText v-if="searchLoader">
+                                            <BSpinner small variant="light"/>
+                                        </BInputGroupText>
+                                    </template>
+                                    <BFormInput list="my-list-id"
+                                                v-on:keyup="initLoading"
+                                                :placeholder="$t('enter name or email...')"
+                                                v-model="searchPerson"
+                                                v-debounce:500ms="doSearch"/>
+                                </BInputGroup>
+                                <datalist id="my-list-id" v-on:select="setParticipant('x')">
+                                    <option v-for="entry in datalistSearch" :value="JSON.stringify(entry)">{{
+                                            entry.value
+                                        }}
+                                    </option>
+                                </datalist>
+                            </div>
                         </div>
+                    </div>
+                </BTab>
+                <BTab>
+                    <template #title>
+                        <mdicon name="link-variant" size="20"/> {{ $t('share project to everyone without account') }}
                     </template>
-                </BTable>
-                <div class="m-3 mt-0">
-                    <div class="form-group">
-                        <label>{{ $t('add user to project') }}</label>
-                        <BInputGroup>
-                            <template #append>
-                                <BInputGroupText v-if="searchLoader">
-                                    <BSpinner small variant="light"/>
+                    <div class="card">
+                        <BInputGroup prepend="Username" class="p-3 pb-0">
+                            <template #prepend>
+                                <BInputGroupText>
+                                    <mdicon name="link-variant" size="20"/>
                                 </BInputGroupText>
                             </template>
-                            <BFormInput list="my-list-id"
-                                        v-on:keyup="initLoading"
-                                        :placeholder="$t('enter name or email...')"
-                                        v-model="searchPerson"
-                                        v-debounce:500ms="doSearch"/>
+                            <BFormInput v-model="shareUrl" :state="copyState" :readonly="true"/>
+                            <BButton :variant="isDark ? 'secondary' : 'outline-secondary'" @click="copyLinkToClipboard">
+                                <mdicon name="content-copy" size="20"/>
+                                {{ $t('copy') }}
+                            </BButton>
+                            <BButton :variant="isDark ? 'secondary' : 'outline-secondary'" @click="openLinkInNewWindow">
+                                <mdicon name="open-in-new" size="20"/>
+                                {{ $t('open') }}
+                            </BButton>
                         </BInputGroup>
-                        <datalist id="my-list-id" v-on:select="setParticipant('x')">
-                            <option v-for="entry in datalistSearch" :value="JSON.stringify(entry)">{{
-                                    entry.value
-                                }}
-                            </option>
-                        </datalist>
+                        <div class="pb-3" v-if="copyState === null"></div>
+                        <div class="text-success px-3" v-if="copyState === true">{{ $t('successfully copied') }}</div>
+                        <div class="text-danger px-3" v-if="copyState === false">{{ $t('text could not be copied') }}</div>
                     </div>
-                </div>
-            </div>
-            <div class="card mt-3">
-                <div class="card-header" :class="{'text-gray-200': isDark, 'text-primary': !isDark}">
-                    {{ $t('share project to everyone without account') }}
-                </div>
+                </BTab>
 
-                <BInputGroup prepend="Username" class="p-3 pb-0">
-                    <template #prepend>
-                        <BInputGroupText>
-                            <mdicon name="link-variant" size="20"/>
-                        </BInputGroupText>
-                    </template>
-                    <BFormInput v-model="shareUrl" :state="copyState" :readonly="true"/>
-                    <BButton :variant="isDark ? 'secondary' : 'outline-secondary'" @click="copyLinkToClipboard">
-                        <mdicon name="content-copy" size="20"/>
-                        {{ $t('copy') }}
-                    </BButton>
-                    <BButton :variant="isDark ? 'secondary' : 'outline-secondary'" @click="openLinkInNewWindow">
-                        <mdicon name="open-in-new" size="20"/>
-                        {{ $t('open') }}
-                    </BButton>
-                </BInputGroup>
-                <div class="pb-3" v-if="copyState === null"></div>
-                <div class="text-success px-3" v-if="copyState === true">{{ $t('successfully copied') }}</div>
-                <div class="text-danger px-3" v-if="copyState === false">{{ $t('text could not be copied') }}</div>
-            </div>
+            </BTabs>
+
+
         </div>
     </BModal>
     <BModal
@@ -113,7 +121,9 @@ import {
     BInputGroup,
     BInputGroupText,
     BFormInput,
-    BSpinner
+    BSpinner,
+    BTabs,
+    BTab
 } from "bootstrap-vue-next";
 import Loading from "@/componants/parts/Loading.vue";
 import Error from "@/componants/parts/Error.vue";
@@ -129,7 +139,7 @@ export default {
         Error,
         BModal, BButton, BFormCheckbox, BButtonGroup,
         BFormSelect, BTable, BInputGroup, BFormInput,
-        BInputGroupText, BSpinner
+        BInputGroupText, BSpinner,BTabs,BTab
     },
     data() {
         return {

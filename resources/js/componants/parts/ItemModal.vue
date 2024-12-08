@@ -41,6 +41,7 @@
             <div class="col-4">
                 <!-- input for start date -->
                 <div class="form-group">
+                    {{    item.start }}
                     <label for="start">{{ $t('project_timeline_tables.columns.start') }}</label>
                     <input type="date" class="form-control" v-model="item.start">
                 </div>
@@ -90,7 +91,7 @@
                     <div class="col">
                         <BButtonGroup>
                         <BButton :variant="'secondary'" class="mr-2" @click="cancel">{{$t('general.close')}}</BButton>
-                        <BButton variant="danger" @click="cancel">{{$t('general.delete')}}</BButton>
+                        <BButton variant="danger" @click="emitDelete">{{$t('general.delete')}}</BButton>
                         </BButtonGroup>
                     </div>
                     <div class="col ">
@@ -108,6 +109,7 @@ import Api from "@/Api";
 import Error from "@/componants/parts/Error.vue";
 import Loading from "@/componants/parts/Loading.vue";
 import themeMixin from "@/mixins/ThemeMixin";
+import moment from 'moment/min/moment-with-locales';
 export default {
     mixins: ['themeMixin'],
     components: {
@@ -150,6 +152,10 @@ export default {
         }
     },
     methods: {
+        emitDelete() {
+            this.$emit('delete', this.item.id);
+            this.modal = false;
+        },
         newItem() {
             return {
                 id: null,
@@ -215,11 +221,7 @@ export default {
             if (null === isoDate || undefined === isoDate) {
                 return null;
             }
-            if (typeof isoDate === "object") {
-                return isoDate.toISOString().slice(0,10);
-            }
-            let date = new Date(isoDate);
-            return date.toISOString().slice(0,10);
+            return moment(isoDate).format('YYYY-MM-DD');
         },
         save() {
             this.loading = true;

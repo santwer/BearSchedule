@@ -12,6 +12,7 @@ use App\Helper\TimelineHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GroupRequest;
 use App\Http\Requests\TimelineItemRequest;
+use App\Http\Resources\Timeline\ItemResource;
 use App\Http\Services\Settings\Account;
 use App\Http\Services\Timeline\Timeline;
 use App\Models\Project;
@@ -22,6 +23,7 @@ use App\Models\Timeline\Item;
 use App\Models\Timeline\ItemLink;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 
 class TimelineAjaxController extends Controller
@@ -49,19 +51,18 @@ class TimelineAjaxController extends Controller
         return response()->ajax(null, 'Delete successful', 200);
     }
 
-    public function destroyItem(Request $request)
+    public function destroyItem($id, Request $request)
     {
-        if (! $request->has('id')) {
-            return response()->ajax(null, 'id not set.', 400);
-        }
-        $item = Item::find($request->get('id'));
-        ProjectLog::entry(Actions::DELETE, Types::ITEM, $item->toJson(), '', auth()->user()->id, $item->project_id,
-            null, $request->get('id'));
+        $item = Item::find($id);
+
+        ProjectLog::entry(Actions::DELETE, Types::ITEM,
+            $item->toJson(), '', auth()->user()->id, $item->project_id,
+            $id, );
         if (! $item->delete()) {
             return response()->ajax(null, 'Delete not possible', 400);
         }
         if (TimelineHelper::useWebsocket()) {
-            event(new Data($request->get('project_id'), 'ITEM-DELETE', $request->get('id')));
+            event(new Data($item->project_id, 'ITEM-DELETE', $id));
         }
         return response()->ajax(null, 'Delete successful', 200);
     }
@@ -207,13 +208,12 @@ class TimelineAjaxController extends Controller
         if ($request->get('start') === 'Invalid Date') {
             return response()->ajax(null, 'Start not set.', 422);
         }
-
-        if (! $request->has('id') || empty($request->get('id'))) {
+        $item = Item::find($request->get('id'));
+        if ($item === null) {
             $logAction = Actions::ADD;
             $item = new Item;
         } else {
             $logAction = Actions::CHANGE;
-            $item = Item::find($request->get('id'));
         }
         $useMethods = ['start', 'end'];
             foreach ($request->validated() as $key => $value) {
@@ -257,8 +257,11 @@ class TimelineAjaxController extends Controller
             if (TimelineHelper::useWebsocket()) {
                 event(new Data($request->get('project_id'), 'ITEM', $responseItem));
             }
+            if(Str::isUuid($request->get('id'))) {
+               $responseItem->uuid = $request->get('id');
+            }
 
-            return response()->ajax($responseItem, 'Saved successfully', 200);
+            return response()->ajax(new ItemResource($responseItem), 'Saved successfully', 200);
         }
         return response()->ajax(null, 'Error can not save.', 400);
 

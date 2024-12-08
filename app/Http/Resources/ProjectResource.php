@@ -10,12 +10,12 @@ class ProjectResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
-
         return [
             'id'         => $this->encrypt_id,
             'name'       => $this->name,
             'share'      => $this->share,
             'created_at' => $this->created_at,
+            'is_archived' => $this->is_archived,
         ];
     }
 }

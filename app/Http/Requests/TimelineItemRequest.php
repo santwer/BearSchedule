@@ -10,12 +10,12 @@ class TimelineItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'int|nullable',
+            'id' => 'uuid|nullable',
             'project_id' => 'required|int',
             'title' => 'required',
             'group' => 'required_unless:type,=,background',
-            'start' => 'required|date|lte:end',
-            'end'   => 'date|nullable',
+            'start' => 'required|date|before:end',
+            'end' => 'date|nullable',
             'content' => 'nullable',
             'className' => 'nullable',
             'style' => 'nullable',
@@ -38,7 +38,7 @@ class TimelineItemRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-        if(!is_numeric($this->project_id)) {
+        if (!is_numeric($this->project_id)) {
             $this->merge([
                 'project_id' => decrypt($this->project_id)
             ]);

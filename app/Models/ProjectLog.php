@@ -34,7 +34,7 @@ class ProjectLog extends Model
     }
 
     public static function entry(string $action, string $type, string $old, string $new,
-                                 int $user_id, int $project_id, ?int $item_id = null, ?int $group_id = null):bool
+                                 int $user_id, int $project_id, ?string $item_id = null, ?int $group_id = null):bool
     {
         try {
             $projectLog = new ProjectLog;

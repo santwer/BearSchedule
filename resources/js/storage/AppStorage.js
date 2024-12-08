@@ -8,7 +8,8 @@ export default createStore({
         projects: [],
         user: {},
         meta: {},
-        theme: 'light'
+        theme: 'light',
+        isLoading: false
     }
   },
     mutations: {
@@ -23,14 +24,20 @@ export default createStore({
         },
         setTheme(state, theme) {
             state.theme = theme;
+        },
+        setLoading(state, isLoading) {
+            state.isLoading = isLoading;
         }
     },
     getters: {
+        isLoading(state) {
+            return state.isLoading;
+        },
         projects(state) {
-            return state.projects;
+            return state.projects.filter(project => !project.is_archived);
         },
         archivedProjects(state) {
-            return [];
+            return state.projects.filter(project => project.is_archived);
         },
         user(state) {
             return state.user;

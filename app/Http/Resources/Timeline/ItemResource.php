@@ -31,8 +31,8 @@ class ItemResource extends JsonResource
             'status'      => $this->status,
             'is_series'   => $this->is_series,
             'series'      => $this->series,
-            'start'       => $this->start->startOfDay(),
-            'end'         => $this->end->endOfDay(),
+            'start'       => $this->start->format('Y-m-d H:i:s'),
+            'end'         => $this->end->endOfDay()->format('Y-m-d H:i:s'),
         ];
     }
 

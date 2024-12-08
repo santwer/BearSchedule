@@ -84,7 +84,7 @@ export default {
                 parent: null,
                 project_id: this.$route.params.id,
                 show_share: true,
-                visible: 1,
+                visible: true,
                 id: null,
                 start: null,
                 end: null,

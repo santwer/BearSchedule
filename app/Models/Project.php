@@ -17,9 +17,18 @@ class Project extends Model
 
     protected $fillable = [
         'name',
-        'share'
+        'share',
+        'archive_date'
     ];
 
+    protected $casts = [
+        'archive_date' => 'datetime:Y-m-d',
+    ];
+
+    public function getIsArchivedAttribute() : bool
+    {
+        return $this->archive_date !== null;
+    }
 
     public function scopeWhereUserId($query, ?int $user_id = null)
     {

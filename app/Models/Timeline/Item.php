@@ -4,10 +4,13 @@ namespace App\Models\Timeline;
 
 use App\Models\ProjectLog;
 use App\Models\Timeline\Item\Issue;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
 {
+    use HasUuids;
+    protected $keyType = 'string';
     protected $casts = [
         'start' => 'datetime:Y-m-d',
         'end' => 'datetime:Y-m-d',

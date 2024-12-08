@@ -93,7 +93,7 @@ class Timeline extends BaseService
         return $project->shareUrl();
     }
 
-    public function saveLinks(array $links, int $itemId)
+    public function saveLinks(array $links, string $itemId)
     {
         foreach ($links as $link) {
             if (isset($link['href']) && !empty($link['href'])) {

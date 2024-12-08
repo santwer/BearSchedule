@@ -11,7 +11,7 @@
                 <div id="content">
 
                     <!-- Topbar -->
-                    <nav class="mb-4 shadow bg-body rounded row">
+                    <nav class="mb-3 shadow bg-body rounded row">
                     </nav>
                     <!-- End of Topbar -->
 
@@ -52,7 +52,7 @@ export default {
             return routeLocationKey
         },
 
-        ...mapGetters(['user']),
+        ...mapGetters(['user', 'isLoading']),
     },
     data() {
         return {
@@ -83,6 +83,19 @@ export default {
     {
         this.getMeta();
         this.themeOnCreated();
+        // this.$router.beforeEach((to, from, next) => {
+        //     console.log('test1');
+        //     this.$store.commit('setLoading', true);
+        //     this.$nextTick(() => {
+        //         next();
+        //     });
+        // });
+        // this.$router.afterEach((to, from) => {
+        //     setTimeout(() => {
+        //         console.log('test2');
+        //         this.$store.commit('setLoading', false);
+        //     }, 1200);
+        // });
     }
 }
 </script>

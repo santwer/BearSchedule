@@ -58,7 +58,7 @@
 
         <!-- Nav Item - Dashboard -->
         <li class="nav-item dropdown no-arrow">
-            <a class="nav-link dropdown-toggle" @click="accountOpen = !accountOpen" role="button">
+            <a class="nav-link dropdown-toggle"   @click="goHomeAndOpen" role="button">
                 <span>{{ user.user_name }}</span>
                 <img class="img-profile rounded-circle float-end" v-if="!toggled" :src="user.user_avatar">
             </a>
@@ -80,15 +80,6 @@
                     </a>
                 </div>
             </div>
-        </li>
-
-        <hr class="sidebar-divider my-0">
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item">
-            <a class="nav-link" @click="goTo('home')">
-                <mdicon name="view-dashboard" class="float-end"/>
-                <span>{{ $t('menu.home') }}</span>
-            </a>
         </li>
 
         <!-- Divider -->
@@ -186,6 +177,12 @@ export default {
     },
     methods: {
         ...mapActions(['getMeta']),
+        goHomeAndOpen() {
+            this.goTo('home');
+            this.$nextTick(() => {
+                this.accountOpen = !this.accountOpen;
+            });
+        },
         changeLocale(locale) {
             //find current locale in route and replace with new
             let url = this.$route.fullPath;

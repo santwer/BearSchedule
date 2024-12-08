@@ -37,7 +37,7 @@ export default class Api {
     }
 
     static deleteItem(id) {
-        return axios.delete('/items/' + id);
+        return axios.delete('/item/' + id);
     }
 
     static setGroup(group) {

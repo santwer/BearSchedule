@@ -4,12 +4,38 @@
         class="dropdown-menu overflow-auto show shadow-sm"
         ref="context"
         role="menu">
-        <li role="presentation" v-if="item">
-            <button class="dropdown-item" role="menuitem" type="button" @click="editItem()">
-                <mdicon name="pencil" size="20"/>
-                <span class="d-none d-lg-inline px-2">{{ $t('edit item') }}</span>
+        <BButtonGroup class="px-2" style="width: 100%" v-if="item">
+            <BButton
+                :variant="isDark ?
+                            'secondary' : 'outline-dark'"
+                :title="$t('edit item')"
+                @click="editItem()">
+                <mdicon name="pencil" size="16"/>
+            </BButton>
+            <BButton
+                :variant="isDark ?
+                            'secondary' : 'outline-dark'"
+                @click="copyItem()"
+                :title="$t('copy item')"
+            >
+                <mdicon name="content-copy" size="16"/>
+            </BButton>
+            <BButton
+                variant="danger"
+                :title="$t('delete item')"
+                @click="deleteItem"
+            >
+                <mdicon name="delete" size="16"/>
+            </BButton>
+        </BButtonGroup>
+        <hr v-if="item && hasPaste()">
+        <li role="presentation" v-if="hasPaste()">
+            <button class="dropdown-item" role="menuitem" type="button" @click="paste()">
+                <mdicon name="content-paste" size="20"/>
+                <span class="d-none d-lg-inline px-2">{{ $t('paste item') }}</span>
             </button>
         </li>
+        <hr v-if="item">
         <li role="presentation">
             <button class="dropdown-item" role="menuitem" type="button" @click="editGroup()" :disabled="!group">
                 <mdicon name="folder-edit" size="20"/>
@@ -39,8 +65,25 @@
     </ul>
 </template>
 <script>
+import {
+    BModal,
+    BButton,
+    BAlert,
+    BButtonGroup,
+} from "bootstrap-vue-next";
+import ThemeMixin from "@/mixins/ThemeMixin";
+import routeMixin from "@/mixins/RouteMixin";
+import clipboardMixin from "@/mixins/ClipboardMixin";
+import {has} from "immutable";
 export default {
     name: "ContextMenuTimeline",
+    mixins: [ThemeMixin, routeMixin, clipboardMixin ],
+    components: {
+        BModal,
+        BButton,
+        BAlert,
+        BButtonGroup,
+    },
     data() {
         return {
             show: false,
@@ -52,6 +95,14 @@ export default {
         }
     },
     methods: {
+        copyItem() {
+            this.$emit('copy', this.item);
+            this.show = false;
+        },
+        paste() {
+            this.$parent.pasteItem(this.group);
+            this.show = false;
+        },
         open(properties) {
             this.show = true;
             this.xpos = properties.pageX;
@@ -105,6 +156,10 @@ export default {
             this.$emit('action', 'addItem');
             this.show = false;
             this.$parent.addItemPrefix(this.time, this.group)
+        },
+        deleteItem() {
+          this.$parent.openItemDeleteModal(this.item);
+          this.show = false;
         },
         parentAction(action) {
             this.$parent[action]()
