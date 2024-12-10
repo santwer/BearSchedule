@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Timeline\Group;
+use App\Models\Timeline\Item;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -91,5 +93,16 @@ class Project extends Model
             return null;
         }
         return $row->{$field};
+    }
+
+    public function items()
+    {
+        return $this->hasMany(Item::class, 'project_id', 'id');
+    }
+
+    public function groups()
+    {
+        return $this->hasMany(Group::class, 'project_id', 'id')
+            ->orderBy('order');
     }
 }

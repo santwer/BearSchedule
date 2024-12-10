@@ -1,5 +1,6 @@
 {
     "date_format_js": "YYYY-MM-DD",
+    "date_format_excel": "yyyy-mm-dd",
     "auth.sign_up": "Registieren",
     "copy": "copy",
     "open": "open",

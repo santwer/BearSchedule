@@ -32,6 +32,10 @@ export default class Api {
         });
     }
 
+    static generateExcel(id) {
+        return axios.get('/timeline/' + id + '/excel');
+    }
+
     static setItem(item) {
         return axios.post('/items', item);
     }

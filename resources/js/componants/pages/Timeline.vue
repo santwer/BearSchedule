@@ -18,10 +18,12 @@
             </BButtonGroup>
         </div>
         <div class="col-10 col-sm-8" style="text-align: right">
-            <BButtonGroup size="sm" class="px-2" v-if="false">
+            <BButtonGroup size="sm" class="px-2">
                 <BButton
-                    :variant=" isDark ? 'secondary' : 'outline-dark'" :title="$t('project_excel')"
-                         :disabled="true">
+                    :variant=" isDark ? 'secondary' : 'outline-dark'"
+                    :title="$t('project_excel')"
+                    @click="openExcelExportModal"
+                    :disabled="loading">
                     <mdicon name="file-excel-outline" size="20"/>
                 </BButton>
             </BButtonGroup>
@@ -301,6 +303,9 @@
         ref="itemDeleteModal"
     v-on:delete="deleteItem"
     ></item-delete>
+    <excel-export-modal
+        ref="excelexport"
+    ></excel-export-modal>
 
 </template>
 
@@ -334,10 +339,12 @@ import ClipboardMixin from "@/mixins/ClipboardMixin";
 import ItemDelete from "@/componants/parts/ItemDelete.vue";
 import {routeLocationKey} from "vue-router";
 import {mapGetters} from "vuex";
+import ExcelExportModal from "@/componants/parts/ExcelExportModal.vue";
 
 export default {
     mixins: [ThemeMixin, routeMixin, ClipboardMixin],
     components: {
+        ExcelExportModal,
         ItemDelete,
         ContextMenuTimeline,
         RenameModal,
@@ -398,6 +405,9 @@ export default {
         ...mapGetters(['user', 'isLoading']),
     },
     methods: {
+        openExcelExportModal() {
+          this.$refs.excelexport.openModal();
+        },
         openItemDeleteModal(id) {
             this.$refs.itemDeleteModal.openModal(id);
         },
