@@ -86,12 +86,12 @@ export default {
         },
         setExportDates() {
             let itemRange = this.$parent.getItemRange();
-            let min = moment(itemRange.min).format('YYYY-MM-DD');
-            let max = moment(itemRange.max).format('YYYY-MM-DD');
+            let start = moment(itemRange.start).format('YYYY-MM-DD');
+            let end = moment(itemRange.end).format('YYYY-MM-DD');
 
 
-            this.export_start = min;
-            this.export_end = max;
+            this.export_start = start;
+            this.export_end = end;
 
         },
         getProjectName() {

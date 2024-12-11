@@ -19,22 +19,50 @@ use PhpOffice\PhpSpreadsheet\Style\Conditional;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class GanttExport implements FromView, WithStyles,WithColumnWidths, WithTitle
+class GanttExport implements FromView, WithStyles, WithColumnWidths, WithTitle
 {
-    protected $project;
+    protected Project $project;
+    protected ?Carbon $from;
+    protected ?Carbon $to;
+
+    protected ?array $savedInterval = null;
 
     public function __construct(Project $project, ?Carbon $from = null, ?Carbon $to = null)
     {
+        $this->from = $from;
+        $this->to = $to;
         $project->loadMissing([
             'items' => function (HasMany $builder) use ($from, $to) {
-                if($from) {
-                    $builder->where('start', '>=', $from);
-                }
-                if($to) {
-                    $builder->where('end', '<=', $to);
-                }
+                $builder->where(function (Builder $builder) use ($from, $to) {
+                    if ($from && $to === null) {
+                        $builder->where(function (Builder $builder) use ($from) {
+                            $builder->where('start', '>=', $from);
+                            $builder->where('end', '>=', $from);
+                        });
+                    } elseif ($to && $from === null) {
+                        $builder->where(function (Builder $builder) use ($to) {
+                            $builder->where('start', '<=', $to);
+                            $builder->where('end', '<=', $to);
+                        });
+                    } elseif ($to && $from) {
+                        $builder->orWhere(function (Builder $builder) use ($from, $to) {
+                            $builder->where('start', '>=', $from);
+                            $builder->where('start', '<=', $to);
+                        });
+                        $builder->orWhere(function (Builder $builder) use ($from, $to) {
+                            $builder->where('end', '>=', $from);
+                            $builder->where('end', '<=', $to);
+                        });
+                        $builder->orWhere(function (Builder $builder) use ($from, $to) {
+                            $builder->where('start', '<', $from);
+                            $builder->where('end', '>', $to);
+                        });
+                    }
+                });
+
             }, 'groups'
         ]);
+
         $this->project = $project;
     }
 
@@ -59,24 +87,26 @@ class GanttExport implements FromView, WithStyles,WithColumnWidths, WithTitle
 
     private function interval(): array
     {
+        if ($this->savedInterval)
+            return $this->savedInterval;
         /**
          * @var $start Carbon
          */
-        $start = $this->project->items->min('start');
+        $start = $this->from ?? $this->project->items->min('start');
         /**
          * @var $end Carbon
          */
-        $end = $this->project->items->max('end');
+        $end = $this->to ?? $this->project->items->max('end');
         //get array with days between start and end
         $interval = [];
         for ($date = $start; $date->lte($end); $date->addDay()) {
             $interval[] = (clone $date);
         }
 
-        return $interval;
+        return $this->savedInterval = $interval;
     }
 
-    private function monthsFromInterval(array $interval) : array
+    private function monthsFromInterval(array $interval): array
     {
         //get months and amount of days from array with all days as Carbon
         $months = [];
@@ -105,25 +135,25 @@ class GanttExport implements FromView, WithStyles,WithColumnWidths, WithTitle
         //if column G6 is 1 set background color to red
         $interval = $this->interval();
         $cols = count($interval);
-        $rows = $this->project->groups->count() + $this->project->items()->count();
+        $rows = $this->project->groups->count() + $this->project->items->count();
         $lastCol = self::num2AlphaExcel($cols + 5);
         $lastRow = $rows + 5;
 
-        for ($c = 5; $cols+5 >= $c; $c++) {
+        for ($c = 5; $cols + 5 >= $c; $c++) {
             $sheet->getColumnDimension(self::num2AlphaExcel($c))->setWidth(4);
         }
 
-        $sheet->getStyle('G4:'.$lastCol . '4')->getNumberFormat()->setFormatCode('mmm yy');
-        $sheet->getStyle('G5:'.$lastCol . '5')->getNumberFormat()->setFormatCode('dd');
+        $sheet->getStyle('G4:' . $lastCol . '4')->getNumberFormat()->setFormatCode('mmm yy');
+        $sheet->getStyle('G5:' . $lastCol . '5')->getNumberFormat()->setFormatCode('dd');
 
-        $sheet->getStyle('G4:'.$lastCol . '5')->getFill()->setFillType(Fill::FILL_SOLID);
-        $sheet->getStyle('G4:'.$lastCol . '5')->getFill()->getStartColor()->setARGB('a1cdff');
-        $sheet->getStyle('G4:'.$lastCol . '5')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER_CONTINUOUS);
+        $sheet->getStyle('G4:' . $lastCol . '5')->getFill()->setFillType(Fill::FILL_SOLID);
+        $sheet->getStyle('G4:' . $lastCol . '5')->getFill()->getStartColor()->setARGB('a1cdff');
+        $sheet->getStyle('G4:' . $lastCol . '5')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER_CONTINUOUS);
 
-        $sheet->getStyle('C5:D'.$lastRow)->getNumberFormat()->setFormatCode(__('date_format_excel'));
+        $sheet->getStyle('C5:D' . $lastRow)->getNumberFormat()->setFormatCode(__('date_format_excel'));
 
         $sheet->getStyle('G6:' . $lastCol . $lastRow)->getFont()
-            ->setColor(new Color(Color::changeBrightness('FFFFFF',0)));
+            ->setColor(new Color(Color::changeBrightness('FFFFFF', 0)));
 
 
         $this->setConditionalStyles($sheet, $lastCol, $lastRow);

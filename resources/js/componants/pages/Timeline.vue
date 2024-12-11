@@ -406,7 +406,7 @@ export default {
     },
     methods: {
         getItemRange() {
-            return this.timeline.getItemRange();
+            return this.timeline.getWindow();
         },
 
         openExcelExportModal() {

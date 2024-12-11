@@ -2,27 +2,28 @@
 
 namespace App\Http\Requests;
 
-use Carbon\Carbon;
+
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Carbon;
 
 class ExcelExportRequest extends FormRequest
 {
     public function rules(): array
     {
         return [
-            'start_date' => 'nullable|date',
+            'start' => 'nullable|date',
             'end_date' => 'nullable|date',
         ];
     }
 
     public function startDate() : ?Carbon
     {
-        return $this->start_date ? Carbon::parse($this->start_date) : null;
+        return $this->start ? Carbon::parse($this->start) : null;
     }
 
     public function endDate() : ?Carbon
     {
-        return $this->end_date ? Carbon::parse($this->end_date) : null;
+        return $this->end ? Carbon::parse($this->end) : null;
     }
 
     public function authorize(): bool
