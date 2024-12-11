@@ -1,13 +1,28 @@
 <template>
     <BModal
-        :title="$t('project_excel')"
+        :title="$t('project_excel') + ' ' + project_name"
         v-model="modal"
         :ok-title="$t('general.close')"
         :ok-only="true"
         :ok-variant="isDark ? 'secondary' : 'secondary'"
         v-b-modal.modal-center>
         <div class="form-group pb-2">
-            <label>{{ project_name }}</label>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <label for="start">{{ $t('project_timeline_tables.columns.start') }}</label>
+                        <input type="date" class="form-control" :max="export_end" v-model="export_start">
+                    </div>
+                </div>
+                <div class="col">
+                    <!-- input for end date -->
+                    <div class="form-group">
+                        <label for="end">{{ $t('project_timeline_tables.columns.end') }}</label>
+                        <input type="date" class="form-control"  :min="export_start" v-model="export_end">
+                    </div>
+                </div>
+            </div>
+
 
 
         </div>
@@ -27,6 +42,7 @@
 import error from "@/componants/parts/Error.vue";
 import {BButton, BFormInput, BInputGroup, BInputGroupText, BModal, BSpinner, BToast} from "bootstrap-vue-next";
 import {mapActions} from "vuex";
+import moment from "moment";
 import Api from "@/Api";
 export default {
     name: "ExcelExportModal",
@@ -55,6 +71,8 @@ export default {
             state: null,
             name: '',
             project_name: null,
+            export_start: null,
+            export_end: null,
         }
     },
     methods: {
@@ -64,13 +82,27 @@ export default {
             this.loading = false;
             this.modal = true;
             this.getProjectName();
+            this.setExportDates();
+        },
+        setExportDates() {
+            let itemRange = this.$parent.getItemRange();
+            let min = moment(itemRange.min).format('YYYY-MM-DD');
+            let max = moment(itemRange.max).format('YYYY-MM-DD');
+
+
+            this.export_start = min;
+            this.export_end = max;
+
         },
         getProjectName() {
             let project = this.$store.getters.projectById(this.$route.params.id);
             this.project_name = project.name;
         },
         exportExcel() {
-           window.open('/api/timeline/' + this.$route.params.id + '/excel');
+            let url = '/api/timeline/' + this.$route.params.id + '/excel';
+            url += '?start=' + this.export_start + '&end=' + this.export_end;
+
+           window.open(url);
            this.modal = false;
 
         }

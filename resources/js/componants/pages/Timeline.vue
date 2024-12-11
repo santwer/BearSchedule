@@ -405,6 +405,10 @@ export default {
         ...mapGetters(['user', 'isLoading']),
     },
     methods: {
+        getItemRange() {
+            return this.timeline.getItemRange();
+        },
+
         openExcelExportModal() {
           this.$refs.excelexport.openModal();
         },
