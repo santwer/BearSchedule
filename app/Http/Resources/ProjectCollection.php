@@ -11,15 +11,19 @@ class ProjectCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
         $user = $request->user();
+        $userArray = [
+            'user_name' => $user->name,
+            'user_avatar' => $user->avatarUrl,
+        ];
+        if ($user->isAdmin()) {
+            $userArray['is_admin'] = true;
+            $userArray['pulse'] = route('pulse');
+        }
         return [
             'projects' => $this->collection,
-            'user' => [
-                'user_name' => $user->name,
-                'user_avatar' => $user->avatarUrl,
-            ],
+            'user' => $userArray,
             'meta' => [
                 'version' => '1.0.0',
-
             ]
         ];
     }

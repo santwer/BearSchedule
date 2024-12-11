@@ -66,9 +66,13 @@
             <div class="collapse" :class="{'hidden': !accountOpen, 'show': accountOpen}">
                 <div class=" py-2 collapse-inner rounded "
                      :class="{'bg-white': !isDark, 'bg-gray-400': isDark, 'text-gray-800': isDark}">
+                    <a class="collapse-item" v-if="user.is_admin" :href="user.pulse" target="_blank">
+                        <mdicon name="monitor-dashboard" class="mr-2 text-gray-800 float-end" size="16"/>
+                        Pulse
+                    </a>
                     <a class="collapse-item" @click="goTo('settings')">
                         <mdicon name="account-cog" class="mr-2 text-gray-800 float-end" size="16"/>
-                        {{ $t('project_settings') }}
+                         {{ $t('project_settings') }}
                     </a>
                     <a class="collapse-item" @click=" goTo('activity-log')">
                         <mdicon name="file-document-outline" class="mr-2 text-gray-800 float-end" size="16"/>

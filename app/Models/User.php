@@ -43,6 +43,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'is_admin' => 'boolean',
     ];
 
     public function projects()
@@ -53,6 +54,11 @@ class User extends Authenticatable
     public function log()
     {
         return $this->hasMany(ProjectLog::class, 'user_id', 'id');
+    }
+
+    public function isAdmin() : bool
+    {
+        return $this->is_admin;
     }
 
     public static function ajaxSearch(string $q, $project_id): Collection
