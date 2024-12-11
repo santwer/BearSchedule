@@ -14,7 +14,7 @@ class TimelineItemRequest extends FormRequest
             'project_id' => 'required|int',
             'title' => 'required',
             'group' => 'required_unless:type,=,background',
-            'start' => 'required|date|before:end',
+            'start' => 'required|date|before_or_equal:end',
             'end' => 'date|nullable',
             'content' => 'nullable',
             'className' => 'nullable',

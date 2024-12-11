@@ -70,12 +70,9 @@ export default {
             this.project_name = project.name;
         },
         exportExcel() {
-           console.log('export excel');
-           Api.generateExcel(this.$route.params.id).then(response => {
-               console.log(response);
-           }).catch(error => {
-               console.log(error);
-           });
+           window.open('/api/timeline/' + this.$route.params.id + '/excel');
+           this.modal = false;
+
         }
     }
 }

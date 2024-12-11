@@ -41,14 +41,13 @@
             <div class="col-4">
                 <!-- input for start date -->
                 <div class="form-group">
-                    {{    item.start }}
                     <label for="start">{{ $t('project_timeline_tables.columns.start') }}</label>
-                    <input type="date" class="form-control" v-model="item.start">
+                    <input type="date" class="form-control" :max="item.end" v-model="item.start">
                 </div>
                 <!-- input for end date -->
                 <div class="form-group">
                     <label for="end">{{ $t('project_timeline_tables.columns.end') }}</label>
-                    <input type="date" class="form-control" v-model="item.end">
+                    <input type="date" class="form-control" :min="item.start" v-model="item.end">
                 </div>
                 <!-- select for type -->
                 <div class="form-group">
