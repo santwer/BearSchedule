@@ -13,6 +13,7 @@ use App\Models\Project;
 use App\Models\ProjectLog;
 use App\Models\ProjectOption;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class TimelineController extends TimelineAjaxController
 {
@@ -28,6 +29,12 @@ class TimelineController extends TimelineAjaxController
             $project_id = decrypt($project_id);
         }
         $project = Project::withCount(['users'])->findOrFail($project_id);
+
+        if(!Gate::allows('viewProject', $project)){
+            return response()->json([
+                'error' => 'Unauthorized'
+            ], 403);
+        }
 
         $options = $this->logicClass->getOptions($project_id);
         $output = [];
@@ -45,6 +52,7 @@ class TimelineController extends TimelineAjaxController
             ]
         ];
         $output['options'] = $options;
+        $output['id'] = $project_id;
         $output['groups'] = $this->logicClass->getGroups($project_id, false);
         $output['items'] = $this->logicClass
             ->getItems($project_id, false, null, null);
@@ -70,6 +78,14 @@ class TimelineController extends TimelineAjaxController
 
     public function updateSetting($id, Request $request)
     {
+        if (!is_numeric($id)) {
+            $id = decrypt($id);
+        }
+        if(!Gate::allows('adminProject', $id)){
+            return response()->json([
+                'error' => 'Unauthorized'
+            ], 403);
+        }
         $project = Project::with(['options'])->findOrFail($id);
         if ($request->setting === 'project_name') {
             $old = $project->name;
@@ -120,5 +136,22 @@ class TimelineController extends TimelineAjaxController
 
 
         return $this->settings($id);
+    }
+
+    public function destroy($project_id, Request $request)
+    {
+        if (!is_numeric($project_id)) {
+            $project_id = decrypt($project_id);
+        }
+        if(!Gate::allows('adminProject', $project_id)){
+            return response()->json([
+                'error' => 'Unauthorized'
+            ], 403);
+        }
+        Project::destroy($project_id);
+
+        return response()->json([
+            'success' => true
+        ]);
     }
 }

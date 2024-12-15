@@ -12,6 +12,8 @@
     "get to archive": "get to archive",
     "copy item": "copy item",
     "delete item": "delete item",
+    "delete project": "Delete project",
+    "delete group": "Delete group",
     "paste item": "paste item",
     "remove person from project": "remove {name} from project",
     "Do you want to remove person from project": "Do you want to remove {name} from project",
@@ -251,7 +253,8 @@
             "delete_success": "Delete successfully",
             "delete_fail": "Delete didn't work. Come back later.",
             "confirm_delete_group": "You want to Delete this Group?",
-            "confirm_delete_item": "You want to Delete this Item?"
+            "confirm_delete_item": "You want to Delete this Item?",
+            "confirm_delete_project": "You want to Delete this Project?"
         },
         "connection_status": "Connection status"
     },

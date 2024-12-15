@@ -11,6 +11,8 @@
     "edit item": "Element bearbeiten",
     "copy item": "Element kopieren",
     "delete item": "Element löschen",
+    "delete group": "Gruppe löschen",
+    "delete project": "Projekt löschen",
     "paste item": "Element einfügen",
     "please select": "Bitte wählen",
     "rename": "Umbenennen",
@@ -253,7 +255,8 @@
             "delete_success": "Erfolgreich gel\u00f6scht",
             "delete_fail": "L\u00f6schen ist fehlgeschlagen. Versuche es sp\u00e4ter erneut.",
             "confirm_delete_group": "M\u00f6chtest du diese Gruppe l\u00f6schen?",
-            "confirm_delete_item": "M\u00f6chtest du dieses Item l\u00f6schen?"
+            "confirm_delete_item": "M\u00f6chtest du dieses Item l\u00f6schen?",
+            "confirm_delete_project": "M\u00f6chtest du dieses Projekt l\u00f6schen?"
         },
         "connection_status": "Verbindungsstatus"
     },

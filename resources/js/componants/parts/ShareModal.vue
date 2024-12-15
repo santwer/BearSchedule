@@ -20,7 +20,7 @@
                                 :fields="sortFields"
                         >
                             <template #cell(remove)="row">
-                                <BButton variant="outline-danger"
+                                <BButton variant="outline-danger" v-if="editable"
                                          size="sm" class="pt-0 px-1"
                                          @click="openDeleteModal(row.item)"
                                 >
@@ -30,7 +30,7 @@
                             <template #cell(role)="row">
                                 <BFormSelect v-model="row.value"
                                              :state="row.item.role_state"
-                                             :disabled="row.item.role_state === false"
+                                             :disabled="row.item.role_state === false || !editable"
                                              :options="roleOptions"
                                              v-on:change="changeRole(row)"
                                              size="sm"/>
@@ -39,7 +39,7 @@
                                 </div>
                             </template>
                         </BTable>
-                        <div class="m-3 mt-0">
+                        <div class="m-3 mt-0" v-if="editable">
                             <div class="form-group">
                                 <label>{{ $t('add user to project') }}</label>
                                 <BInputGroup>
@@ -140,6 +140,12 @@ export default {
         BModal, BButton, BFormCheckbox, BButtonGroup,
         BFormSelect, BTable, BInputGroup, BFormInput,
         BInputGroupText, BSpinner,BTabs,BTab
+    },
+    props: {
+        editable: {
+            type: Boolean,
+            default: false
+        }
     },
     data() {
         return {

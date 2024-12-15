@@ -9,7 +9,7 @@
             <error :error="error"></error>
             <div class="form-group">
                 <label for="content">{{ $t('project_timeline_tables.columns.title') }}</label>
-                <input type="text" class="form-control" v-model="item.content">
+                <input type="text" class="form-control" v-model="item.content" :disabled="!editable">
             </div>
             <div class="form-group">
                 <BFormCheckbox
@@ -18,13 +18,14 @@
                     name="checkbox-1"
                     :value="true"
                     :unchecked-value="false"
+                    :disabled="!editable"
                 >
                     {{ $t('project_timelines.group.show_in_share') }}
                 </BFormCheckbox>
             </div>
             <div class="form-group">
                 <label for="color">{{ $t('project_timelines.group.group') }}</label>
-                <select class="form-select" v-model="item.parent">
+                <select class="form-select" v-model="item.parent" :disabled="!editable">
                     <option :value="null">{{ $t('project_timelines.item.no_group') }}</option>
                     <option v-for="group in groups" :value="group.id">
                         {{ group.content }}
@@ -37,12 +38,12 @@
         <template v-slot:footer="{ ok, cancel, hide }">
             <div class="col">
                 <BButtonGroup>
-                    <BButton variant="secondary" class="mr-2" @click="cancel">Close</BButton>
-                    <BButton variant="danger" @click="cancel">Delete</BButton>
+                    <BButton variant="secondary" class="mr-2" @click="cancel">{{ $t('general.close') }}</BButton>
+                    <BButton variant="danger" @click="openDelete" v-if="editable">{{ $t('general.delete') }}</BButton>
                 </BButtonGroup>
             </div>
             <div class="col ">
-                <BButton variant="primary" class="float-end" @click="save">Save</BButton>
+                <BButton variant="primary" class="float-end" @click="save" v-if="editable">{{ $t('general.save') }}</BButton>
             </div>
 
         </template>
@@ -50,7 +51,7 @@
 </template>
 
 <script>
-import {BModal, BButton, BFormCheckbox,BButtonGroup} from "bootstrap-vue-next";
+import {BModal, BButton, BFormCheckbox, BButtonGroup} from "bootstrap-vue-next";
 import Api from "@/Api";
 import Error from "@/componants/parts/Error.vue";
 import Loading from "@/componants/parts/Loading.vue";
@@ -59,13 +60,18 @@ export default {
     components: {
         Loading,
         Error,
-        BModal, BButton, BFormCheckbox,BButtonGroup
+        BModal, BButton, BFormCheckbox, BButtonGroup
     },
     props: {
         groups: {
             type: Array,
             default: () => []
+        },
+        editable: {
+            type: Boolean,
+            default: false,
         }
+
     },
     data() {
         return {
@@ -98,6 +104,10 @@ export default {
             this.item = Object.assign({}, item);
             console.log('here', this.item)
             this.modal = true;
+        },
+        openDelete() {
+            this.modal =false;
+            this.$emit('delete', this.item.id);
         },
         save() {
             this.loading = true;

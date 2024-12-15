@@ -23,6 +23,7 @@ use App\Models\Timeline\Item;
 use App\Models\Timeline\ItemLink;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Str;
 use Ramsey\Uuid\Uuid;
 
@@ -33,12 +34,14 @@ class TimelineAjaxController extends Controller
      */
     protected $logicClass = Timeline::class;
 
-    public function destroyGroup(Request $request)
+    public function destroyGroup($id, Request $request)
     {
-        if (! $request->has('id')) {
-            return response()->ajax(null, 'id not set.', 400);
+        $grp = Group::find($id);
+        if(!Gate::allows('editProject', $grp->project_id)) {
+            return response()->json([
+                'error' => 'Unauthorized'
+            ], 403);
         }
-        $grp = Group::find($request->get('id'));
         ProjectLog::entry(Actions::DELETE, Types::GROUP, $grp->toJson(), '', auth()->user()->id, $grp->project_id, null,
             $request->get('id'));
 
@@ -54,6 +57,12 @@ class TimelineAjaxController extends Controller
     public function destroyItem($id, Request $request)
     {
         $item = Item::find($id);
+
+        if(!Gate::allows('editProject', $item->project_id)) {
+            return response()->json([
+                'error' => 'Unauthorized'
+            ], 403);
+        }
 
         ProjectLog::entry(Actions::DELETE, Types::ITEM,
             $item->toJson(), '', auth()->user()->id, $item->project_id,

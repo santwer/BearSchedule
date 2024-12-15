@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class RoleRequest extends FormRequest
 {
@@ -25,6 +26,6 @@ class RoleRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return true;
+        return Gate::allows('adminProject', $this->projectId());
     }
 }

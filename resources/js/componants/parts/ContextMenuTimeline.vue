@@ -4,7 +4,7 @@
         class="dropdown-menu overflow-auto show shadow-sm"
         ref="context"
         role="menu">
-        <BButtonGroup class="px-2" style="width: 100%" v-if="item">
+        <BButtonGroup class="px-2" style="width: 100%" v-if="item && editable">
             <BButton
                 :variant="isDark ?
                             'secondary' : 'outline-dark'"
@@ -28,28 +28,28 @@
                 <mdicon name="delete" size="16"/>
             </BButton>
         </BButtonGroup>
-        <hr v-if="item && hasPaste()">
-        <li role="presentation" v-if="hasPaste()">
+        <hr v-if="item && hasPaste() && editable">
+        <li role="presentation" v-if="hasPaste() && editable">
             <button class="dropdown-item" role="menuitem" type="button" @click="paste()">
                 <mdicon name="content-paste" size="20"/>
                 <span class="d-none d-lg-inline px-2">{{ $t('paste item') }}</span>
             </button>
         </li>
-        <hr v-if="item">
+        <hr v-if="item && editable">
         <li role="presentation">
             <button class="dropdown-item" role="menuitem" type="button" @click="editGroup()" :disabled="!group">
                 <mdicon name="folder-edit" size="20"/>
                 <span class="d-none d-lg-inline px-2">{{ $t('edit group') }}</span>
             </button>
         </li>
-        <hr>
-        <li role="presentation">
+        <hr v-if="editable">
+        <li role="presentation"  v-if="editable">
             <button class="dropdown-item" role="menuitem" type="button" @click="addItem()">
                 <mdicon name="plus" size="20"/>
                 <span class="d-none d-lg-inline px-2">{{ $t('Add Item') }}</span>
             </button>
         </li>
-        <li role="presentation">
+        <li role="presentation"  v-if="editable">
             <button class="dropdown-item" role="menuitem" type="button" @click="parentAction('addGroup')">
                 <mdicon name="folder-plus" size="20"/>
                 <span class="d-none d-lg-inline px-2">{{ $t('Add Group') }}</span>
@@ -83,6 +83,12 @@ export default {
         BButton,
         BAlert,
         BButtonGroup,
+    },
+    props: {
+        editable: {
+            type: Boolean,
+            default: false,
+        }
     },
     data() {
         return {

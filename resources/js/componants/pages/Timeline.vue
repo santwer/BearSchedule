@@ -1,7 +1,7 @@
 <template>
     <div class="row mb-2">
         <div class="col-2 col-sm-4">
-            <BButtonGroup size="sm">
+            <BButtonGroup size="sm" v-if="getOption('editable.add')">
 
                 <BButton :variant=" isDark ? 'secondary' : 'outline-primary'" :title="$t('Add Item')"
                          @click="addItem()" :disabled="loading">
@@ -127,7 +127,7 @@
                     <mdicon name="view-list" size="20"/>
                 </BButton>
             </BButtonGroup>
-            <BButtonGroup size="sm" class="">
+            <BButtonGroup size="sm" class="" v-if="getOption('editable.admin')">
 
                 <BDropdown  :disabled="loading" v-model="timelineOptionShow" class="" :variant="isDark ? 'secondary' : 'outline-dark'"
                            size="sm"
@@ -197,6 +197,7 @@
                         <BButton
                             variant="danger"
                             :title="$t('general.delete')"
+                            @click="openDeleteModal"
                         >
                             <mdicon name="delete" size="16"/>
                         </BButton>
@@ -245,7 +246,7 @@
                 </BTable>
             </div>
         </div>
-        <div class="card mb-1" v-for="group in groups">
+        <div v-for="group in groups" :class="'card mb-1 ' + group.className">
             <div class="card-body">
                 <h5 class="card-title">{{ group.content }}</h5>
                 <BAlert variant="info" :model-value="true" v-if="items.filter(x => x.group === group.id).length === 0">
@@ -286,18 +287,24 @@
     <ItemModal
         ref="itemmodal"
         :groups="groups"
+        :editable="getOption('editable.add')"
         v-on:delete="openItemDeleteModal"
         v-on:save="saveItem"
     ></ItemModal>
     <GroupModal
         ref="groupmodal"
         :groups="groups"
+        v-on:delete="openGroupDeleteModal"
+        :editable="getOption('editable.add')"
         v-on:save="saveGroup"
     ></GroupModal>
-    <ShareModal ref="share"></ShareModal>
+    <ShareModal ref="share"
+                :editable="getOption('editable.admin')"
+    ></ShareModal>
     <rename-modal ref="rename"></rename-modal>
     <context-menu-timeline
         v-on:copy="copyItem"
+        :editable="getOption('editable.add')"
         ref="contextmenu"></context-menu-timeline>
     <item-delete
         ref="itemDeleteModal"
@@ -306,6 +313,14 @@
     <excel-export-modal
         ref="excelexport"
     ></excel-export-modal>
+    <project-delete
+        ref="deleteproject"
+        v-on:delete="deleteProject"
+    ></project-delete>
+    <group-delete
+        ref="groupdelete"
+        v-on:delete="deleteGroup"
+    ></group-delete>
 
 </template>
 
@@ -340,10 +355,14 @@ import ItemDelete from "@/componants/parts/ItemDelete.vue";
 import {routeLocationKey} from "vue-router";
 import {mapGetters} from "vuex";
 import ExcelExportModal from "@/componants/parts/ExcelExportModal.vue";
+import ProjectDelete from "@/componants/parts/ProjectDelete.vue";
+import GroupDelete from "@/componants/parts/GroupDelete.vue";
 
 export default {
     mixins: [ThemeMixin, routeMixin, ClipboardMixin],
     components: {
+        GroupDelete,
+        ProjectDelete,
         ExcelExportModal,
         ItemDelete,
         ContextMenuTimeline,
@@ -399,16 +418,46 @@ export default {
             templates: [],
             copyMethod: this.copyItem,
             pasteMethod: this.pasteItem,
+            isAdmin: false,
         }
     },
     computed: {
         ...mapGetters(['user', 'isLoading']),
     },
     methods: {
+        getOption(name) {
+            if(name === 'editable.admin') {
+                return this.isAdmin;
+            }
+            //if option has . in name then it is a suboption
+            if (name.includes('.')) {
+                if (this.options[name.split('.')[0]] === undefined || this.options[name.split('.')[0]][name.split('.')[1]] === undefined) {
+                    return null;
+                }
+                return this.options[name.split('.')[0]][name.split('.')[1]];
+            }
+            return this.options[name] !== undefined ? this.options[name] : null;
+        },
         getItemRange() {
             return this.timeline.getWindow();
         },
-
+        openDeleteModal() {
+            this.$refs.deleteproject.openModal(this.$route.params.id);
+        },
+        deleteProject() {
+            Api.deleteProject(this.$route.params.id).then(response => {
+                window.location.href = '/';
+            });
+        },
+        deleteGroup(id) {
+          Api.deleteGroup(id).then(response => {
+              this.groups = this.groups.filter(x => x.id !== id);
+              this.timeline.setGroups(this.groups);
+          });
+        },
+        openGroupDeleteModal(id) {
+            this.$refs.groupdelete.openModal(id);
+        },
         openExcelExportModal() {
           this.$refs.excelexport.openModal();
         },
@@ -434,6 +483,15 @@ export default {
             this.copyItemToClipboard(item);
         },
         pasteItem(group) {
+            if (this.getOption('editable.add') === false) {
+                return;
+            }
+            if(this.$refs.share.modal) {
+                return;
+            }
+            if(this.$refs.rename.modal) {
+                return;
+            }
             if(this.$refs.itemmodal.modal) {
                 return;
             }
@@ -452,6 +510,7 @@ export default {
             if(group !== null) {
                 item.group = group;
             }
+            item.project_id = this.$route.params.id;
             delete item.id;
             this.saveItem(item);
 
@@ -569,6 +628,11 @@ export default {
                 this.templates = response.data.item_templates;
                 this.setOptions(response.data.options);
                 this.initTimeline();
+                if(response.data.meta && response.data.meta.isAdmin) {
+                    this.isAdmin = response.data.meta.isAdmin;
+                } else {
+                    this.isAdmin = false;
+                }
             });
         },
         setOptions(options) {

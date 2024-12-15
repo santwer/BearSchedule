@@ -7,6 +7,7 @@ use App\Helper\Handlebars;
 use App\Http\Services\BaseService;
 use App\Models\ProjectOption;
 use App\Models\Timeline\Group;
+use Illuminate\Auth\Access\Gate;
 use Illuminate\Database\Eloquent\Collection;
 
 class Options extends BaseService
@@ -14,13 +15,14 @@ class Options extends BaseService
     protected $options = [];
     protected $isTimeline = true;
     protected $role = null;
+    protected int $project_id;
     protected $ignoreOptions = ['jira_host', 'jira_user', 'jira_password'];
 
     public function __construct(?int $project_id, bool $isTimeline = true)
     {
+        $this->project_id = $project_id;
         $this->isTimeline = $isTimeline;
         $projectOptions = ProjectOption::where('project_id', $project_id)->get();
-        $this->role = $this->getRoleInProject($project_id);
 
         $this->options = [
             'editable' => $this->getEdiable($project_id),
@@ -80,10 +82,10 @@ class Options extends BaseService
     private function getEdiable(int $projectId)
     {
         return [
-            'add' => ($this->role === 'ADMIN' || $this->role === 'EDITOR'),
+            'add' => \Illuminate\Support\Facades\Gate::allows('editProject', $projectId),
             'remove' => false,
-            'updateTime' => ($this->role === 'ADMIN' || $this->role === 'EDITOR'),
-            'updateGroup' => ($this->role === 'ADMIN' || $this->role === 'EDITOR'),
+            'updateTime' => \Illuminate\Support\Facades\Gate::allows('editProject', $projectId),
+            'updateGroup' => \Illuminate\Support\Facades\Gate::allows('editProject', $projectId),
         ];
     }
 
@@ -99,7 +101,7 @@ class Options extends BaseService
 
     private function getGroupTemplate()
     {
-        if ($this->role === 'ADMIN' || $this->role === 'EDITOR') {
+        if (\Illuminate\Support\Facades\Gate::allows('editProject', $this->project_id)) {
             return Handlebars::get('timeline.group.default');
         }
 
@@ -108,7 +110,7 @@ class Options extends BaseService
 
     private function getGroupEditable()
     {
-        return $this->role === 'ADMIN' || $this->role === 'EDITOR';
+        return \Illuminate\Support\Facades\Gate::allows('editProject', $this->project_id);
     }
 
     private function getRoleInProject(int $projectId)

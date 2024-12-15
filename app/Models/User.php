@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UserProjectRole;
 use App\Helper\UserHelper;
 use App\Notifications\ResetPasswordNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -50,6 +51,19 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Project::class, 'project_user')->withPivot(['role']);
     }
+
+    public function hasProjectRole(Project|int $project, UserProjectRole ...$role): bool
+    {
+
+        if($project instanceof Project) {
+            $project_id = $project->id;
+        } else {
+            $project_id = $project;
+        }
+        return $this->projects()->wherePivot('project_id', $project_id)
+                ->wherePivotIn('role', array_map(fn($x) => $x->value, $role))->first() !== null;
+    }
+
 
     public function log()
     {

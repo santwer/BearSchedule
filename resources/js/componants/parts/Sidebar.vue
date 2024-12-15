@@ -97,7 +97,7 @@
             </a>
             <div id="collapsePages" class="collapse" :class="{hidden: !activeProjects, 'show': activeProjects}"
                  data-parent="#accordionSidebar">
-                <div class=" py-2 collapse-inner rounded "
+                <div class=" py-2 collapse-inner rounded " v-if="projects.length > 0"
                      :class="{'bg-white': !isDark, 'bg-gray-400': isDark, 'text-gray-800': isDark}">
                     <a class="collapse-item" :class="{active: project.id === $route.params.id}"
                        v-for="project in projects"

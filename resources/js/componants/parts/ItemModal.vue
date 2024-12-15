@@ -14,7 +14,7 @@
                 <!-- select for group -->
                 <div class="form-group">
                     <label for="group">{{ $t('project_timelines.group.group') }}</label>
-                    <select class="form-select" v-model="item.group">
+                    <select class="form-select" v-model="item.group" :disabled="!editable">
                         <option :value="null" :disabled="item.type !== 'background'">
                             {{ item.type !== 'background' ? $t('please select') : $t('project_timelines.item.no_group')  }}</option>
                         <option v-for="group in groups" :value="group.id">{{ group.content }}</option>
@@ -23,17 +23,17 @@
                 <!-- input for title -->
                 <div class="form-group">
                     <label for="content">{{ $t('project_timeline_tables.columns.title') }}</label>
-                    <input type="text" class="form-control" v-model="item.title">
+                    <input type="text" class="form-control" v-model="item.title" :disabled="!editable">
                 </div>
                 <!-- input for subtitle -->
                 <div class="form-group">
                     <label for="start">{{ $t('project_timeline_tables.columns.subtitle') }}</label>
-                    <input type="text" class="form-control" v-model="item.subtitle">
+                    <input type="text" class="form-control" v-model="item.subtitle" :disabled="!editable">
                 </div>
                 <!-- textarea for content -->
                 <div class="form-group">
                     <label for="start">{{ $t('project_timeline_tables.columns.content') }}</label>
-                    <textarea class="form-control" style="height: 100px"
+                    <textarea class="form-control" style="height: 100px" :disabled="!editable"
                               v-model="item.content"></textarea>
                 </div>
 
@@ -42,17 +42,17 @@
                 <!-- input for start date -->
                 <div class="form-group">
                     <label for="start">{{ $t('project_timeline_tables.columns.start') }}</label>
-                    <input type="date" class="form-control" :max="item.end" v-model="item.start">
+                    <input type="date" class="form-control" :max="item.end" v-model="item.start" :disabled="!editable">
                 </div>
                 <!-- input for end date -->
                 <div class="form-group">
                     <label for="end">{{ $t('project_timeline_tables.columns.end') }}</label>
-                    <input type="date" class="form-control" :min="item.start" v-model="item.end">
+                    <input type="date" class="form-control" :min="item.start" v-model="item.end" :disabled="!editable">
                 </div>
                 <!-- select for type -->
                 <div class="form-group">
                     <label for="type">{{ $t('project_timeline_tables.columns.type') }}</label>
-                    <select class="form-select" v-model="item.type">
+                    <select class="form-select" v-model="item.type" :disabled="!editable">
                         <option value="box">{{ $t('project_timelines.item.types.box') }}</option>
                         <option value="point">{{ $t('project_timelines.item.types.point') }}</option>
                         <option value="range">{{ $t('project_timelines.item.types.range') }}</option>
@@ -62,7 +62,7 @@
                 <!-- select for Status -->
                 <div class="form-group">
                     <label for="status">{{ $t('project_timelines.item.status') }}</label>
-                    <select class="form-select" v-model="item.status">
+                    <select class="form-select" v-model="item.status" :disabled="!editable">
                         <option value="DEFAULT">{{ $t('project_timelines.item.stati.DEFAULT') }}</option>
                         <option value="DELAYED">{{ $t('project_timelines.item.stati.DELAYED') }}</option>
                         <option value="CRITICAL">{{ $t('project_timelines.item.stati.CRITICAL') }}</option>
@@ -74,7 +74,7 @@
                 <!-- select for Color -->
                 <div class="form-group">
                     <label for="color">{{ $t('project_timelines.item.color') }}</label>
-                    <select class="form-select" v-model="item.color">
+                    <select class="form-select" v-model="item.color" :disabled="!editable">
                         <option v-for="color in colors" :value="color">
                             {{ $t('project_timelines.item.colors.' + color.id) }}
                         </option>
@@ -90,11 +90,11 @@
                     <div class="col">
                         <BButtonGroup>
                         <BButton :variant="'secondary'" class="mr-2" @click="cancel">{{$t('general.close')}}</BButton>
-                        <BButton variant="danger" @click="emitDelete">{{$t('general.delete')}}</BButton>
+                        <BButton variant="danger" @click="emitDelete" v-if="editable">{{$t('general.delete')}}</BButton>
                         </BButtonGroup>
                     </div>
                     <div class="col ">
-                        <BButton variant="primary" class="float-end" @click="save">{{$t('general.save')}}</BButton>
+                        <BButton variant="primary" class="float-end" @click="save"  v-if="editable">{{$t('general.save')}}</BButton>
                     </div>
 
             </template>
@@ -120,6 +120,10 @@ export default {
         groups: {
             type: Array,
             default: () => []
+        },
+        editable: {
+            type: Boolean,
+            default: false,
         }
     },
     data() {

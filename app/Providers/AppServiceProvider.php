@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Enums\UserProjectRole;
+use App\Models\Project;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
@@ -29,6 +31,15 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
         Gate::define('viewPulse', function (User $user) {
             return $user->isAdmin();
+        });
+        Gate::define('viewProject', function (User $user, Project|int $project) {
+            return $user->hasProjectRole($project, UserProjectRole::ADMIN, UserProjectRole::EDITOR, UserProjectRole::SUBSCRIBER);
+        });
+        Gate::define('editProject', function (User $user, Project|int $project) {
+            return $user->hasProjectRole($project, UserProjectRole::ADMIN, UserProjectRole::EDITOR);
+        });
+        Gate::define('adminProject', function (User $user, Project|int $project) {
+            return $user->hasProjectRole($project, UserProjectRole::ADMIN);
         });
     }
 }

@@ -12,16 +12,48 @@
 
     .vis-item .vis-item-content {
         border-radius: 3px;
+        font-size: 90%;
+        padding: 3px 5px;
+    }
+    &.vis-tight {
+        .vis-item .vis-item-content {
+            border-radius: 3px;
+            font-size: 80%;
+            padding: 0 5px;
+        }
+        .vis-panel {
+            border-color: $border-color;
+
+
+            .vis-label {
+                font-size: 90%;
+                .vis-inner {
+                    min-width: 150px;
+                    padding: 0 5px;
+                }
+
+                /*vis-label draggable vis-nested-group --edf2f5 */
+            }
+        }
     }
     .vis-panel {
         border-color: $border-color;
 
 
         .vis-label {
-
+            .vis-inner {
+                min-width: 150px;
+                font-size: 90%;
+            }
 
             &.vis-nested-group {
                 background-color: #fafbfd;
+                &.collapsed::before {
+                    content: "+";
+                }
+                &.expanded {
+                    content: "-";
+                }
             }
 
             /*vis-label draggable vis-nested-group --edf2f5 */
@@ -35,7 +67,8 @@
         .vis-labelset .vis-label {
             border-color: $border-color;
             .vis-inner {
-                min-width: 200px;
+                min-width: 150px;
+                font-size: 90%;
             }
 
 
@@ -220,4 +253,10 @@
             }
         }
     }
+}
+.vis-label.vis-nesting-group.expanded::before {
+    content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>chevron-down</title><path d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" /></svg>');
+}
+.vis-label.vis-nesting-group.collapsed::before {
+    content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>chevron-right</title><path d="M8.59,16.58L13.17,12L8.59,7.41L10,6L16,12L10,18L8.59,16.58Z" /></svg>');
 }

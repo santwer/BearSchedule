@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Gate;
 
 class GroupRequest extends FormRequest
 {
@@ -30,6 +31,6 @@ class GroupRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return true;
+        return Gate::allows('editProject', $this->project_id);
     }
 }

@@ -20,6 +20,10 @@ export default class Api {
         return axios.get('/timeline/' + id,);
     }
 
+    static deleteProject(id) {
+        return axios.delete('/timeline/' + id,);
+    }
+
     static getProjectSettings(id) {
         return axios.get('/timeline/' + id + '/settings',);
     }
@@ -46,6 +50,10 @@ export default class Api {
 
     static setGroup(group) {
         return axios.post('/groups/', group);
+    }
+
+    static deleteGroup(group) {
+        return axios.delete('/groups/' + group);
     }
 
     static getShareData(id) {
