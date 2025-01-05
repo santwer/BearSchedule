@@ -50,7 +50,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        if ($this->isHttpException($exception) && config('app.debug') === false) {
+        if ($this->isHttpException($exception)) {
                 $code = $exception->getStatusCode();
                 return response()->view('errors.custom', [
                     'message' => $this->getMessage($exception),
