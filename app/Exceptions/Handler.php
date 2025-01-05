@@ -50,6 +50,32 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
+        if ($this->isHttpException($exception) && config('app.debug') === false) {
+                $code = $exception->getStatusCode();
+                return response()->view('errors.custom', [
+                    'message' => $this->getMessage($exception),
+                    'code' => $code,
+                ], $exception->getStatusCode());
+
+        }
         return parent::render($request, $exception);
+    }
+
+    private function getMessage(Throwable $exception) : string
+    {
+        $message = $exception->getMessage();
+        if(!empty($message)){
+            return $message;
+        }
+        $statusCode = $exception->getStatusCode();
+        switch ($statusCode) {
+            case 404:
+                return 'Page not found';
+            case 403:
+                return 'Access denied';
+            case 500:
+            default:
+                return 'An error occurred';
+        }
     }
 }
