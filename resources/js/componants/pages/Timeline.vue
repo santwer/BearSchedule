@@ -26,7 +26,7 @@
             </BButtonGroup>
         </div>
         <div class="col-10 col-sm-8" style="text-align: right">
-            <BButtonGroup size="sm" class="px-2">
+            <BButtonGroup size="sm" class="px-2" v-if="hasExcel">
                 <BButton
                     :variant=" isDark ? 'secondary' : 'outline-dark'"
                     :title="$t('project_excel')"
@@ -191,7 +191,7 @@
                         <BButton
                             variant="info"
                             @click="openArchiveModal"
-                            v-if="true"
+                            v-if="!archived"
                             :title="$t('put to archive')"
                         >
                             <mdicon name="archive-arrow-down" size="16"/>
@@ -333,7 +333,8 @@
     ></group-delete>
     <project-archive
         ref="archive"
-        :archive="archiveProject"
+        :is-archived="archived"
+        v-on:archive="archiveProject"
     ></project-archive>
 
 </template>
@@ -367,7 +368,7 @@ import ContextMenuTimeline from "@/componants/parts/ContextMenuTimeline.vue";
 import ClipboardMixin from "@/mixins/ClipboardMixin";
 import ItemDelete from "@/componants/parts/ItemDelete.vue";
 import {routeLocationKey} from "vue-router";
-import {mapGetters} from "vuex";
+import {mapActions, mapGetters} from "vuex";
 import ExcelExportModal from "@/componants/parts/ExcelExportModal.vue";
 import ProjectDelete from "@/componants/parts/ProjectDelete.vue";
 import GroupDelete from "@/componants/parts/GroupDelete.vue";
@@ -414,6 +415,7 @@ export default {
                 {key: 'end', label: this.$t('project_timeline_tables.columns.end'), sortable: true},
                 {key: 'edit', label: '', sortable: false}
             ],
+            hasExcel: false,
             timeline: null,
             items: [],
             groups: [],
@@ -441,6 +443,7 @@ export default {
             copyMethod: this.copyItem,
             pasteMethod: this.pasteItem,
             isAdmin: false,
+            archived: false
         }
     },
     computed: {
@@ -453,11 +456,15 @@ export default {
         ...mapGetters(['user', 'isLoading']),
     },
     methods: {
+        ...mapActions(['getMeta']),
         openArchiveModal() {
             this.$refs.archive.openModal();
         },
         archiveProject() {
-
+            Api.archiveProject(this.project_id).then(response => {
+                this.getMeta();
+                this.archived = !this.archived;
+            });
         },
         getOption(name) {
             if(this.pid !== null) {
@@ -670,6 +677,17 @@ export default {
                 } else {
                     this.isAdmin = false;
                 }
+                if(response.data.meta && response.data.meta.hasExcel) {
+                    this.hasExcel = response.data.meta.hasExcel;
+                } else {
+                    this.hasExcel = false;
+                }
+                if(response.data.meta && response.data.meta.archived) {
+                    this.archived = response.data.meta.archived;
+                } else {
+                    this.archived = false;
+                }
+
             });
         },
         setOptions(options) {

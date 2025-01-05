@@ -54,6 +54,7 @@ class TimelineController extends TimelineAjaxController
         $options = $this->logicClass->getOptions($project_id);
         $output = [];
         $output['shared_count'] = $project->users_count;
+        $output['archived'] = $project->archive_date !== null;
         $output['item_templates'] = [
             [
                 'value'    => null,
@@ -164,6 +165,30 @@ class TimelineController extends TimelineAjaxController
             ], 403);
         }
         Project::destroy($project_id);
+
+        return response()->json([
+            'success' => true
+        ]);
+    }
+
+    public function archive($project_id, Request $request)
+    {
+        if (!is_numeric($project_id)) {
+            $project_id = decrypt($project_id);
+        }
+        if(!Gate::allows('adminProject', $project_id)){
+            return response()->json([
+                'error' => 'Unauthorized'
+            ], 403);
+        }
+        $project = Project::findOrFail($project_id);
+        if($project->archive_date !== null && $project->archive_date->lt(now()->subSeconds(15))) {
+            $project->archive_date = null;
+        }
+        else {
+            $project->archive_date = now();
+        }
+        $project->save();
 
         return response()->json([
             'success' => true

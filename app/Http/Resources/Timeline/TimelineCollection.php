@@ -16,9 +16,12 @@ class TimelineCollection extends ResourceCollection
     public function toArray(Request $request): array
     {
 
-        $output = ['version' => '1.0.0',];
+        $output = ['version' => '1.0.0', 'archived' => $this->collection['archived']];
         if(Gate::allows('adminProject', $this->collection['id'])) {
             $output['isAdmin'] = true;
+        }
+        if(config('bearschedule.enable_excel')) {
+            $output['hasExcel'] = true;
         }
         return [
             'options' => new OptionResource($this->collection['options']),

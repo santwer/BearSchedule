@@ -19,7 +19,7 @@
                             <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                                 {{ $t('general.projects') }}
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ projects.length }}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ projects.length + archivedProjects.length }}</div>
                         </div>
                         <div class="col-auto text-primary ">
                             <mdicon name="chart-gantt" size="32"/>
@@ -57,7 +57,7 @@
                             <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                                 {{ $t('collaboration') }}
                             </div>
-                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ projects.length }}</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ projects.filter(x => x.collaboration > 1).length }}</div>
                         </div>
                         <div class="col-auto text-info">
                             <mdicon name="account-group" size="32"/>

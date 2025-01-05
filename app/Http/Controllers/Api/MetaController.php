@@ -14,6 +14,7 @@ class MetaController extends Controller
 
 
         $projects = Project::whereUserId()
+            ->withCount(['users'])
             ->orderBy('name')
             ->get();
         return new ProjectCollection($projects);

@@ -1,16 +1,17 @@
 <template>
     <BModal
-        :title="$t('delete group')"
+        :title="$t('general.Archive_project')"
         v-model="modal"
-        :ok-title="$t('general.delete')"
+        :ok-title="isArchived ? $t('get to archive') : $t('general.do_archive')"
         :cancel-title="$t('general.cancel')"
         :ok-only="false"
-        ok-variant="danger"
+        :ok-variant="isArchived ? 'primary' : 'info'"
         :cancel-variant="isDark ? 'secondary' : 'secondary'"
-        v-on:ok="deleteItem"
+        v-on:ok="archiveItem"
         v-b-modal.modal-center>
         <div class="form-group pb-2">
-            <label>{{ $t('project_timelines.messages.confirm_archive_project') }}</label>
+            <label v-if="isArchived">{{ $t('project_timelines.messages.confirm_unarchive_project') }}</label>
+            <label v-else>{{ $t('project_timelines.messages.confirm_archive_project') }}</label>
         </div>
     </BModal>
     <div  class="toast-container position-fixed p-3 bottom-0 end-0">
@@ -36,6 +37,12 @@ import {BButton, BFormInput, BInputGroup, BInputGroupText, BModal, BSpinner, BTo
 export default {
     name: "ProjectArchive",
     mixins: ['themeMixin'],
+    props: {
+        isArchived: {
+            type: Boolean,
+            default: false
+        }
+    },
     computed: {
         error() {
             return error
@@ -72,7 +79,7 @@ export default {
         closeModal() {
             this.modal = false;
         },
-        deleteItem() {
+        archiveItem() {
             this.$emit('archive')
         }
     },

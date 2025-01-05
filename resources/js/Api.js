@@ -24,6 +24,10 @@ export default class Api {
         return axios.delete('/timeline/' + id,);
     }
 
+    static archiveProject(id) {
+        return axios.post('/timeline/' + id + '/archive');
+    }
+
     static getProjectSettings(id) {
         return axios.get('/timeline/' + id + '/settings',);
     }

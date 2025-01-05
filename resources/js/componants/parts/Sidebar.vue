@@ -45,7 +45,7 @@
         </div>
 
         <!-- Sidebar - Brand -->
-        <a class="sidebar-brand d-flex align-items-center justify-content-center" @click="goHome">
+        <a class="sidebar-brand d-flex align-items-center" @click="goHome">
             <div class="sidebar-brand-icon1">
                 <logo class="bear-logo "/>
             </div>

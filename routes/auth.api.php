@@ -9,6 +9,7 @@ Route::get('/settings', [\App\Http\Controllers\Api\SettingsController::class, 'i
 Route::put('/settings', [\App\Http\Controllers\Api\SettingsController::class, 'update']);
 Route::get('/timeline/{project}', [\App\Http\Controllers\Api\TimelineController::class, 'index']);
 Route::delete('/timeline/{project}', [\App\Http\Controllers\Api\TimelineController::class, 'destroy']);
+Route::post('/timeline/{project}/archive', [\App\Http\Controllers\Api\TimelineController::class, 'archive']);
 Route::get('/timeline/{project}/settings', [\App\Http\Controllers\Api\TimelineController::class, 'settings']);
 Route::get('/timeline/{project}/excel', [\App\Http\Controllers\Api\ExcelExportController::class, 'index']);
 Route::post('/timeline/{project}/settings', [\App\Http\Controllers\Api\TimelineController::class, 'updateSetting']);

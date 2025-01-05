@@ -83,10 +83,12 @@
     "general.project": "Project",
     "general.projects": "Projects",
     "general.archive": "Archive",
+    "general.do_archive": "Archive",
     "general.active": "Active",
     "general.open": "Open",
     "general.archivevd_projects": "Archived projects",
     "general.active_projects": "Active projects",
+    "general.Archive_project": "Archive project",
     "collaboration": "Collaboration",
     "general.close": "Close",
     "general.dashboard": {
@@ -256,7 +258,8 @@
             "confirm_delete_group": "You want to Delete this Group?",
             "confirm_delete_item": "You want to Delete this Item?",
             "confirm_delete_project": "You want to Delete this Project?",
-            "confirm_archive_project": "You want to Archive this Project?"
+            "confirm_archive_project": "You want to Archive this Project?",
+            "confirm_unarchive_project": "You want to restore this Project?"
         },
         "connection_status": "Connection status"
     },

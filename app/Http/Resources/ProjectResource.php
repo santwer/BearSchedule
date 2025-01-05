@@ -16,6 +16,7 @@ class ProjectResource extends JsonResource
             'share'      => $this->share,
             'created_at' => $this->created_at,
             'is_archived' => $this->is_archived,
+            'collaboration' => $this->users_count,
         ];
     }
 }

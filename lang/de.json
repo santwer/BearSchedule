@@ -79,6 +79,8 @@
     "general.password_confirmation": "Password bestätigen",
     "general.save": "Speichern",
     "general.delete": "L\u00f6schen",
+    "general.archive": "Archiv",
+    "general.do_archive": "Archivieren",
     "general.password": "Passwort",
     "general.project_schedule": "Projekt-Zeitplan",
     "general.content_not_loaded": "Inhalt nicht geladen",
@@ -86,6 +88,7 @@
     "general.projects": "Projekte",
     "general.archivevd_projects": "Archivierte Projekte",
     "general.active_projects": "Aktive Projekte",
+    "general.Archive_project": "Projekt archivieren",
     "collaboration": "Zusammenarbeit",
     "general.open": "\u00d6ffnen",
     "general.close": "Schlie\u00dfen",
@@ -258,7 +261,8 @@
             "confirm_delete_group": "M\u00f6chtest du diese Gruppe l\u00f6schen?",
             "confirm_delete_item": "M\u00f6chtest du dieses Item l\u00f6schen?",
             "confirm_delete_project": "M\u00f6chtest du dieses Projekt l\u00f6schen?",
-            "confirm_archive_project": "M\u00f6chtest du dieses Projekt archivieren?"
+            "confirm_archive_project": "M\u00f6chtest du dieses Projekt archivieren?",
+            "confirm_unarchive_project": "M\u00f6chtest du dieses Projekt aus dem Archiv holen?"
         },
         "connection_status": "Verbindungsstatus"
     },
