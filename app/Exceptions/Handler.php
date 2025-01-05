@@ -62,10 +62,16 @@ class Handler extends ExceptionHandler
         }
         $statusCode = $exception->getStatusCode();
         switch ($statusCode) {
+            case 401:
+                return 'Unauthorized';
+            case 403:
+                return 'Forbidden';
             case 404:
                 return 'Page not found';
-            case 403:
-                return 'Access denied';
+            case 405:
+                return 'Method not allowed';
+            case 429:
+                return 'Too many requests';
             case 500:
             default:
                 return 'An error occurred';

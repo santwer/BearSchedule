@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ShareController extends Controller
 {
@@ -15,7 +16,7 @@ class ShareController extends Controller
     public function index(Request $request, string $unique)
     {
         if (!$this->checkShare($unique)) {
-            return response()->json('No Data', 404);
+            throw new HttpException(404);
         }
 
         $pageTitle = $this->project->name;
@@ -28,7 +29,7 @@ class ShareController extends Controller
     public function getShareJs(Request $request, string $unique)
     {
         if ($this->checkShare($unique)) {
-            response()->json('No Data', 404);
+            throw new HttpException(404);
         }
         $file = file_get_contents(public_path('js/share.js'));
         $file = str_replace('{$csrf_token}', csrf_token(), $file);
@@ -38,7 +39,7 @@ class ShareController extends Controller
     public function getShareCss(Request $request, string $unique)
     {
         if ($this->checkShare($unique)) {
-            response()->json('No Data', 404);
+            throw new HttpException(404);
         }
         $file = file_get_contents(public_path('css/share.css'));
         return response()->make($file, 200, ['content-type' => 'text/css; charset=UTF-8']);
@@ -47,10 +48,10 @@ class ShareController extends Controller
     public function getData(Request $request, string $unique)
     {
         if($request->header('X-CSRF-TOKEN') !== csrf_token()) {
-            response()->json('Not authorizied', 404);
+            throw new HttpException(401);
         }
         if ($this->checkShare($unique)) {
-            response()->json('No Data', 404);
+            throw new HttpException(404);
         }
 
         $request->merge(['project' => $this->project->id]);
