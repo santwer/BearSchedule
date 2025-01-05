@@ -9,12 +9,17 @@ class LoginController extends Controller
 {
     public function disclaimer()
     {
-        return view('auth.disclaimer');
+        return view('auth.disclaimer', [
+            'title' => __('general.disclaimer'),
+            'file' => storage_path('app/disclaimer.html')
+        ]);
     }
 
     public function privacy()
-    { // Legal
-       // Privacy Policy
-        return view('auth.privacy');
+    {
+        return view('auth.disclaimer', [
+            'title' => __('general.privacy_policy'),
+            'file' => storage_path('app/privacy.html')
+        ]);
     }
 }

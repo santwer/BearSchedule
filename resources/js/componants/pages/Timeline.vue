@@ -4,7 +4,7 @@
             <BButtonGroup size="sm" v-if="getOption('editable.add')">
 
                 <BButton :variant=" isDark ? 'secondary' : 'outline-primary'" :title="$t('Add Item')"
-                         @click="addItem()" :disabled="loading">
+                         @click="addItem()" :disabled="loading" >
                     <mdicon name="plus" size="20"/>
                     <span class="d-none d-lg-inline">{{ $t('Add Item') }}</span>
                 </BButton>
@@ -14,6 +14,14 @@
                          @click="addGroup()">
                     <mdicon name="folder-plus" size="20"/>
                     <span class="d-none d-lg-inline">{{ $t('Add Group') }}</span>
+                </BButton>
+            </BButtonGroup>
+            <BButtonGroup size="sm" v-if="pid !== null">
+                <BButton :variant=" isDark ? 'secondary' : 'outline-primary'"
+                         :title="$t('general.dark_mode_toogle')"
+                         :disabled="loading"
+                         @click="toggleTheme">
+                    <mdicon name="theme-light-dark" size="16"/>
                 </BButton>
             </BButtonGroup>
         </div>
@@ -27,7 +35,7 @@
                     <mdicon name="file-excel-outline" size="20"/>
                 </BButton>
             </BButtonGroup>
-            <BButtonGroup size="sm">
+            <BButtonGroup size="sm" v-if="pid === null">
                 <BButton
                     :disabled="loading"
                     :variant=" isDark ? 'secondary' : 'outline-primary'"
@@ -182,12 +190,14 @@
                         </BButton>
                         <BButton
                             variant="info"
+                            @click="openArchiveModal"
                             v-if="true"
                             :title="$t('put to archive')"
                         >
                             <mdicon name="archive-arrow-down" size="16"/>
                         </BButton>
                         <BButton
+                            @click="openArchiveModal"
                             :title="$t('get to archive')"
                             v-else>
                             <mdicon
@@ -321,6 +331,10 @@
         ref="groupdelete"
         v-on:delete="deleteGroup"
     ></group-delete>
+    <project-archive
+        ref="archive"
+        :archive="archiveProject"
+    ></project-archive>
 
 </template>
 
@@ -357,10 +371,12 @@ import {mapGetters} from "vuex";
 import ExcelExportModal from "@/componants/parts/ExcelExportModal.vue";
 import ProjectDelete from "@/componants/parts/ProjectDelete.vue";
 import GroupDelete from "@/componants/parts/GroupDelete.vue";
+import ProjectArchive from "@/componants/parts/ProjectArchive.vue";
 
 export default {
     mixins: [ThemeMixin, routeMixin, ClipboardMixin],
     components: {
+        ProjectArchive,
         GroupDelete,
         ProjectDelete,
         ExcelExportModal,
@@ -380,6 +396,12 @@ export default {
         BAlert,
         BTable,
         BDropdownItem
+    },
+    props: {
+        pid: {
+            type: Number,
+            default: null
+        }
     },
     data() {
         return {
@@ -422,10 +444,25 @@ export default {
         }
     },
     computed: {
+        project_id() {
+            if(this.pid) {
+                return this.pid;
+            }
+            return this.$route.params.id;
+        },
         ...mapGetters(['user', 'isLoading']),
     },
     methods: {
+        openArchiveModal() {
+            this.$refs.archive.openModal();
+        },
+        archiveProject() {
+
+        },
         getOption(name) {
+            if(this.pid !== null) {
+                return false;
+            }
             if(name === 'editable.admin') {
                 return this.isAdmin;
             }
@@ -442,10 +479,10 @@ export default {
             return this.timeline.getWindow();
         },
         openDeleteModal() {
-            this.$refs.deleteproject.openModal(this.$route.params.id);
+            this.$refs.deleteproject.openModal(this.project_id);
         },
         deleteProject() {
-            Api.deleteProject(this.$route.params.id).then(response => {
+            Api.deleteProject(this.project_id).then(response => {
                 window.location.href = '/';
             });
         },
@@ -510,7 +547,7 @@ export default {
             if(group !== null) {
                 item.group = group;
             }
-            item.project_id = this.$route.params.id;
+            item.project_id = this.project_id;
             delete item.id;
             this.saveItem(item);
 
@@ -555,7 +592,7 @@ export default {
             this.timeline.setOptions(this.options);
 
 
-            Api.setProjectSetting(this.$route.params.id, name, value)
+            Api.setProjectSetting(this.project_id, name, value)
                 .then(response => {
                     console.log(response.data)
                 })
@@ -724,7 +761,7 @@ export default {
                 item.end = moment(endDate);
                 item.type = 'range';
                 item.content = '';
-                item.project_id = this.$route.params.id;
+                item.project_id = this.project_id;
                 let emptyObject = this.$refs.itemmodal.newItem();
                 Object.keys(emptyObject).forEach(key => {
                     if (typeof item[key] === "undefined") {
@@ -793,7 +830,7 @@ export default {
                 group: group,
                 type: 'range',
                 content: '',
-                project_id: this.$route.params.id
+                project_id: this.project_id
             };
             let endDate = new Date( time.getTime());
             endDate.setHours(23, 59, 59, 999);
@@ -929,14 +966,14 @@ export default {
     },
 
     mounted() {
-        this.project_id = this.$route.params.id;
+        this.project_id = this.project_id;
         this.registerHandlebarHelper();
         this.getData();
     }
     ,
     created() {
         this.$watch(
-            () => this.$route.params.id,
+            () => this.project_id,
             () => {
                 this.loading = true;
                 this.tab = 'timeline';
@@ -948,7 +985,7 @@ export default {
                     this.options = {
                         orientation: {axis: undefined, item: undefined}
                     };
-                    this.project_id = this.$route.params.id;
+                    this.project_id = this.project_id;
                     this.getData();
                 });
             }

@@ -34,10 +34,10 @@
                     <a href="{{ locale_route('login') }}">@lang('general.login')</a> &nbsp;·&nbsp;
                     <a href="{{ locale_route('register') }}">@lang('auth.sign_up')</a> &nbsp;·&nbsp;
                     <a href="{{ locale_route('password.request') }}">@lang('auth.password_forgot')</a>
-                    @if(file_exists(storage_path('app/disclaimer.txt')))
+                    @if(file_exists(storage_path('app/disclaimer.html')))
                         &nbsp;·&nbsp;<a href="{{ locale_route('disclaimer') }}">@lang('general.disclaimer')</a>
                     @endif
-                    @if(file_exists(storage_path('app/privacy.txt')))
+                    @if(file_exists(storage_path('app/privacy.html')))
                         &nbsp;·&nbsp;<a href="{{ locale_route('privacy') }}">@lang('general.privacy_policy')</a>
                     @endif
                 </p>

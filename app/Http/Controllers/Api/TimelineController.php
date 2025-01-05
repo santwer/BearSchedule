@@ -14,6 +14,7 @@ use App\Models\ProjectLog;
 use App\Models\ProjectOption;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Str;
 
 class TimelineController extends TimelineAjaxController
 {
@@ -25,16 +26,30 @@ class TimelineController extends TimelineAjaxController
 
     public function index($project_id, Request $request)
     {
-        if (!is_numeric($project_id)) {
-            $project_id = decrypt($project_id);
+        if(Str::isUuid($project_id)) {
+            $project = Project::withCount(['users'])->where('share', $project_id)->first();
+            $project_id = $project?->id;
+            if(null == $project_id) {
+                return response()->json([
+                    'error' => 'Not found'
+                ], 404);
+            }
         }
-        $project = Project::withCount(['users'])->findOrFail($project_id);
+        else {
+            if (!is_numeric($project_id)) {
+                $project_id = decrypt($project_id);
+            }
 
-        if(!Gate::allows('viewProject', $project)){
-            return response()->json([
-                'error' => 'Unauthorized'
-            ], 403);
+            $project = Project::withCount(['users'])->findOrFail($project_id);
+
+            if(!Gate::allows('viewProject', $project)){
+                return response()->json([
+                    'error' => 'Unauthorized'
+                ], 403);
+            }
         }
+
+
 
         $options = $this->logicClass->getOptions($project_id);
         $output = [];

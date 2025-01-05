@@ -44,9 +44,13 @@ Route::middleware(['auth'])->group(function () {
 
 Route::group(['prefix' => 'share/'], function () {
     Route::get('{unique}/', [ShareController::class, 'index'])->name('share.index');
-    Route::get('{unique}/ajax/getdata', [ShareController::class, 'getData']);
-    Route::get('{unique}/share.js', [ShareController::class, 'getShareJs']);
-    Route::get('{unique}/share.css', [ShareController::class, 'getShareCss']);
+    Route::get('/meta', [\App\Http\Controllers\Api\MetaController::class, 'index']);
+    Route::get('/settings', [\App\Http\Controllers\Api\SettingsController::class, 'index']);
+    Route::get('/timeline/{project}', [\App\Http\Controllers\Api\TimelineController::class, 'index']);
+    Route::get('/timeline/{project}/settings', [\App\Http\Controllers\Api\TimelineController::class, 'settings']);
+    Route::get('/timeline/{project}/excel', [\App\Http\Controllers\Api\ExcelExportController::class, 'index']);
+    Route::get('/share/{project}', [\App\Http\Controllers\Api\ShareController::class, 'index']);
+    Route::get('/search-person/{project}', \App\Http\Controllers\Api\SearchUserController::class);
 
 });
 Route::any('/', [\App\Http\Controllers\LocaleController::class, 'redirectMain']);

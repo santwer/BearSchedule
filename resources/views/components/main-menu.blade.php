@@ -20,10 +20,10 @@
             <localization-select :locals="{{ $locals }}" init="{{ user_locale() }}" :extra="true"></localization-select>
         </p>
         <p class="has-text-grey">
-            @if(file_exists(storage_path('app/disclaimer.txt')))
+            @if(file_exists(storage_path('app/disclaimer.html')))
                 <a href="{{ locale_route('disclaimer') }}" target="_blank">@lang('general.disclaimer')</a>
             @endif
-            @if(file_exists(storage_path('app/privacy.txt')))
+            @if(file_exists(storage_path('app/privacy.html')))
                 &nbsp;·&nbsp;<a href="{{ locale_route('privacy') }}" target="_blank">@lang('general.privacy_policy')</a>
             @endif
             @if(env('SHOW_GITHUB', false))

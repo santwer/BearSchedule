@@ -58,7 +58,7 @@ class RegisterController extends Controller
         if (config('services.turnstile.key')) {
             $rules['cf-turnstile-response'] = ['required', app(TurnstileRule::class)];
         }
-
+dd(request()->all());
         return Validator::make($data, array_merge([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],

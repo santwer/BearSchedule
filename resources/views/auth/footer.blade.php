@@ -11,10 +11,10 @@
             </div>
         @endif
         <div class="col-6 col-sm-3">
-            @if(file_exists(storage_path('app/disclaimer.txt')))
+            @if(file_exists(storage_path('app/disclaimer.html')))
                 <a class="small" href="{{ locale_route('disclaimer') }}">@lang('general.disclaimer')</a>
             @endif
-            @if(file_exists(storage_path('app/privacy.txt')))
+            @if(file_exists(storage_path('app/privacy.html')))
                 &nbsp;·&nbsp;<a class="small" href="{{ locale_route('privacy') }}">@lang('general.privacy_policy')</a>
             @endif
         </div>

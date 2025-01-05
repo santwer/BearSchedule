@@ -117,7 +117,7 @@ class TimelineAjaxController extends Controller
                 ;
         }
 
-        return response()->timeline($output, 200);
+        return response()->json($output, 200);
     }
 
     public function getShareLink(Request $request)
