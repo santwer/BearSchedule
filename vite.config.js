@@ -15,6 +15,7 @@ export default defineConfig({
                 'resources/css/app.scss',
                 'resources/js/login.js',
                 'resources/js/app.js',
+                'resources/js/share.js',
             ],
             refresh: true,
         }),
