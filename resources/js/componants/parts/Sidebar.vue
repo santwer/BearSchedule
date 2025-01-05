@@ -74,7 +74,7 @@
                         <mdicon name="account-cog" class="mr-2 text-gray-800 float-end" size="16"/>
                          {{ $t('project_settings') }}
                     </a>
-                    <a class="collapse-item" @click=" goTo('activity-log')">
+                    <a class="collapse-item" @click=" goTo('activity-log')" v-if="false">
                         <mdicon name="file-document-outline" class="mr-2 text-gray-800 float-end" size="16"/>
                         {{ $t('project_logs') }}
                     </a>
