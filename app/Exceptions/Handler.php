@@ -50,18 +50,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $exception)
     {
-        if ($this->isHttpException($exception)) {
-                $code = $exception->getStatusCode();
-                return response()->view('errors.custom', [
-                    'message' => $this->getMessage($exception),
-                    'code' => $code,
-                ], $exception->getStatusCode());
 
-        }
         return parent::render($request, $exception);
     }
 
-    private function getMessage(Throwable $exception) : string
+    public static function getMessage(Throwable $exception) : string
     {
         $message = $exception->getMessage();
         if(!empty($message)){

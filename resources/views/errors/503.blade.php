@@ -1,0 +1,1 @@
+@include('errors.500')
