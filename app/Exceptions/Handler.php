@@ -57,7 +57,7 @@ class Handler extends ExceptionHandler
     public static function getMessage(Throwable $exception) : string
     {
         $message = $exception->getMessage();
-        if(!empty($message)){
+        if(!empty($message) && config('app.debug')){
             return $message;
         }
         $statusCode = $exception->getStatusCode();
