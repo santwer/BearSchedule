@@ -37,7 +37,13 @@ class TimelineController extends TimelineAjaxController
         }
         else {
             if (!is_numeric($project_id)) {
-                $project_id = decrypt($project_id);
+                try {
+                    $project_id = decrypt($project_id);
+                } catch (\Exception $e) {
+                    return response()->json([
+                        'error' => 'Not found'
+                    ], 404);
+                }
             }
 
             $project = Project::withCount(['users'])->findOrFail($project_id);
