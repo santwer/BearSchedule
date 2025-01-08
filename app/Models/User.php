@@ -6,9 +6,11 @@ use App\Enums\UserProjectRole;
 use App\Helper\UserHelper;
 use App\Notifications\ResetPasswordNotification;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -87,6 +89,7 @@ class User extends Authenticatable
                 ->selectRaw("id, name, email, CONCAT(name, ' (', email, ')') as value")
                 ->get();
         }
+
         if (in_array('*', $domains)) {
             return self::where('email', 'like', '%' . $q . '%')->orWhere('name', 'like', '%' . $q . '%')
                 ->whereDoesntHave('projects', function ($query) use ($project_id) {
@@ -96,16 +99,27 @@ class User extends Authenticatable
                 ->get();
         }
 
-        return self::where('email', 'like', $q)->where(function ($where) use ($domains, $q) {
-            foreach ($domains as $domain) {
-                $where->orWhere('email', 'like', '%' . $q . '%@' . $domain);
-            }
+        return self::where(function (Builder $query) use ($domains, $q) {
+            $query->where('email', 'like', $q)->orWhere(function ($where) use ($domains, $q) {
+                foreach ($domains as $domain) {
+                    if (self::userMailDomain() != $domain)
+                        continue;
+                    $where->orWhere('email', 'like', '%' . $q . '%@' . $domain);
+                }
+            });
         })
             ->whereDoesntHave('projects', function ($query) use ($project_id) {
                 $query->where('project_id', $project_id);
             })
             ->selectRaw("id, name, email, CONCAT(name, ' (', email, ')') as value")
             ->get();
+    }
+
+    private static function userMailDomain():string
+    {
+        $mail = auth()->user()->email;
+        $domain = substr($mail, strpos($mail, '@') + 1);
+        return Str::lower($domain);
     }
 
     public function hasProject($id)
