@@ -98,7 +98,7 @@ class User extends Authenticatable
                 ->selectRaw("id, name, email, CONCAT(name, ' (', email, ')') as value")
                 ->get();
         }
-dd($domains);
+
         return self::where(function (Builder $query) use ($domains, $q) {
             $query->where('email', 'like', $q)->orWhere(function ($where) use ($domains, $q) {
                 foreach ($domains as $domain) {
