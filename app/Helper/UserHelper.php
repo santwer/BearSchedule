@@ -31,7 +31,7 @@ class UserHelper
                     return ['*'];
                 } elseif(is_array($value) && in_array($userDomain, $value)) {
                     $possible = array_merge($possible, $value);
-                } elseif(sizeof($valueParts = explode(',', $value)) > 1 && in_array($userDomain, $valueParts) ) {
+                } elseif(!is_array($value) && sizeof($valueParts = explode(',', $value)) > 1 && in_array($userDomain, $valueParts) ) {
                     $possible = array_merge($possible, $valueParts);
                 } elseif($value === $userDomain) {
                     $possible[] = $value;
