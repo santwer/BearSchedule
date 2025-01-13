@@ -31,6 +31,6 @@ class GroupRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return Gate::allows('editProject', $this->project_id) || true;
+        return Gate::allows('editProject', $this->project_id) ;
     }
 }
