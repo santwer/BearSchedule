@@ -156,7 +156,7 @@ class TimelineAjaxController extends Controller
     }
 
 
-    public function setGroup(GroupRequest $request)
+    public function setGroup(Request $request)
     {
 dd($request->all());
 
