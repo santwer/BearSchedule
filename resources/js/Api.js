@@ -53,7 +53,7 @@ export default class Api {
     }
 
     static setGroup(group) {
-        return axios.post('/groups/', group);
+        return axios.post('/groups', group);
     }
 
     static deleteGroup(group) {
