@@ -19,5 +19,6 @@ Route::delete('/role', [\App\Http\Controllers\Api\ShareController::class, 'delet
 Route::post('/items', [\App\Http\Controllers\Timeline\TimelineAjaxController::class, 'setItem']);
 Route::delete('/item/{id}', [\App\Http\Controllers\Timeline\TimelineAjaxController::class, 'destroyItem']);
 Route::post('/groups', [\App\Http\Controllers\Timeline\TimelineAjaxController::class, 'setGroup']);
+Route::post('/groups-order', [\App\Http\Controllers\Timeline\TimelineAjaxController::class, 'setGroupOrder']);
 Route::delete('/groups/{id}', [\App\Http\Controllers\Timeline\TimelineAjaxController::class, 'destroyGroup']);
 Route::get('/search-person/{project}', \App\Http\Controllers\Api\SearchUserController::class);

@@ -56,6 +56,10 @@ export default class Api {
         return axios.post('/groups', group);
     }
 
+    static setGroupsOrder(project_id, groups) {
+        return axios.post('/groups-order', {groups: groups, project_id: project_id});
+    }
+
     static deleteGroup(group) {
         return axios.delete('/groups/' + group);
     }

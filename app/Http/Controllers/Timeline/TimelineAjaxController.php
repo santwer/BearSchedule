@@ -195,16 +195,25 @@ class TimelineAjaxController extends Controller
     {
         $validatedData = $request->validate([
             'groups' => 'required|array',
+            'project_id' => 'required',
         ]);
-        $groups = collect($validatedData['groups'])->each(function ($item) {
-            $grp = Group::find($item['id']);
-            if ($grp !== null) {
-                $grp->order = $item['order'];
-            }
-            $grp->save();
-        });
 
-        return response()->json('done');
+        $databaseGroups = Group::where('project_id', $validatedData['project_id'])->get();
+        $groups = collect($validatedData['groups']);
+        //update all database groups
+        foreach ($databaseGroups as $databaseGroup) {
+            $group = $groups->where('id', $databaseGroup->id)->first();
+            if ($group === null) {
+                continue;
+            }
+            $databaseGroup->order = $group['order'];
+
+            if($databaseGroup->isDirty()) {
+                $databaseGroup->save();
+            }
+        }
+
+        return response()->ajax([], 'Saved successfully', 200);
     }
 
     /**

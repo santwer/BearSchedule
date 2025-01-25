@@ -739,6 +739,7 @@ export default {
 
             this.options['minHeight'] = this.getMinHeight(this.options['minHeight']);
             this.options.onMove = this.onItemMove;
+            this.options.onMoveGroup = this.onGroupMove;
             this.options.locale = this.$i18n.locale;
             moment.locale(this.$i18n.locale)
         },
@@ -865,6 +866,19 @@ export default {
         },
         addGroup() {
             this.$refs.groupmodal.showModal();
+        },
+        onGroupMove: function (group, callback) {
+            let orgGroup = this.groups.find(x => x.id === group.id);
+            orgGroup.order = group.order;
+            //update all groups order
+            let groups = this.groups.map((x, i) => {
+                return {
+                    id: x.id,
+                    order: x.order
+                };
+            });
+            Api.setGroupsOrder(this.project_id, groups);
+            callback(group);
         },
         onItemMove: function (item, callback) {
             let orgItem = this.items.find(x => x.id === item.id);
