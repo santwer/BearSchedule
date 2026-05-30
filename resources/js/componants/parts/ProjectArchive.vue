@@ -7,8 +7,7 @@
         :ok-only="false"
         :ok-variant="isArchived ? 'primary' : 'info'"
         :cancel-variant="isDark ? 'secondary' : 'secondary'"
-        v-on:ok="archiveItem"
-        v-b-modal.modal-center>
+        v-on:ok="archiveItem">
         <div class="form-group pb-2">
             <label v-if="isArchived">{{ $t('project_timelines.messages.confirm_unarchive_project') }}</label>
             <label v-else>{{ $t('project_timelines.messages.confirm_archive_project') }}</label>
@@ -31,21 +30,16 @@
 </template>
 
 <script>
-import error from "@/componants/parts/Error.vue";
 import {BButton, BFormInput, BInputGroup, BInputGroupText, BModal, BSpinner, BToast} from "bootstrap-vue-next";
+import ThemeMixin from "@/mixins/ThemeMixin";
 
 export default {
     name: "ProjectArchive",
-    mixins: ['themeMixin'],
+    mixins: [ThemeMixin],
     props: {
         isArchived: {
             type: Boolean,
             default: false
-        }
-    },
-    computed: {
-        error() {
-            return error
         }
     },
     components: {

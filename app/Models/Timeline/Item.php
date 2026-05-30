@@ -2,6 +2,7 @@
 
 namespace App\Models\Timeline;
 
+use App\Enums\ItemStatus;
 use App\Models\ProjectLog;
 use App\Models\Timeline\Item\Issue;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
@@ -14,6 +15,7 @@ class Item extends Model
     protected $casts = [
         'start' => 'datetime:Y-m-d',
         'end' => 'datetime:Y-m-d',
+        'status' => ItemStatus::class,
     ];
     protected $fillable = [
         'title', 'content', 'className', 'style', 'align',

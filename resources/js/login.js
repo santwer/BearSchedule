@@ -43,3 +43,35 @@ const app = createApp({
     })
     .use(i18n)
     .mount('#app')
+
+import { Passkeys } from '@/lib/passkeys';
+
+const passkeyLoginButton = document.getElementById('passkey-login');
+const passkeyLoginError = document.getElementById('passkey-login-error');
+
+passkeyLoginButton?.addEventListener('click', async () => {
+    if (passkeyLoginError) {
+        passkeyLoginError.classList.add('d-none');
+        passkeyLoginError.textContent = '';
+    }
+
+    passkeyLoginButton.disabled = true;
+
+    try {
+        const result = await Passkeys.verify({
+            routes: {
+                options: '/passkeys/login/options',
+                submit: '/passkeys/login',
+            },
+        });
+
+        window.location.href = result?.redirect || '/';
+    } catch (error) {
+        if (passkeyLoginError) {
+            passkeyLoginError.textContent = error?.message || 'Passkey login failed.';
+            passkeyLoginError.classList.remove('d-none');
+        }
+    } finally {
+        passkeyLoginButton.disabled = false;
+    }
+});

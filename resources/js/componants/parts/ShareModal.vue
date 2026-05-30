@@ -6,11 +6,12 @@
         :ok-title="$t('general.close')"
         :ok-only="true"
         :ok-variant="isDark ? 'secondary' : 'secondary'"
-        v-b-modal.modal-center>
+        @ok="modal = false"
+        @hide="modal = false">
         <loading v-if="loading"></loading>
         <div v-else>
-            <BTabs card>
-                <BTab  active>
+            <BTabs card v-model="activeTab" @activate-tab="onTabActivated">
+                <BTab active>
                     <template #title>
                         <mdicon name="account-multiple" size="20"/> {{ $t('project_project_members') }}
                     </template>
@@ -90,6 +91,75 @@
                         <div class="text-danger px-3" v-if="copyState === false">{{ $t('text could not be copied') }}</div>
                     </div>
                 </BTab>
+                <BTab lazy>
+                    <template #title>
+                        <mdicon name="robot" size="20"/> {{ $t('project_mcp_tab') }}
+                    </template>
+                    <div class="card p-3">
+                        <p class="text-muted mb-3">{{ $t('project_mcp_description') }}</p>
+
+                        <loading v-if="mcpLoading"></loading>
+                        <div v-else>
+                            <div v-if="mcpNewUrl" class="alert alert-success mb-3" role="alert">
+                                <p class="mb-2">{{ $t('project_mcp_created_warning') }}</p>
+                                <BInputGroup>
+                                    <BFormInput v-model="mcpNewUrl" :readonly="true"/>
+                                    <BButton :variant="isDark ? 'secondary' : 'outline-secondary'" @click="copyMcpLinkToClipboard">
+                                        <mdicon name="content-copy" size="20"/>
+                                        {{ $t('copy') }}
+                                    </BButton>
+                                </BInputGroup>
+                                <div class="text-success mt-2" v-if="mcpCopyState === true">{{ $t('successfully copied') }}</div>
+                                <div class="text-danger mt-2" v-if="mcpCopyState === false">{{ $t('text could not be copied') }}</div>
+                            </div>
+
+                            <div v-if="mcpError" class="text-danger mb-3">{{ mcpError }}</div>
+
+                            <BTable
+                                v-if="mcpTokens.length"
+                                :items="mcpTokens"
+                                :fields="mcpTokenFields"
+                                small
+                                responsive
+                            >
+                                <template #cell(label)="row">
+                                    {{ row.item.name || row.item.token_prefix }}
+                                </template>
+                                <template #cell(created_at)="row">
+                                    {{ formatMcpDate(row.item.created_at) }}
+                                </template>
+                                <template #cell(last_used_at)="row">
+                                    {{ row.item.last_used_at ? formatMcpDate(row.item.last_used_at) : '—' }}
+                                </template>
+                                <template #cell(actions)="row">
+                                    <BButton
+                                        variant="outline-danger"
+                                        size="sm"
+                                        @click="revokeMcpToken(row.item)"
+                                    >
+                                        {{ $t('project_mcp_revoke') }}
+                                    </BButton>
+                                </template>
+                            </BTable>
+                            <p v-else class="text-muted">{{ $t('project_mcp_no_tokens') }}</p>
+
+                            <div class="mt-3">
+                                <label class="form-label">{{ $t('project_mcp_name') }}</label>
+                                <BInputGroup>
+                                    <BFormInput v-model="mcpNewName" :disabled="mcpCreating"/>
+                                    <BButton
+                                        :variant="isDark ? 'primary' : 'primary'"
+                                        :disabled="mcpCreating"
+                                        @click="createMcpToken"
+                                    >
+                                        <BSpinner v-if="mcpCreating" small class="me-1"/>
+                                        {{ $t('project_mcp_create') }}
+                                    </BButton>
+                                </BInputGroup>
+                            </div>
+                        </div>
+                    </div>
+                </BTab>
 
             </BTabs>
 
@@ -103,9 +173,7 @@
         :cancel-title="$t('general.cancel')"
         v-on:ok="removePerson"
         v-on:cancel="toDeleteItem = null"
-        v-on:backdrop="toDeleteItem = null"
-        v-on:close="toDeleteItem = null"
-        v-b-modal.modal-center>
+        v-on:close="toDeleteItem = null">
         <p>{{ $t('Do you want to remove person from project', {name: toDeleteItem ? toDeleteItem.name : ''}) }}</p>
     </BModal>
 </template>
@@ -129,7 +197,6 @@ import Loading from "@/componants/parts/Loading.vue";
 import Error from "@/componants/parts/Error.vue";
 import ThemeMixin from "@/mixins/ThemeMixin";
 import Api from "@/Api";
-import App from "@/componants/App.vue";
 
 
 export default {
@@ -139,7 +206,7 @@ export default {
         Error,
         BModal, BButton, BFormCheckbox, BButtonGroup,
         BFormSelect, BTable, BInputGroup, BFormInput,
-        BInputGroupText, BSpinner,BTabs,BTab
+        BInputGroupText, BSpinner, BTabs, BTab
     },
     props: {
         editable: {
@@ -149,6 +216,7 @@ export default {
     },
     data() {
         return {
+            activeTab: 0,
             datalistSearch: [],
             searchPerson: null,
             modal: false,
@@ -160,11 +228,25 @@ export default {
             error: null,
             copyState: null,
             shareUrl: 'https://example.com/share/1234',
+            mcpTokens: [],
+            mcpLoading: false,
+            mcpCreating: false,
+            mcpLoaded: false,
+            mcpError: null,
+            mcpNewName: '',
+            mcpNewUrl: null,
+            mcpCopyState: null,
             sortFields: [
                 {key: 'name', label: this.$t('project_setting_users.name'), sortable: true},
                 {key: 'email', label: this.$t('project_setting_users.email'), sortable: true},
                 {key: 'role', label: this.$t('project_setting_users.role'), sortable: true},
                 {key: 'remove', label: '', sortable: false}
+            ],
+            mcpTokenFields: [
+                {key: 'label', label: this.$t('project_mcp_name'), sortable: false},
+                {key: 'created_at', label: this.$t('project_mcp_created_at'), sortable: true},
+                {key: 'last_used_at', label: this.$t('project_mcp_last_used'), sortable: true},
+                {key: 'actions', label: '', sortable: false}
             ],
             sortItems: [],
             roleOptions: [
@@ -224,7 +306,76 @@ export default {
         },
         show() {
             this.modal = true;
+            this.mcpLoaded = false;
+            this.mcpNewUrl = null;
+            this.mcpCopyState = null;
+            this.mcpNewName = '';
+            this.mcpError = null;
             this.getData();
+        },
+        onTabActivated(tabIndex) {
+            if (tabIndex === 2) {
+                this.loadMcpTokens();
+            }
+        },
+        loadMcpTokens(force = false) {
+            if (this.mcpLoaded && !force) {
+                return;
+            }
+
+            if (!this.mcpLoaded) {
+                this.mcpLoading = true;
+            }
+
+            this.mcpError = null;
+
+            Api.getMcpTokens(this.$route.params.id)
+                .then(response => {
+                    this.mcpTokens = response.data.data;
+                    this.mcpLoaded = true;
+                    this.mcpLoading = false;
+                })
+                .catch(error => {
+                    this.mcpLoading = false;
+                    this.mcpError = error.response?.data?.message || error.message;
+                });
+        },
+        createMcpToken() {
+            this.mcpCreating = true;
+            this.mcpError = null;
+
+            const payload = {};
+            if (this.mcpNewName.trim() !== '') {
+                payload.name = this.mcpNewName.trim();
+            }
+
+            Api.createMcpToken(this.$route.params.id, payload)
+                .then(response => {
+                    this.mcpNewUrl = response.data.data.url;
+                    this.mcpNewName = '';
+                    this.mcpCreating = false;
+                    this.loadMcpTokens(true);
+                })
+                .catch(error => {
+                    this.mcpCreating = false;
+                    this.mcpError = error.response?.data?.message || error.message;
+                });
+        },
+        revokeMcpToken(token) {
+            if (!window.confirm(this.$t('project_mcp_revoke_confirm'))) {
+                return;
+            }
+
+            Api.revokeMcpToken(this.$route.params.id, token.id)
+                .then(() => {
+                    if (this.mcpNewUrl) {
+                        this.mcpNewUrl = null;
+                    }
+                    this.loadMcpTokens(true);
+                })
+                .catch(error => {
+                    this.mcpError = error.response?.data?.message || error.message;
+                });
         },
         copyLinkToClipboard() {
             navigator.clipboard.writeText(this.shareUrl).then(() => {
@@ -232,14 +383,32 @@ export default {
                 setTimeout(() => {
                     this.copyState = null;
                 }, 3000);
-                console.log('Async: Copying to clipboard was successful!');
-            }, err => {
+            }, () => {
                 this.copyState = false;
                 setTimeout(() => {
                     this.copyState = null;
                 }, 30000);
-                console.error('Async: Could not copy text: ', err);
             });
+        },
+        copyMcpLinkToClipboard() {
+            navigator.clipboard.writeText(this.mcpNewUrl).then(() => {
+                this.mcpCopyState = true;
+                setTimeout(() => {
+                    this.mcpCopyState = null;
+                }, 3000);
+            }, () => {
+                this.mcpCopyState = false;
+                setTimeout(() => {
+                    this.mcpCopyState = null;
+                }, 30000);
+            });
+        },
+        formatMcpDate(value) {
+            if (!value) {
+                return '';
+            }
+
+            return new Date(value).toLocaleString();
         },
         openLinkInNewWindow() {
             window.open(this.shareUrl, '_blank');
@@ -285,7 +454,6 @@ export default {
     },
     watch: {
         searchPerson() {
-            //string is json
             if (typeof this.searchPerson === 'string') {
                 try {
                     let searchPerson = JSON.parse(this.searchPerson);

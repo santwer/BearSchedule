@@ -14,7 +14,8 @@
         "vite-plugin-pwa": "^0.16.4"
     },
     "dependencies": {
-        "@jamescoyle/vue-icon": "^0.1.2",
+        "@laravel/passkeys": "^0.2.0",
+        "@simplewebauthn/browser": "^13.1.2",
         "@mdi/font": "^7.2.96",
         "@mdi/js": "^7.2.96",
         "@vitejs/plugin-vue": "^4.2.3",

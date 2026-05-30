@@ -24,6 +24,7 @@
         "guzzlehttp/guzzle": "^7.10",
         "kg-bot/laravel-localization-to-vue": "^2.4",
         "laravel/ai": "^0.7.2",
+        "laravel/fortify": "^1.37",
         "laravel/framework": "^13.0",
         "laravel/mcp": "^0.7.2",
         "laravel/pulse": "^1.7",

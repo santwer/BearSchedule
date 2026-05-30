@@ -29,6 +29,14 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Schema::defaultStringLength(191);
+
+        config([
+            'debugbar.except' => array_merge(config('debugbar.except', []), [
+                'mcp/*',
+                '.well-known/*',
+            ]),
+        ]);
+
         Gate::define('viewPulse', function (User $user) {
             return $user->isAdmin();
         });

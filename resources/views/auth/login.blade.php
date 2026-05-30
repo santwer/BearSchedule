@@ -76,6 +76,12 @@
                                 </div>
                             @endif
                         </div>
+                        <div class="col d-grid gap-2 mt-2">
+                            <button type="button" id="passkey-login" class="btn btn-outline-primary btn-user">
+                                @lang('auth.login_with_passkey')
+                            </button>
+                            <div id="passkey-login-error" class="alert alert-danger d-none small mb-0"></div>
+                        </div>
 
                     </div>
 
