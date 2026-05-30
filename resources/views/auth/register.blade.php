@@ -3,7 +3,7 @@
 @section('subtitle', 'Please fill to proceed.')
 @section('head')
     @if(config('services.turnstile.key'))
-        @turnstileScripts()
+        <x-turnstile.scripts />
     @endif
 @endsection
 @section('content')
