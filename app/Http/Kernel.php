@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'jira' =>  JiraMiddleware::class,
         'setlocale' => LocalizationMiddleware::class,
+        'mcp.project.token' => \App\Http\Middleware\ResolveProjectMcpToken::class,
     ];
 }

@@ -242,13 +242,13 @@ class TimelineAjaxController extends Controller
             }
         }
 
-        if ($request->has('color')) {
-            if ($request->get('color')['id'] == 'default') {
+        if ($request->has('color') && is_array($color = $request->get('color'))) {
+            if (($color['id'] ?? 'default') === 'default') {
                 $item->style = $this->logicClass->getStyle(null);
+            } elseif (isset($color['style'])) {
+                $item->style = $this->logicClass->getStyle($color['style']);
             } else {
-                if (isset($request->get('color')['style'])) {
-                    $item->style = $this->logicClass->getStyle($request->get('color')['style']);
-                }
+                $item->style = $this->logicClass->getStyle(null);
             }
         } else {
             if ($request->filled('style')) {

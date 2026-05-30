@@ -7,8 +7,7 @@
         :ok-only="false"
         ok-variant="danger"
         :cancel-variant="isDark ? 'secondary' : 'secondary'"
-        v-on:ok="deleteItem"
-        v-b-modal.modal-center>
+        v-on:ok="deleteItem">
         <div class="form-group pb-2">
             <label>{{ $t('project_timelines.messages.confirm_delete_group') }}</label>
         </div>
@@ -30,17 +29,12 @@
 </template>
 
 <script>
-import error from "@/componants/parts/Error.vue";
 import {BButton, BFormInput, BInputGroup, BInputGroupText, BModal, BSpinner, BToast} from "bootstrap-vue-next";
+import ThemeMixin from "@/mixins/ThemeMixin";
 
 export default {
     name: "GroupDelete",
-    mixins: ['themeMixin'],
-    computed: {
-        error() {
-            return error
-        }
-    },
+    mixins: [ThemeMixin],
     components: {
         BModal,
         BButton,

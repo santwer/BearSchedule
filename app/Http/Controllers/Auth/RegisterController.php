@@ -8,7 +8,6 @@ use App\Rules\TurnstileRule;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
 class RegisterController extends Controller
 {
@@ -57,7 +56,7 @@ class RegisterController extends Controller
     {
         $rules = [];
         if (config('services.turnstile.key')) {
-            $rules['cf-turnstile-response'] = ['required', Rule::turnstile()];
+            $rules['cf-turnstile-response'] = ['required', new TurnstileRule];
         }
 
         return Validator::make($data, array_merge([

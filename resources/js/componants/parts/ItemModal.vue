@@ -5,8 +5,7 @@
         size="lg"
 
         :title="item.id === null ? $t('project_timelines.item.new') : (item.title === '' ? $t('project_timelines.item.empty') : item.title)"
-        v-on:ok="save"
-        v-b-modal.modal-center>
+        v-on:ok="save">
         <loading v-if="loading"></loading>
         <div class="row" v-else>
             <div class="col-8">
@@ -110,7 +109,7 @@ import Loading from "@/componants/parts/Loading.vue";
 import themeMixin from "@/mixins/ThemeMixin";
 import moment from 'moment/min/moment-with-locales';
 export default {
-    mixins: ['themeMixin'],
+    mixins: [themeMixin],
     components: {
         Loading,
         Error,

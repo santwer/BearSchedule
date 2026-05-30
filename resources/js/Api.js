@@ -12,6 +12,18 @@ export default class Api {
         return axios.put('/settings', settings);
     }
 
+    static listPasskeys() {
+        return axios.get('/passkeys');
+    }
+
+    static confirmPassword(password) {
+        return axios.post('/user/confirm-password', { password });
+    }
+
+    static deletePasskey(id) {
+        return axios.delete(`/user/passkeys/${id}`);
+    }
+
     static deleteAccount() {
         return axios.delete('/account');
     }
@@ -82,5 +94,17 @@ export default class Api {
 
     static removePerson(project, user) {
         return axios.delete('/role', {params: {project: project, user: user}});
+    }
+
+    static getMcpTokens(projectId) {
+        return axios.get('/projects/' + projectId + '/mcp-tokens');
+    }
+
+    static createMcpToken(projectId, { name } = {}) {
+        return axios.post('/projects/' + projectId + '/mcp-tokens', { name });
+    }
+
+    static revokeMcpToken(projectId, tokenId) {
+        return axios.delete('/projects/' + projectId + '/mcp-tokens/' + tokenId);
     }
 }

@@ -4,8 +4,7 @@
         v-model="modal"
         :ok-title="$t('general.close')"
         :ok-only="true"
-        :ok-variant="isDark ? 'secondary' : 'secondary'"
-        v-b-modal.modal-center>
+        :ok-variant="isDark ? 'secondary' : 'secondary'">
         <div class="form-group pb-2">
             <label>{{ $t('project_project_name') }}</label>
             <BInputGroup class="mt-3">
@@ -49,17 +48,11 @@ import {
     BSpinner
 } from "bootstrap-vue-next";
 import Api from "@/Api";
-import error from "./Error.vue";
 import {mapActions, mapGetters} from "vuex";
-import themeMixin from "@/mixins/ThemeMixin";
+import ThemeMixin from "@/mixins/ThemeMixin";
 export default {
-    mixins: ['themeMixin'],
+    mixins: [ThemeMixin],
     name: "RenameModal",
-    computed: {
-        error() {
-            return error
-        }
-    },
     components: {
         BModal,
         BButton,

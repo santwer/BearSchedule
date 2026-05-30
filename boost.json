@@ -1,0 +1,22 @@
+{
+    "agents": [
+        "claude_code",
+        "cursor",
+        "copilot"
+    ],
+    "cloud": false,
+    "guidelines": true,
+    "mcp": true,
+    "nightwatch": false,
+    "packages": [
+        "barryvdh/laravel-debugbar"
+    ],
+    "sail": false,
+    "skills": [
+        "ai-sdk-development",
+        "laravel-best-practices",
+        "mcp-development",
+        "pulse-development",
+        "debug-using-debugbar"
+    ]
+}

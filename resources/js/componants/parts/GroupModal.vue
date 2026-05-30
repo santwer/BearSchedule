@@ -2,8 +2,7 @@
     <BModal
 
         title="Group"
-        v-model="modal"
-        v-b-modal.modal-center>
+        v-model="modal">
         <loading v-if="loading"></loading>
         <div v-else>
             <error :error="error"></error>

@@ -24,6 +24,11 @@ class LocaleController extends Controller
     public function redirect($any = null)
     {
         $request = \request();
+
+        if (str_starts_with($request->path(), '.well-known/')) {
+            abort(404);
+        }
+
         $this->isLocale($request);
         return redirect(user_locale().'/'.$any);
     }
